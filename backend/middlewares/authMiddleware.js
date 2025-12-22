@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-import User from "../models/User.js"; // ✅ ADD THIS LINE
+import User from "../models/User.js";
+import TokenBlacklist from "../models/TokenBlacklist.js";
 
 // Protect routes - verify JWT token
 export const protect = async (req, res, next) => {
@@ -12,6 +13,18 @@ export const protect = async (req, res, next) => {
     try {
       // Get token from header
       token = req.headers.authorization.split(" ")[1];
+
+      // ✅ Store token in req for later use (logout, etc.)
+      req.token = token;
+
+      // Check if token is blacklisted
+      const blacklisted = await TokenBlacklist.findOne({ token });
+      if (blacklisted) {
+        return res.status(401).json({
+          success: false,
+          message: "Token has been invalidated. Please login again.",
+        });
+      }
 
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);

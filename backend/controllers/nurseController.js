@@ -1,24 +1,23 @@
+// backend/controllers/nurseController.js
 import NurseProfile from "../models/NurseProfile.js";
 import Appointment from "../models/Appointments.js";
 import Review from "../models/Reviews.js";
-import PatientProfile from "../models/PatientProfile.js"; // ✅ ADDED THIS LINE
+import PatientProfile from "../models/PatientProfile.js";
+import { deleteImage, extractPublicId } from "../config/cloudinary.js";
 
-// @desc    Get nurse dashboard
-// @route   GET /api/nurse/dashboard
-// @access  Private (Nurse only)
+// @desc Get nurse dashboard
+// @route GET /api/nurse/dashboard
+// @access Private (Nurse only)
 const getDashboard = async (req, res) => {
   try {
     console.log("🔍 Looking for nurse profile with userId:", req.user._id);
-
     let nurseProfile = await NurseProfile.findOne({ userId: req.user._id });
 
-    // If profile doesn't exist, create a default one
     if (!nurseProfile) {
       console.log("⚠️ Nurse profile not found, creating default profile...");
-
       nurseProfile = await NurseProfile.create({
         userId: req.user._id,
-        fullName: req.user.email.split("@")[0], // Use email username as temp name
+        fullName: req.user.email.split("@")[0],
         phone: "",
         specialization: "General Nursing",
         hourlyRate: 50,
@@ -33,18 +32,18 @@ const getDashboard = async (req, res) => {
           sunday: [],
         },
       });
-
       console.log("✅ Default nurse profile created:", nurseProfile._id);
     }
 
-    // Get appointment statistics
     const totalAppointments = await Appointment.countDocuments({
       nurseId: req.user._id,
     });
+
     const pendingAppointments = await Appointment.countDocuments({
       nurseId: req.user._id,
       status: "pending",
     });
+
     const upcomingAppointments = await Appointment.find({
       nurseId: req.user._id,
       status: "confirmed",
@@ -53,10 +52,8 @@ const getDashboard = async (req, res) => {
       .limit(5)
       .sort({ appointmentDate: 1 });
 
-    // Get unread messages count (set to 0 if Message model doesn't exist)
     let unreadMessages = 0;
     try {
-      // Only count if Message model exists
       const Message = (await import("../models/Message.js")).default;
       unreadMessages = await Message.countDocuments({
         receiverId: req.user._id,
@@ -88,21 +85,20 @@ const getDashboard = async (req, res) => {
   }
 };
 
-// @desc    Update nurse profile
-// @route   PUT /api/nurse/profile
-// @access  Private (Nurse only)
+// @desc Update nurse profile
+// @route PUT /api/nurse/profile
+// @access Private (Nurse only)
 const updateProfile = async (req, res) => {
   try {
     const updates = req.body;
 
-    // Remove fields that shouldn't be updated directly
     delete updates.userId;
     delete updates.rating;
     delete updates.totalReviews;
+    delete updates.profileImage;
 
     let nurseProfile = await NurseProfile.findOne({ userId: req.user._id });
 
-    // Create profile if it doesn't exist
     if (!nurseProfile) {
       console.log("⚠️ Nurse profile not found during update, creating...");
       nurseProfile = await NurseProfile.create({
@@ -130,16 +126,15 @@ const updateProfile = async (req, res) => {
   }
 };
 
-// @desc    Update nurse availability
-// @route   PUT /api/nurse/availability
-// @access  Private (Nurse only)
+// @desc Update nurse availability
+// @route PUT /api/nurse/availability
+// @access Private (Nurse only)
 const updateAvailability = async (req, res) => {
   try {
     const { availability, isAvailable } = req.body;
 
     let nurseProfile = await NurseProfile.findOne({ userId: req.user._id });
 
-    // Create profile if it doesn't exist
     if (!nurseProfile) {
       console.log(
         "⚠️ Nurse profile not found during availability update, creating..."
@@ -179,9 +174,9 @@ const updateAvailability = async (req, res) => {
   }
 };
 
-// @desc    Add certification
-// @route   POST /api/nurse/certifications
-// @access  Private (Nurse only)
+// @desc Add certification
+// @route POST /api/nurse/certifications
+// @access Private (Nurse only)
 const addCertification = async (req, res) => {
   try {
     const {
@@ -230,12 +225,13 @@ const addCertification = async (req, res) => {
   }
 };
 
-// @desc    Get nurse appointments
-// @route   GET /api/nurse/appointments
-// @access  Private (Nurse only)
+// @desc Get nurse appointments
+// @route GET /api/nurse/appointments
+// @access Private (Nurse only)
 const getAppointments = async (req, res) => {
   try {
     const { status, startDate, endDate } = req.query;
+
     let query = { nurseId: req.user._id };
 
     if (status) {
@@ -249,13 +245,11 @@ const getAppointments = async (req, res) => {
       };
     }
 
-    // FIXED: Simple population first
     const appointments = await Appointment.find(query)
       .populate("patientId", "email")
       .sort({ appointmentDate: -1 })
       .lean();
 
-    // FIXED: Manually fetch patient profiles after
     const appointmentsWithPatientDetails = await Promise.all(
       appointments.map(async (appointment) => {
         if (appointment.patientId) {
@@ -292,9 +286,9 @@ const getAppointments = async (req, res) => {
   }
 };
 
-// @desc    Respond to appointment request
-// @route   PUT /api/nurse/appointments/:id/respond
-// @access  Private (Nurse only)
+// @desc Respond to appointment request
+// @route PUT /api/nurse/appointments/:id/respond
+// @access Private (Nurse only)
 const respondToAppointment = async (req, res) => {
   try {
     const { status, nurseNotes } = req.body;
@@ -338,9 +332,68 @@ const respondToAppointment = async (req, res) => {
   }
 };
 
-// @desc    Get nurse reviews
-// @route   GET /api/nurse/reviews
-// @access  Private (Nurse only)
+// @desc Complete appointment
+// @route PUT /api/nurse/appointments/:id/complete
+// @access Private (Nurse only)
+const completeAppointment = async (req, res) => {
+  try {
+    const { completionNotes } = req.body;
+    const appointmentId = req.params.id;
+
+    // Find the appointment and verify it belongs to this nurse
+    const appointment = await Appointment.findOne({
+      _id: appointmentId,
+      nurseId: req.user._id,
+      status: "confirmed",
+    });
+
+    if (!appointment) {
+      return res.status(404).json({
+        success: false,
+        message: "Appointment not found or cannot be completed",
+      });
+    }
+
+    // Check if appointment date has passed or is today
+    const appointmentDate = new Date(appointment.appointmentDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (appointmentDate > today) {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot complete future appointments",
+      });
+    }
+
+    // Update appointment status to completed
+    appointment.status = "completed";
+    appointment.completedAt = new Date();
+
+    if (completionNotes) {
+      appointment.nurseNotes = completionNotes;
+    }
+
+    await appointment.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Appointment marked as completed",
+      appointment,
+    });
+  } catch (error) {
+    console.error("❌ Complete appointment error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+// @desc Get nurse reviews
+// @route GET /api/nurse/reviews
+// @access Private (Nurse only)
 const getReviews = async (req, res) => {
   try {
     const reviews = await Review.find({ nurseId: req.user._id })
@@ -368,6 +421,124 @@ const getReviews = async (req, res) => {
   }
 };
 
+// @desc Upload nurse profile picture
+// @route POST /api/nurse/profile/upload-image
+// @access Private (Nurse only)
+const uploadProfileImage = async (req, res) => {
+  try {
+    console.log("📤 Upload endpoint hit");
+    console.log("👤 User ID:", req.user?._id);
+    console.log("📁 File received:", req.file ? "YES" : "NO");
+
+    if (req.file) {
+      console.log("📁 File details:", {
+        fieldname: req.file.fieldname,
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+        path: req.file.path,
+      });
+    }
+
+    if (!req.file) {
+      console.error("❌ No file in request");
+      return res.status(400).json({
+        success: false,
+        message: "No image file provided",
+      });
+    }
+
+    let nurseProfile = await NurseProfile.findOne({ userId: req.user._id });
+    console.log("🔍 Nurse profile found:", nurseProfile ? "YES" : "NO");
+
+    if (!nurseProfile) {
+      console.error("❌ Nurse profile not found");
+      return res.status(404).json({
+        success: false,
+        message: "Nurse profile not found. Please complete your profile first.",
+      });
+    }
+
+    // Delete old image if exists
+    if (nurseProfile.profileImage) {
+      console.log("🗑️ Deleting old image:", nurseProfile.profileImage);
+      const oldPublicId = extractPublicId(nurseProfile.profileImage);
+      if (oldPublicId) {
+        await deleteImage(oldPublicId).catch((err) =>
+          console.log("⚠️ Error deleting old image:", err)
+        );
+      }
+    }
+
+    // Update with new image URL
+    nurseProfile.profileImage = req.file.path;
+    await nurseProfile.save();
+
+    console.log("✅ Profile image uploaded successfully:", req.file.path);
+
+    res.status(200).json({
+      success: true,
+      message: "Profile image uploaded successfully",
+      imageUrl: req.file.path,
+      profile: nurseProfile,
+    });
+  } catch (error) {
+    console.error("❌ Upload error:", error);
+    console.error("❌ Error stack:", error.stack);
+    res.status(500).json({
+      success: false,
+      message: "Failed to upload image",
+      error: error.message,
+    });
+  }
+};
+
+// @desc Delete nurse profile picture
+// @route DELETE /api/nurse/profile/delete-image
+// @access Private (Nurse only)
+const deleteProfileImage = async (req, res) => {
+  try {
+    console.log("🗑️ Delete image endpoint hit");
+    console.log("👤 User ID:", req.user?._id);
+
+    let nurseProfile = await NurseProfile.findOne({ userId: req.user._id });
+
+    if (!nurseProfile || !nurseProfile.profileImage) {
+      return res.status(404).json({
+        success: false,
+        message: "No profile image to delete",
+      });
+    }
+
+    console.log("🗑️ Deleting image:", nurseProfile.profileImage);
+
+    // Delete from Cloudinary
+    const publicId = extractPublicId(nurseProfile.profileImage);
+    if (publicId) {
+      await deleteImage(publicId);
+    }
+
+    // Remove from database
+    nurseProfile.profileImage = "";
+    await nurseProfile.save();
+
+    console.log("✅ Profile image deleted successfully");
+
+    res.status(200).json({
+      success: true,
+      message: "Profile image deleted successfully",
+      profile: nurseProfile,
+    });
+  } catch (error) {
+    console.error("❌ Delete error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete image",
+      error: error.message,
+    });
+  }
+};
+
 export {
   getDashboard,
   updateProfile,
@@ -375,5 +546,8 @@ export {
   addCertification,
   getAppointments,
   respondToAppointment,
+  completeAppointment,
   getReviews,
+  uploadProfileImage,
+  deleteProfileImage,
 };

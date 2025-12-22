@@ -12,6 +12,10 @@ import {
   AlertCircle,
   CheckCircle,
   Sparkles,
+  Camera,
+  Upload,
+  X,
+  Loader,
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../services/api";
@@ -41,6 +45,10 @@ const NurseProfile = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Image upload states
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [previewImage, setPreviewImage] = useState(profile?.profileImage || "");
+
   useEffect(() => {
     if (profile) {
       setFormData({
@@ -60,6 +68,7 @@ const NurseProfile = () => {
         services: profile.services?.join(", ") || "",
         languages: profile.languages?.join(", ") || "",
       });
+      setPreviewImage(profile.profileImage || "");
       setLoading(false);
     }
   }, [profile]);
@@ -81,6 +90,91 @@ const NurseProfile = () => {
         ...formData,
         [name]: value,
       });
+    }
+  };
+
+  // Handle image upload
+  const handleImageChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    console.log("📁 Selected file:", {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+    });
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      setError("Please select an image file (JPG, PNG, WEBP)");
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image size must be less than 5MB");
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+      setError("");
+
+      console.log("🚀 Starting upload...");
+      const data = await api.uploadNurseProfileImage(file);
+      console.log("✅ Upload response:", data);
+
+      if (data.success) {
+        setPreviewImage(data.imageUrl);
+        setSuccess("Profile picture updated successfully! ✨");
+        await refreshUser();
+        setTimeout(() => setSuccess(""), 3000);
+      } else {
+        throw new Error(data.message || "Upload failed");
+      }
+    } catch (err) {
+      console.error("❌ Upload error:", err);
+      const errorMsg =
+        err.message || err.toString() || "Failed to upload image";
+      setError(`Upload failed: ${errorMsg}`);
+
+      // Show more details in console for debugging
+      console.error("Full error details:", {
+        message: err.message,
+        stack: err.stack,
+        error: err,
+      });
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  // Handle image deletion
+  const handleDeleteImage = async () => {
+    if (
+      !window.confirm("Are you sure you want to remove your profile picture?")
+    ) {
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+      setError("");
+
+      const data = await api.deleteNurseProfileImage();
+
+      if (data.success) {
+        setPreviewImage("");
+        setSuccess("Profile picture removed successfully!");
+        await refreshUser();
+        setTimeout(() => setSuccess(""), 3000);
+      }
+    } catch (err) {
+      const errorMsg =
+        err.message || err.toString() || "Failed to delete image";
+      setError(`Delete failed: ${errorMsg}`);
+    } finally {
+      setUploadingImage(false);
     }
   };
 
@@ -188,7 +282,13 @@ const NurseProfile = () => {
               className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3"
             >
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-red-800 text-sm">{error}</p>
+              <div className="flex-1">
+                <p className="text-red-800 text-sm font-medium">Upload Error</p>
+                <p className="text-red-700 text-sm mt-1">{error}</p>
+                <p className="text-red-600 text-xs mt-2">
+                  Check browser console (F12) for more details
+                </p>
+              </div>
             </motion.div>
           )}
 
@@ -212,6 +312,102 @@ const NurseProfile = () => {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
+          {/* Profile Picture Section */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
+            className="bg-white rounded-xl shadow-lg p-6"
+          >
+            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <Camera className="w-5 h-5 text-purple-600" />
+              Profile Picture
+            </h2>
+
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              {/* Profile Picture Preview */}
+              <div className="relative">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 border-4 border-purple-200 shadow-lg"
+                >
+                  {previewImage ? (
+                    <img
+                      src={previewImage}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.error("❌ Image failed to load:", previewImage);
+                        e.target.style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <User className="w-16 h-16" />
+                    </div>
+                  )}
+                </motion.div>
+
+                {uploadingImage && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center"
+                  >
+                    <Loader className="w-8 h-8 text-white animate-spin" />
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Upload Controls */}
+              <div className="flex-1">
+                <p className="text-sm text-gray-600 mb-3">
+                  Upload a professional photo to help patients recognize you.
+                  Accepted formats: JPG, PNG, WEBP. Maximum size: 5MB.
+                </p>
+
+                <div className="flex flex-wrap gap-3">
+                  <motion.label
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: "0 5px 15px rgba(139, 92, 246, 0.3)",
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`px-4 py-2 bg-purple-600 text-white rounded-lg cursor-pointer hover:bg-purple-700 flex items-center gap-2 ${
+                      uploadingImage ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    <Upload className="w-4 h-4" />
+                    {previewImage ? "Change Photo" : "Upload Photo"}
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
+                      onChange={handleImageChange}
+                      disabled={uploadingImage}
+                      className="hidden"
+                    />
+                  </motion.label>
+
+                  {previewImage && (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleDeleteImage}
+                      disabled={uploadingImage}
+                      type="button"
+                      className={`px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 flex items-center gap-2 ${
+                        uploadingImage ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      <X className="w-4 h-4" />
+                      Remove
+                    </motion.button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Basic Information */}
           <motion.div
             variants={itemVariants}
             whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
@@ -253,6 +449,7 @@ const NurseProfile = () => {
             </div>
           </motion.div>
 
+          {/* Professional Information */}
           <motion.div
             variants={itemVariants}
             whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
@@ -368,6 +565,7 @@ const NurseProfile = () => {
             </div>
           </motion.div>
 
+          {/* Address */}
           <motion.div
             variants={itemVariants}
             whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
@@ -422,6 +620,7 @@ const NurseProfile = () => {
             </div>
           </motion.div>
 
+          {/* Action Buttons */}
           <motion.div variants={itemVariants} className="flex gap-4">
             <motion.button
               whileHover={{ scale: 1.02 }}

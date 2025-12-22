@@ -1,5 +1,11 @@
 // src/App.jsx
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
 import LandingPage from "../components/landing/LandingPage";
 import LoginPage from "../components/auth/Loginpage";
@@ -20,24 +26,35 @@ import NurseAppointments from "../components/nurse/NurseAppointments";
 import VerifyEmailPage from "../components/auth/VerifyEmailPage";
 import EmailVerificationRequired from "../components/auth/EmailVerificationRequired";
 
+// Loading Component
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+  </div>
+);
+
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />;
+    // Redirect to appropriate dashboard based on user's actual role
+    const dashboardMap = {
+      patient: "/patient/dashboard",
+      nurse: "/nurse/dashboard",
+      admin: "/admin/dashboard",
+    };
+
+    return <Navigate to={dashboardMap[user.role] || "/"} replace />;
   }
 
   return children;
@@ -46,24 +63,30 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 // Public Route (redirect if already logged in)
 const PublicRoute = ({ children }) => {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (user) {
-    // Redirect based on role
-    if (user.role === "patient") {
-      return <Navigate to="/patient/dashboard" replace />;
-    } else if (user.role === "nurse") {
-      return <Navigate to="/nurse/dashboard" replace />;
-    } else if (user.role === "admin") {
-      return <Navigate to="/admin/dashboard" replace />;
+    // Get the intended destination from state or default to role-based dashboard
+    const from = location.state?.from?.pathname;
+
+    // Role-based dashboard mapping
+    const dashboardMap = {
+      patient: "/patient/dashboard",
+      nurse: "/nurse/dashboard",
+      admin: "/admin/dashboard",
+    };
+
+    // If there's a "from" path and it's valid for this user's role, go there
+    if (from && from.startsWith(`/${user.role}/`)) {
+      return <Navigate to={from} replace />;
     }
+
+    // Otherwise, go to role-appropriate dashboard
+    return <Navigate to={dashboardMap[user.role] || "/"} replace />;
   }
 
   return children;
@@ -101,9 +124,10 @@ function App() {
           />
           <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
           <Route
-            path="/email-verfication-reactired"
+            path="/email-verification-required"
             element={<EmailVerificationRequired />}
           />
+
           {/* Patient Routes */}
           <Route
             path="/patient/dashboard"

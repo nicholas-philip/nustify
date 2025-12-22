@@ -1,55 +1,98 @@
-// src/services/api.js
-
+// frontend/src/services/api.js
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4500";
 
 class ApiService {
   constructor() {
-    this.token = null;
+    // ✅ Initialize token from localStorage
+    this.token = localStorage.getItem("token");
     console.log("✅ ApiService initialized with URL:", API_URL);
+    console.log(
+      "🔑 Initial token from localStorage:",
+      this.token ? "EXISTS" : "NONE"
+    );
   }
 
   setToken(token) {
     this.token = token;
-    console.log("🔑 Token set in ApiService");
+    localStorage.setItem("token", token);
+    console.log("🔑 Token set in ApiService and localStorage");
   }
 
   getToken() {
+    // ✅ Always check localStorage as fallback
+    if (!this.token) {
+      this.token = localStorage.getItem("token");
+    }
     return this.token;
   }
 
   clearToken() {
     this.token = null;
-    console.log("🗑️ Token cleared from ApiService");
+    localStorage.removeItem("token");
+    console.log("🗑️ Token cleared from ApiService and localStorage");
   }
 
   async request(endpoint, options = {}) {
     console.log("📡 Making request to:", `${API_URL}${endpoint}`);
 
+    const headers = {};
+
+    // Only add Content-Type for JSON requests
+    if (!(options.body instanceof FormData)) {
+      headers["Content-Type"] = "application/json";
+    }
+
+    // ✅ Always get fresh token before making request
+    const currentToken = this.getToken();
+    if (currentToken) {
+      headers["Authorization"] = `Bearer ${currentToken}`;
+      console.log("🔑 Authorization header added");
+    } else {
+      console.warn("⚠️ No token available for request");
+    }
+
+    // Merge with any additional headers
+    if (options.headers) {
+      Object.assign(headers, options.headers);
+    }
+
     const config = {
-      headers: {
-        "Content-Type": "application/json",
-        ...(this.token && { Authorization: `Bearer ${this.token}` }),
-        ...options.headers,
-      },
       ...options,
+      headers,
     };
+
+    console.log("📋 Request headers:", headers);
 
     try {
       const response = await fetch(`${API_URL}${endpoint}`, config);
-      const data = await response.json();
 
-      console.log("📥 Response:", {
-        success: data.success,
-        status: response.status,
-      });
+      console.log("📊 Response status:", response.status);
+      console.log("📊 Response ok:", response.ok);
+
+      // Try to parse JSON response
+      let data;
+      try {
+        data = await response.json();
+        console.log("📥 Response data:", data);
+      } catch (parseError) {
+        console.error("❌ Failed to parse JSON:", parseError);
+        throw new Error("Invalid response from server");
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || "Request failed");
+        const errorMessage =
+          data.message || `Request failed with status ${response.status}`;
+        console.error("❌ Request failed:", errorMessage);
+        throw new Error(errorMessage);
       }
 
       return data;
     } catch (error) {
       console.error("❌ API Error:", error);
+      console.error("❌ Error details:", {
+        message: error.message,
+        stack: error.stack,
+      });
       throw error;
     }
   }
@@ -103,9 +146,29 @@ class ApiService {
   };
 
   logout = async () => {
-    const result = await this.request("/api/auth/logout", { method: "POST" });
-    this.clearToken();
-    return result;
+    try {
+      // Only call API if we have a token
+      if (this.token) {
+        const result = await this.request("/api/auth/logout", {
+          method: "POST",
+        });
+        console.log("✅ Logout API successful");
+        this.clearToken();
+        return result;
+      } else {
+        console.log("⚠️ No token to logout, clearing locally");
+        this.clearToken();
+        return { success: true };
+      }
+    } catch (error) {
+      // Even if API call fails, clear token locally
+      console.warn(
+        "⚠️ Logout API failed, clearing token locally:",
+        error.message
+      );
+      this.clearToken();
+      return { success: true }; // Don't throw error
+    }
   };
 
   changePassword = (data) => {
@@ -193,6 +256,15 @@ class ApiService {
     });
   }
 
+  // ✅ ADD THIS METHOD - Complete appointment
+  completeAppointment(id, data) {
+    console.log("✅ Completing appointment:", id);
+    return this.request(`/api/nurse/appointments/${id}/complete`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
   updateNurseProfile(data) {
     return this.request("/api/nurse/profile", {
       method: "PUT",
@@ -209,6 +281,41 @@ class ApiService {
 
   getNurseReviews() {
     return this.request("/api/nurse/reviews");
+  }
+
+  // Nurse profile picture upload
+  async uploadNurseProfileImage(file) {
+    console.log("📤 Uploading nurse profile image...");
+    console.log("📁 File details:", {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+    });
+
+    const formData = new FormData();
+    formData.append("profileImage", file);
+
+    console.log("📦 FormData created");
+
+    try {
+      const result = await this.request("/api/nurse/profile/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+      console.log("✅ Upload successful:", result);
+      return result;
+    } catch (error) {
+      console.error("❌ Upload failed:", error);
+      throw error;
+    }
+  }
+
+  // Delete nurse profile picture
+  deleteNurseProfileImage() {
+    console.log("🗑️ Deleting nurse profile image...");
+    return this.request("/api/nurse/profile/delete-image", {
+      method: "DELETE",
+    });
   }
 
   // ==================== ADMIN ====================
@@ -312,11 +419,7 @@ class ApiService {
   }
 }
 
-// Create and export a single instance
 const apiInstance = new ApiService();
 
-// Also export the class for testing if needed
 export { ApiService };
-
-// Default export
 export default apiInstance;

@@ -117,13 +117,37 @@ const NurseDetails = () => {
               className="bg-white rounded-xl shadow-lg p-6"
             >
               <div className="text-center mb-6">
+                {/* ⭐ UPDATED: Profile Image */}
                 <motion.div
-                  whileHover={{ scale: 1.1, rotate: 360 }}
-                  transition={{ duration: 0.6 }}
-                  className="w-32 h-32 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                  whileHover={{ scale: 1.05, rotate: 5 }}
+                  transition={{ duration: 0.3 }}
+                  className="mx-auto mb-4"
                 >
-                  <User className="w-16 h-16 text-purple-600" />
+                  {nurse.profileImage ? (
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-200 shadow-lg mx-auto">
+                      <img
+                        src={nurse.profileImage}
+                        alt={nurse.fullName}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                          e.target.nextSibling.style.display = "flex";
+                        }}
+                      />
+                      <div
+                        className="w-32 h-32 bg-purple-100 rounded-full flex items-center justify-center"
+                        style={{ display: "none" }}
+                      >
+                        <User className="w-16 h-16 text-purple-600" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-32 h-32 bg-purple-100 rounded-full flex items-center justify-center mx-auto border-4 border-purple-200 shadow-lg">
+                      <User className="w-16 h-16 text-purple-600" />
+                    </div>
+                  )}
                 </motion.div>
+
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   {nurse.fullName}
                 </h2>

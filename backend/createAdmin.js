@@ -54,7 +54,7 @@ const createAdminUser = async () => {
     console.log("║   ✨ Admin User Created Successfully!     ║");
     console.log("╚════════════════════════════════════════════╝\n");
     console.log("📧 Email:    admin@nursify.com");
-    console.log("🔑 Password: Admin@123456");
+    console.log("🔑 Password: admin@nursify.com");
     console.log("🆔 User ID:  " + adminUser._id);
     console.log("👤 Role:     " + adminUser.role);
     console.log("\n⚠️  IMPORTANT: Change password after first login!\n");

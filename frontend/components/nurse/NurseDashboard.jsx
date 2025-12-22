@@ -34,7 +34,7 @@ const NurseDashboard = () => {
   const fetchDashboard = async () => {
     try {
       const data = await api.getNurseDashboard();
-      console.log("📊 Dashboard data:", data); // Debug log
+      console.log("📊 Dashboard data:", data);
       if (data.success) {
         setDashboard(data.dashboard);
       }
@@ -312,6 +312,7 @@ const NurseDashboard = () => {
           ))}
         </motion.div>
 
+        {/* ⭐ UPDATED: Profile Card with Image */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -323,24 +324,52 @@ const NurseDashboard = () => {
           className="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl shadow-lg p-6 mb-8"
         >
           <div className="flex items-center gap-4">
+            {/* Profile Image */}
             <motion.div
-              whileHover={{ scale: 1.2, rotate: 360 }}
-              transition={{ duration: 0.6 }}
-              className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              transition={{ duration: 0.3 }}
+              className="flex-shrink-0"
             >
-              <User className="w-10 h-10" />
+              {dashboard?.profile?.profileImage ? (
+                <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white/30 shadow-lg">
+                  <img
+                    src={dashboard.profile.profileImage}
+                    alt={dashboard.profile.fullName}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                      e.target.nextSibling.style.display = "flex";
+                    }}
+                  />
+                  <div
+                    className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center"
+                    style={{ display: "none" }}
+                  >
+                    <User className="w-10 h-10" />
+                  </div>
+                </div>
+              ) : (
+                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center border-4 border-white/30 shadow-lg">
+                  <User className="w-10 h-10" />
+                </div>
+              )}
             </motion.div>
+
+            {/* Profile Info */}
             <div className="flex-1">
               <h3 className="text-2xl font-bold mb-1">
                 {dashboard?.profile?.fullName}
               </h3>
               <p className="opacity-90">{dashboard?.profile?.specialization}</p>
               <div className="flex items-center gap-4 mt-2 text-sm">
-                <span>License: {dashboard?.profile?.licenseNumber}</span>
+                <span>
+                  License: {dashboard?.profile?.licenseNumber || "N/A"}
+                </span>
                 <span>•</span>
                 <span>${dashboard?.profile?.hourlyRate}/hour</span>
               </div>
             </div>
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

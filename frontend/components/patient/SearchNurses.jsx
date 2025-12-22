@@ -80,13 +80,20 @@ const SearchNurses = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header */}
+      {/* Header with Background Image */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white shadow-sm"
+        className="bg-white shadow-sm relative overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="absolute inset-0 opacity-10">
+          <img
+            src="https://images.pexels.com/photos/3938022/pexels-photo-3938022.jpeg"
+            alt="Healthcare"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 py-4 relative z-10">
           <motion.button
             whileHover={{ x: -5 }}
             onClick={() => navigate("/patient/dashboard")}
@@ -252,25 +259,55 @@ const SearchNurses = () => {
                     }}
                     className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer"
                   >
-                    <div className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <motion.div
-                            whileHover={{ rotate: 360 }}
-                            transition={{ duration: 0.6 }}
-                            className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center"
-                          >
-                            <User className="w-8 h-8 text-purple-600" />
-                          </motion.div>
-                          <div>
-                            <h3 className="font-bold text-lg text-gray-900">
-                              {nurse.fullName}
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                              {nurse.specialization}
-                            </p>
-                          </div>
-                        </div>
+                    {/* Profile Image Header */}
+                    <div className="relative h-32 bg-gradient-to-br from-purple-500 to-blue-500">
+                      <div className="absolute inset-0 opacity-20">
+                        <img
+                          src="https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg"
+                          alt="Healthcare"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="absolute -bottom-12 left-6">
+                        <motion.div
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {nurse.profileImage ? (
+                            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                              <img
+                                src={nurse.profileImage}
+                                alt={nurse.fullName}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.style.display = "none";
+                                  e.target.nextSibling.style.display = "flex";
+                                }}
+                              />
+                              <div
+                                className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center border-4 border-white"
+                                style={{ display: "none" }}
+                              >
+                                <User className="w-12 h-12 text-purple-600" />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center border-4 border-white shadow-xl">
+                              <User className="w-12 h-12 text-purple-600" />
+                            </div>
+                          )}
+                        </motion.div>
+                      </div>
+                    </div>
+
+                    <div className="p-6 pt-14">
+                      <div className="mb-4">
+                        <h3 className="font-bold text-lg text-gray-900 mb-1">
+                          {nurse.fullName}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          {nurse.specialization}
+                        </p>
                       </div>
 
                       <div className="space-y-2 mb-4">

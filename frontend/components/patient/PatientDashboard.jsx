@@ -28,17 +28,36 @@ const PatientDashboard = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
-    fetchDashboard();
-  }, []);
+    // Only fetch dashboard if user exists
+    if (user) {
+      fetchDashboard();
+    } else {
+      setLoading(false);
+    }
+  }, [user]); // Re-run when user changes
 
   const fetchDashboard = async () => {
+    // Double check user exists before fetching
+    if (!user) {
+      console.log("⚠️ No user, skipping dashboard fetch");
+      setLoading(false);
+      return;
+    }
+
     try {
+      console.log("📊 Fetching dashboard for user:", user.email);
       const data = await api.getPatientDashboard();
       if (data.success) {
         setDashboard(data.dashboard);
       }
     } catch (error) {
       console.error("Error fetching dashboard:", error);
+      // If unauthorized, clear everything and redirect
+      if (error.message.includes("Not authorized")) {
+        console.log("🚪 Unauthorized, logging out");
+        await logout();
+        navigate("/login");
+      }
     } finally {
       setLoading(false);
     }
@@ -46,12 +65,14 @@ const PatientDashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await api.logout();
+      console.log("🚪 Logging out...");
+      await logout();
+      console.log("✅ Logged out successfully");
+      navigate("/login", { replace: true });
     } catch (error) {
       console.error("Logout error:", error);
-    } finally {
-      logout();
-      navigate("/login");
+      // Even if logout fails, redirect to login
+      navigate("/login", { replace: true });
     }
   };
 

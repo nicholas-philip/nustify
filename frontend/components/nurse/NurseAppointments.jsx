@@ -10,7 +10,7 @@ import {
   User,
   Check,
   X,
-  MessageSquare,
+  CheckCircle2,
   Sparkles,
 } from "lucide-react";
 import api from "../../services/api";
@@ -24,8 +24,14 @@ const NurseAppointments = () => {
     show: false,
     appointment: null,
   });
+  const [completeModal, setCompleteModal] = useState({
+    show: false,
+    appointment: null,
+  });
   const [nurseNotes, setNurseNotes] = useState("");
+  const [completionNotes, setCompletionNotes] = useState("");
   const [responding, setResponding] = useState(false);
+  const [completing, setCompleting] = useState(false);
 
   useEffect(() => {
     fetchAppointments();
@@ -65,6 +71,41 @@ const NurseAppointments = () => {
     } finally {
       setResponding(false);
     }
+  };
+
+  const handleComplete = async () => {
+    setCompleting(true);
+    try {
+      const data = await api.completeAppointment(
+        completeModal.appointment._id,
+        {
+          completionNotes,
+        }
+      );
+
+      if (data.success) {
+        alert("Appointment marked as completed successfully!");
+        setCompleteModal({ show: false, appointment: null });
+        setCompletionNotes("");
+        fetchAppointments();
+      }
+    } catch (error) {
+      alert(error.message || "Failed to complete appointment");
+    } finally {
+      setCompleting(false);
+    }
+  };
+
+  const canCompleteAppointment = (appointment) => {
+    if (appointment.status !== "confirmed") return false;
+
+    const appointmentDate = new Date(appointment.appointmentDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    appointmentDate.setHours(0, 0, 0, 0);
+
+    // Can complete if appointment is today or in the past
+    return appointmentDate <= today;
   };
 
   const getStatusColor = (status) => {
@@ -342,6 +383,19 @@ const NurseAppointments = () => {
                     </motion.div>
                   )}
 
+                  {appointment.completedAt && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="mb-4 p-3 bg-green-50 rounded-lg"
+                    >
+                      <p className="text-sm text-green-900">
+                        <strong>Completed:</strong>{" "}
+                        {new Date(appointment.completedAt).toLocaleString()}
+                      </p>
+                    </motion.div>
+                  )}
+
                   {appointment.status === "pending" && (
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -378,6 +432,30 @@ const NurseAppointments = () => {
                       </motion.button>
                     </motion.div>
                   )}
+
+                  {appointment.status === "confirmed" &&
+                    canCompleteAppointment(appointment) && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="mt-4 pt-4 border-t"
+                      >
+                        <motion.button
+                          whileHover={{
+                            scale: 1.02,
+                            boxShadow: "0 5px 15px rgba(59, 130, 246, 0.3)",
+                          }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() =>
+                            setCompleteModal({ show: true, appointment })
+                          }
+                          className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                        >
+                          <CheckCircle2 className="w-5 h-5" />
+                          Mark as Completed
+                        </motion.button>
+                      </motion.div>
+                    )}
                 </motion.div>
               ))}
             </motion.div>
@@ -385,6 +463,7 @@ const NurseAppointments = () => {
         </AnimatePresence>
       </div>
 
+      {/* Accept Appointment Modal */}
       <AnimatePresence>
         {respondModal.show && (
           <motion.div
@@ -458,6 +537,86 @@ const NurseAppointments = () => {
                   className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
                 >
                   {responding ? "Accepting..." : "Accept Appointment"}
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Complete Appointment Modal */}
+      <AnimatePresence>
+        {completeModal.show && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 50 }}
+              className="bg-white rounded-xl p-6 max-w-md w-full"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-gray-900">
+                  Complete Appointment
+                </h3>
+                <motion.button
+                  whileHover={{ rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() =>
+                    setCompleteModal({ show: false, appointment: null })
+                  }
+                  className="p-1 hover:bg-gray-100 rounded"
+                >
+                  <X className="w-5 h-5" />
+                </motion.button>
+              </div>
+
+              <div className="mb-4">
+                <p className="text-gray-600 mb-4">
+                  Mark this appointment as completed. You can add final notes
+                  about the service provided.
+                </p>
+
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Completion Notes (Optional)
+                </label>
+                <motion.textarea
+                  whileFocus={{ scale: 1.02 }}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                  rows="4"
+                  placeholder="Add notes about the service provided, any recommendations, etc..."
+                  value={completionNotes}
+                  onChange={(e) => setCompletionNotes(e.target.value)}
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() =>
+                    setCompleteModal({ show: false, appointment: null })
+                  }
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 5px 15px rgba(59, 130, 246, 0.3)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleComplete}
+                  disabled={completing}
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  <CheckCircle2 className="w-5 h-5" />
+                  {completing ? "Completing..." : "Mark as Complete"}
                 </motion.button>
               </div>
             </motion.div>
