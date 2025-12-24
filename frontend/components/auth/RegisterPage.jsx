@@ -1,4 +1,4 @@
-// src/components/auth/RegisterPage.jsx
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -87,7 +87,7 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background */}
+      {}
       <motion.div
         animate={{
           scale: [1, 1.2, 1],
@@ -114,7 +114,7 @@ const RegisterPage = () => {
       />
 
       <div className="flex max-w-6xl w-full gap-8 relative z-10">
-        {/* Left Side - Image (Desktop) / Background (Mobile) */}
+        {}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -148,7 +148,7 @@ const RegisterPage = () => {
           </div>
         </motion.div>
 
-        {/* Mobile Background Image */}
+        {}
         <div className="lg:hidden absolute inset-0 z-0">
           <img
             src="https://images.pexels.com/photos/7551581/pexels-photo-7551581.jpeg"
@@ -158,7 +158,7 @@ const RegisterPage = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-purple-50/80 to-blue-50/80" />
         </div>
 
-        {/* Right Side - Form */}
+        {}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -200,7 +200,7 @@ const RegisterPage = () => {
             Join our healthcare community
           </motion.p>
 
-          {/* Role Selection */}
+          {}
           <motion.div variants={itemVariants} className="flex gap-4 mb-6">
             {["patient", "nurse"].map((r) => (
               <motion.button

@@ -1,4 +1,4 @@
-// src/components/auth/LoginPage.jsx
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart, Mail, Lock, AlertCircle, ArrowRight } from "lucide-react";
@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [useSession, setUseSession] = useState(true);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,7 +26,8 @@ const LoginPage = () => {
       const data = await api.login(formData);
 
       if (data.success) {
-        login(data.token, data.user);
+        
+        login(data.token, { ...data.user, session: useSession });
 
         if (data.user.role === "patient") {
           navigate("/patient/dashboard");
@@ -71,7 +73,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
+      {}
       <motion.div
         animate={{
           scale: [1, 1.2, 1],
@@ -98,7 +100,7 @@ const LoginPage = () => {
       />
 
       <div className="flex max-w-6xl w-full gap-8 relative z-10">
-        {/* Left Side - Image (Desktop) / Background (Mobile) */}
+        {}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -132,7 +134,7 @@ const LoginPage = () => {
           </div>
         </motion.div>
 
-        {/* Mobile Background Image */}
+        {}
         <div className="lg:hidden absolute inset-0 z-0">
           <img
             src="https://images.pexels.com/photos/4021775/pexels-photo-4021775.jpeg"
@@ -142,7 +144,7 @@ const LoginPage = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-purple-50/80 to-blue-50/80" />
         </div>
 
-        {/* Right Side - Form */}
+        {}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -286,6 +288,17 @@ const LoginPage = () => {
           </motion.form>
 
           <motion.div variants={itemVariants} className="mt-6 text-center">
+            <label className="flex items-center gap-2 justify-center mb-4">
+              <input
+                type="checkbox"
+                checked={useSession}
+                onChange={(e) => setUseSession(e.target.checked)}
+                className="w-4 h-4"
+              />
+              <span className="text-sm text-gray-600">
+                Sign in to all tabs (remember login)
+              </span>
+            </label>
             <p className="text-gray-600">
               Don't have an account?{" "}
               <motion.button

@@ -1,4 +1,4 @@
-// src/components/patient/PatientProfile.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -220,7 +220,7 @@ const PatientProfile = () => {
           onSubmit={handleSubmit}
         >
           <div className="grid lg:grid-cols-3 gap-6">
-            {/* Left Column */}
+            
             <div className="lg:col-span-2 space-y-6">
               <motion.div
                 variants={itemVariants}
@@ -452,7 +452,7 @@ const PatientProfile = () => {
               </motion.div>
             </div>
 
-            {/* Right Column - Sticky */}
+            
             <div className="lg:col-span-1">
               <motion.div
                 variants={itemVariants}

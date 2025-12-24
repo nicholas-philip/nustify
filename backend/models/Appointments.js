@@ -80,13 +80,18 @@ const appointmentSchema = new mongoose.Schema(
     cancelledAt: {
       type: Date,
     },
+    
+    reminderSent: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// Indexes
+
 appointmentSchema.index({ patientId: 1, appointmentDate: 1 });
 appointmentSchema.index({ nurseId: 1, appointmentDate: 1 });
 appointmentSchema.index({ status: 1 });

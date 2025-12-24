@@ -1,17 +1,17 @@
 import PatientProfile from "../models/PatientProfile.js";
 import NurseProfile from "../models/NurseProfile.js";
-import Appointment from "../models/Appointments.js"; // ✅ ADD THIS LINE
+import Appointment from "../models/Appointments.js"; 
 import Message from "../models/Messages.js";
 import Review from "../models/Reviews.js";
 
-// @desc    Update patient profile
-// @route   PUT /api/patient/profile
-// @access  Private (Patient only)
+
+
+
 const updateProfile = async (req, res) => {
   try {
     const updates = req.body;
 
-    // Remove userId from updates
+    
     delete updates.userId;
 
     const patientProfile = await PatientProfile.findOneAndUpdate(
@@ -39,9 +39,9 @@ const updateProfile = async (req, res) => {
   }
 };
 
-// @desc    Search nurses
-// @route   GET /api/patient/nurses/search
-// @access  Private (Patient only)
+
+
+
 const searchNurses = async (req, res) => {
   try {
     const {
@@ -92,7 +92,7 @@ const searchNurses = async (req, res) => {
       .limit(parseInt(limit))
       .lean();
 
-    // Add userIdString to each nurse for easy booking
+    
     const nursesWithUserId = nurses.map((nurse) => ({
       ...nurse,
       userIdString: nurse.userId?._id?.toString() || nurse.userId,
@@ -116,9 +116,9 @@ const searchNurses = async (req, res) => {
   }
 };
 
-// @desc    Get nurse details
-// @route   GET /api/patient/nurses/:id
-// @access  Private (Patient only)
+
+
+
 const getNurseDetails = async (req, res) => {
   try {
     const nurse = await NurseProfile.findById(req.params.id).populate(
@@ -132,7 +132,7 @@ const getNurseDetails = async (req, res) => {
         .json({ success: false, message: "Nurse not found" });
     }
 
-    // Get recent reviews
+    
     const reviews = await Review.find({ nurseId: nurse.userId })
       .populate({
         path: "patientId",
@@ -158,9 +158,9 @@ const getNurseDetails = async (req, res) => {
   }
 };
 
-// @desc    Book appointment
-// @route   POST /api/patient/appointments
-// @access  Private (Patient only)
+
+
+
 const bookAppointment = async (req, res) => {
   try {
     const {
@@ -176,15 +176,15 @@ const bookAppointment = async (req, res) => {
       duration,
     } = req.body;
 
-    // Try to find nurse by profile ID first, then by userId
+    
     let nurse = await NurseProfile.findById(nurseId);
     let actualNurseUserId = nurseId;
 
     if (nurse) {
-      // If found by profile ID, use the userId from the profile
+      
       actualNurseUserId = nurse.userId;
     } else {
-      // Try to find by userId directly
+      
       nurse = await NurseProfile.findOne({ userId: nurseId });
       if (!nurse) {
         return res
@@ -194,17 +194,17 @@ const bookAppointment = async (req, res) => {
       actualNurseUserId = nurseId;
     }
 
-    // Check if nurse is available
+    
     if (!nurse.isAvailable) {
       return res
         .status(400)
         .json({ success: false, message: "Nurse is not currently available" });
     }
 
-    // Calculate total cost
+    
     const totalCost = nurse.hourlyRate * (duration || 1);
 
-    // Create appointment
+    
     const appointment = await Appointment.create({
       patientId: req.user._id,
       nurseId: actualNurseUserId,
@@ -234,9 +234,9 @@ const bookAppointment = async (req, res) => {
   }
 };
 
-// @desc    Get patient appointments
-// @route   GET /api/patient/appointments
-// @access  Private (Patient only)
+
+
+
 const getAppointments = async (req, res) => {
   try {
     const { status } = req.query;
@@ -246,13 +246,13 @@ const getAppointments = async (req, res) => {
       query.status = status;
     }
 
-    // FIXED: Simple population first
+    
     const appointments = await Appointment.find(query)
       .populate("nurseId", "email")
       .sort({ appointmentDate: -1 })
       .lean();
 
-    // FIXED: Manually fetch nurse profiles after
+    
     const appointmentsWithNurseDetails = await Promise.all(
       appointments.map(async (appointment) => {
         if (appointment.nurseId) {
@@ -291,9 +291,9 @@ const getAppointments = async (req, res) => {
   }
 };
 
-// @desc    Cancel appointment
-// @route   PUT /api/patient/appointments/:id/cancel
-// @access  Private (Patient only)
+
+
+
 const cancelAppointment = async (req, res) => {
   try {
     const { cancellationReason } = req.body;
@@ -335,9 +335,9 @@ const cancelAppointment = async (req, res) => {
   }
 };
 
-// @desc    Send message to nurse
-// @route   POST /api/patient/messages
-// @access  Private (Patient only)
+
+
+
 const sendMessage = async (req, res) => {
   try {
     const { receiverId, message, appointmentId } = req.body;
@@ -348,6 +348,23 @@ const sendMessage = async (req, res) => {
       message,
       appointmentId: appointmentId || null,
     });
+
+    
+    try {
+      
+      const { createNotification } = await import(
+        "./notificationController.js"
+      );
+      await createNotification(
+        receiverId,
+        "new_message",
+        "New Message",
+        `You have a new message regarding appointment ${appointmentId || ""}`,
+        { relatedId: appointmentId || newMessage._id, relatedModel: "Message" }
+      );
+    } catch (e) {
+      console.warn("Failed to create notification for new message:", e.message);
+    }
 
     res.status(201).json({
       success: true,
@@ -362,14 +379,14 @@ const sendMessage = async (req, res) => {
   }
 };
 
-// @desc    Submit review for nurse
-// @route   POST /api/patient/reviews
-// @access  Private (Patient only)
+
+
+
 const submitReview = async (req, res) => {
   try {
     const { nurseId, appointmentId, rating, comment, categories } = req.body;
 
-    // Check if appointment exists and is completed
+    
     const appointment = await Appointment.findOne({
       _id: appointmentId,
       patientId: req.user._id,
@@ -384,7 +401,7 @@ const submitReview = async (req, res) => {
       });
     }
 
-    // Check if review already exists
+    
     const existingReview = await Review.findOne({ appointmentId });
     if (existingReview) {
       return res.status(400).json({
@@ -393,7 +410,7 @@ const submitReview = async (req, res) => {
       });
     }
 
-    // Create review
+    
     const review = await Review.create({
       nurseId,
       patientId: req.user._id,
@@ -404,7 +421,20 @@ const submitReview = async (req, res) => {
       isVerified: true,
     });
 
-    // Update nurse rating
+    
+    try {
+      await createNotification(
+        nurseId,
+        "new_review",
+        "New Review Received",
+        `You received a new review for appointment #${appointmentId}`,
+        { relatedId: review._id, relatedModel: "Review" }
+      );
+    } catch (e) {
+      console.warn("Notification create failed for new review:", e.message);
+    }
+
+    
     const allReviews = await Review.find({ nurseId });
     const avgRating =
       allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
@@ -433,7 +463,7 @@ const submitReview = async (req, res) => {
 };
 const getDashboard = async (req, res) => {
   try {
-    // Get patient profile
+    
     const profile = await PatientProfile.findOne({ userId: req.user._id });
 
     if (!profile) {
@@ -443,7 +473,7 @@ const getDashboard = async (req, res) => {
       });
     }
 
-    // Get appointment statistics
+    
     const totalAppointments = await Appointment.countDocuments({
       patientId: req.user._id,
     });
@@ -459,7 +489,7 @@ const getDashboard = async (req, res) => {
       status: "completed",
     });
 
-    // Get upcoming appointments with nurse details
+    
     const upcomingAppointmentsList = await Appointment.find({
       patientId: req.user._id,
       status: { $in: ["pending", "confirmed"] },
@@ -473,7 +503,7 @@ const getDashboard = async (req, res) => {
       .limit(5)
       .lean();
 
-    // Populate nurse profile details
+    
     const appointmentsWithNurseDetails = await Promise.all(
       upcomingAppointmentsList.map(async (appointment) => {
         const nurseProfile = await NurseProfile.findOne({

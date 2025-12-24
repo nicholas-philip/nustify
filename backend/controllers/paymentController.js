@@ -2,14 +2,14 @@ import Payment from "../models/Payment.js";
 import Appointment from "../models/Appointments.js";
 import { createNotification } from "./notificationController.js";
 
-// @desc    Create payment for appointment
-// @route   POST /api/payments
-// @access  Private (Patient only)
+
+
+
 const createPayment = async (req, res) => {
   try {
     const { appointmentId, paymentMethod, paymentDetails } = req.body;
 
-    // Verify appointment exists and belongs to patient
+    
     const appointment = await Appointment.findOne({
       _id: appointmentId,
       patientId: req.user._id,
@@ -29,7 +29,7 @@ const createPayment = async (req, res) => {
       });
     }
 
-    // Check if payment already exists
+    
     const existingPayment = await Payment.findOne({ appointmentId });
     if (existingPayment) {
       return res.status(400).json({
@@ -38,7 +38,7 @@ const createPayment = async (req, res) => {
       });
     }
 
-    // Create payment record
+    
     const payment = await Payment.create({
       appointmentId,
       patientId: req.user._id,
@@ -52,14 +52,14 @@ const createPayment = async (req, res) => {
         .substr(2, 9)}`,
     });
 
-    // In production, integrate with payment gateway (Stripe, PayPal, etc.)
-    // For now, simulate successful payment
+    
+    
     setTimeout(async () => {
       payment.status = "completed";
       payment.paidAt = new Date();
       await payment.save();
 
-      // Create notification for nurse
+      
       await createNotification(
         appointment.nurseId,
         "payment_received",
@@ -90,9 +90,9 @@ const createPayment = async (req, res) => {
   }
 };
 
-// @desc    Get payment by ID
-// @route   GET /api/payments/:id
-// @access  Private
+
+
+
 const getPayment = async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.id)
@@ -107,7 +107,7 @@ const getPayment = async (req, res) => {
       });
     }
 
-    // Check if user is authorized to view this payment
+    
     if (
       req.user._id.toString() !== payment.patientId._id.toString() &&
       req.user._id.toString() !== payment.nurseId._id.toString() &&
@@ -133,9 +133,9 @@ const getPayment = async (req, res) => {
   }
 };
 
-// @desc    Get user payments
-// @route   GET /api/payments
-// @access  Private
+
+
+
 const getPayments = async (req, res) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
@@ -170,7 +170,7 @@ const getPayments = async (req, res) => {
 
     const total = await Payment.countDocuments(query);
 
-    // Calculate total earnings for nurses
+    
     let totalEarnings = 0;
     if (req.user.role === "nurse") {
       const earningsData = await Payment.aggregate([
@@ -199,9 +199,9 @@ const getPayments = async (req, res) => {
   }
 };
 
-// @desc    Request refund
-// @route   POST /api/payments/:id/refund
-// @access  Private (Patient only)
+
+
+
 const requestRefund = async (req, res) => {
   try {
     const { reason } = req.body;
@@ -219,7 +219,7 @@ const requestRefund = async (req, res) => {
       });
     }
 
-    // Check if appointment allows refund (e.g., within 24 hours)
+    
     const appointment = await Appointment.findById(payment.appointmentId);
     const now = new Date();
     const appointmentDate = new Date(appointment.appointmentDate);
@@ -231,7 +231,7 @@ const requestRefund = async (req, res) => {
       });
     }
 
-    // Process refund (integrate with payment gateway in production)
+    
     payment.status = "refunded";
     payment.refundDetails = {
       refundId: `REF-${Date.now()}`,
@@ -241,7 +241,7 @@ const requestRefund = async (req, res) => {
     };
     await payment.save();
 
-    // Update appointment status
+    
     appointment.status = "cancelled";
     appointment.cancellationReason = `Refund requested: ${reason}`;
     await appointment.save();
@@ -261,9 +261,9 @@ const requestRefund = async (req, res) => {
   }
 };
 
-// @desc    Get payment statistics (Admin/Nurse)
-// @route   GET /api/payments/statistics
-// @access  Private
+
+
+
 const getPaymentStatistics = async (req, res) => {
   try {
     let matchQuery = {};

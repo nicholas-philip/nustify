@@ -76,16 +76,16 @@ const paymentSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
+
 paymentSchema.index({ appointmentId: 1 });
 paymentSchema.index({ patientId: 1, status: 1 });
 paymentSchema.index({ nurseId: 1, status: 1 });
 paymentSchema.index({ transactionId: 1 });
 
-// Calculate platform fee and nurse payout before saving
+
 paymentSchema.pre("save", function (next) {
   if (this.isNew || this.isModified("amount")) {
-    // Platform takes 15% fee
+    
     this.platformFee = this.amount * 0.15;
     this.nursePayout = this.amount - this.platformFee;
   }

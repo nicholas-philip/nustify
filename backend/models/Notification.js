@@ -41,7 +41,7 @@ const notificationSchema = new mongoose.Schema(
     },
     relatedId: {
       type: mongoose.Schema.Types.ObjectId,
-      // Can reference Appointment, Message, Review, etc.
+      
     },
     relatedModel: {
       type: String,
@@ -61,7 +61,7 @@ const notificationSchema = new mongoose.Schema(
   }
 );
 
-// Indexes for efficient querying
+
 notificationSchema.index({ userId: 1, isRead: 1, createdAt: -1 });
 notificationSchema.index({ userId: 1, type: 1 });
 

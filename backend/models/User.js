@@ -79,7 +79,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Hash password before saving
+
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
 
@@ -87,19 +87,19 @@ userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Compare password
+
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Check if user is locked
+
 userSchema.virtual("isLocked").get(function () {
   return !!(this.lockUntil && this.lockUntil > Date.now());
 });
 
-// Increment login attempts
+
 userSchema.methods.incLoginAttempts = async function () {
-  // Reset attempts if lock has expired
+  
   if (this.lockUntil && this.lockUntil < Date.now()) {
     return this.updateOne({
       $set: { loginAttempts: 1 },
@@ -109,9 +109,9 @@ userSchema.methods.incLoginAttempts = async function () {
 
   const updates = { $inc: { loginAttempts: 1 } };
 
-  // Lock account after 5 failed attempts for 2 hours
+  
   const maxAttempts = 5;
-  const lockTime = 2 * 60 * 60 * 1000; // 2 hours
+  const lockTime = 2 * 60 * 60 * 1000; 
 
   if (this.loginAttempts + 1 >= maxAttempts && !this.isLocked) {
     updates.$set = { lockUntil: Date.now() + lockTime };
@@ -120,7 +120,7 @@ userSchema.methods.incLoginAttempts = async function () {
   return this.updateOne(updates);
 };
 
-// Reset login attempts
+
 userSchema.methods.resetLoginAttempts = async function () {
   return this.updateOne({
     $set: { loginAttempts: 0 },
@@ -128,7 +128,7 @@ userSchema.methods.resetLoginAttempts = async function () {
   });
 };
 
-// Generate email verification token
+
 userSchema.methods.createEmailVerificationToken = function () {
   const verificationToken = crypto.randomBytes(32).toString("hex");
 
@@ -137,12 +137,12 @@ userSchema.methods.createEmailVerificationToken = function () {
     .update(verificationToken)
     .digest("hex");
 
-  this.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+  this.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000; 
 
   return verificationToken;
 };
 
-// Generate password reset token
+
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString("hex");
 
@@ -151,23 +151,23 @@ userSchema.methods.createPasswordResetToken = function () {
     .update(resetToken)
     .digest("hex");
 
-  this.passwordResetExpires = Date.now() + 60 * 60 * 1000; // 1 hour
+  this.passwordResetExpires = Date.now() + 60 * 60 * 1000; 
 
   return resetToken;
 };
 
-// Generate 2FA code
+
 userSchema.methods.create2FACode = function () {
-  const code = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
+  const code = Math.floor(100000 + Math.random() * 900000).toString(); 
 
   this.twoFactorCode = crypto.createHash("sha256").update(code).digest("hex");
 
-  this.twoFactorExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+  this.twoFactorExpires = Date.now() + 10 * 60 * 1000; 
 
   return code;
 };
 
-// Check if password was changed after token was issued
+
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
@@ -179,7 +179,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   return false;
 };
 
-// Remove password from JSON output
+
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;

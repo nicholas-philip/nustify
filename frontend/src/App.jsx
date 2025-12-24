@@ -1,4 +1,3 @@
-// src/App.jsx
 import {
   BrowserRouter,
   Routes,
@@ -7,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
+import NotificationCenter from "../components/common/NotificationCenter";
 import LandingPage from "../components/landing/LandingPage";
 import LoginPage from "../components/auth/Loginpage";
 import RegisterPage from "../components/auth/RegisterPage";
@@ -26,14 +26,12 @@ import NurseAppointments from "../components/nurse/NurseAppointments";
 import VerifyEmailPage from "../components/auth/VerifyEmailPage";
 import EmailVerificationRequired from "../components/auth/EmailVerificationRequired";
 
-// Loading Component
 const LoadingSpinner = () => (
   <div className="min-h-screen flex items-center justify-center">
     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
   </div>
 );
 
-// Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
@@ -47,7 +45,6 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    // Redirect to appropriate dashboard based on user's actual role
     const dashboardMap = {
       patient: "/patient/dashboard",
       nurse: "/nurse/dashboard",
@@ -60,7 +57,6 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   return children;
 };
 
-// Public Route (redirect if already logged in)
 const PublicRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
@@ -70,22 +66,18 @@ const PublicRoute = ({ children }) => {
   }
 
   if (user) {
-    // Get the intended destination from state or default to role-based dashboard
     const from = location.state?.from?.pathname;
 
-    // Role-based dashboard mapping
     const dashboardMap = {
       patient: "/patient/dashboard",
       nurse: "/nurse/dashboard",
       admin: "/admin/dashboard",
     };
 
-    // If there's a "from" path and it's valid for this user's role, go there
     if (from && from.startsWith(`/${user.role}/`)) {
       return <Navigate to={from} replace />;
     }
 
-    // Otherwise, go to role-appropriate dashboard
     return <Navigate to={dashboardMap[user.role] || "/"} replace />;
   }
 
@@ -97,7 +89,6 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          {/* Public Routes */}
           <Route
             path="/"
             element={
@@ -128,7 +119,6 @@ function App() {
             element={<EmailVerificationRequired />}
           />
 
-          {/* Patient Routes */}
           <Route
             path="/patient/dashboard"
             element={
@@ -186,7 +176,6 @@ function App() {
             }
           />
 
-          {/* Nurse Routes */}
           <Route
             path="/nurse/dashboard"
             element={
@@ -212,7 +201,6 @@ function App() {
             }
           />
 
-          {/* Admin Routes */}
           <Route
             path="/admin/dashboard"
             element={
@@ -238,7 +226,6 @@ function App() {
             }
           />
 
-          {/* Catch all - redirect to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>

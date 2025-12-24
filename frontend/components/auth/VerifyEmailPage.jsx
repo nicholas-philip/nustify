@@ -1,4 +1,4 @@
-// src/components/auth/VerifyEmailPage.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -15,7 +15,7 @@ import api from "../../services/api";
 const VerifyEmailPage = () => {
   const navigate = useNavigate();
   const { token } = useParams();
-  const [status, setStatus] = useState("verifying"); // verifying, success, error
+  const [status, setStatus] = useState("verifying"); 
   const [message, setMessage] = useState("");
   const [resending, setResending] = useState(false);
 
@@ -93,7 +93,7 @@ const VerifyEmailPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background */}
+      {}
       <motion.div
         animate={{
           scale: [1, 1.2, 1],
@@ -125,7 +125,7 @@ const VerifyEmailPage = () => {
         animate="visible"
         className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative z-10"
       >
-        {/* Logo */}
+        {}
         <div className="flex items-center justify-center gap-2 mb-8">
           <motion.div
             animate={{

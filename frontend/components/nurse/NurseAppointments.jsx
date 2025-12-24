@@ -1,4 +1,4 @@
-// src/components/nurse/NurseAppointments.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -104,7 +104,7 @@ const NurseAppointments = () => {
     today.setHours(0, 0, 0, 0);
     appointmentDate.setHours(0, 0, 0, 0);
 
-    // Can complete if appointment is today or in the past
+    
     return appointmentDate <= today;
   };
 
@@ -434,7 +434,8 @@ const NurseAppointments = () => {
                   )}
 
                   {appointment.status === "confirmed" &&
-                    canCompleteAppointment(appointment) && (
+                    canCompleteAppointment(appointment) &&
+                    !appointment.completedAt && (
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -463,7 +464,7 @@ const NurseAppointments = () => {
         </AnimatePresence>
       </div>
 
-      {/* Accept Appointment Modal */}
+      {}
       <AnimatePresence>
         {respondModal.show && (
           <motion.div

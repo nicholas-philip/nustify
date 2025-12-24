@@ -1,4 +1,4 @@
-// src/components/auth/EmailVerificationRequired.jsx
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart, Mail, AlertCircle, CheckCircle, LogOut } from "lucide-react";
@@ -11,7 +11,7 @@ const EmailVerificationRequired = () => {
   const { user, logout } = useAuth();
   const [resending, setResending] = useState(false);
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); // success or error
+  const [messageType, setMessageType] = useState(""); 
 
   const handleResendVerification = async () => {
     setResending(true);
@@ -58,7 +58,7 @@ const EmailVerificationRequired = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background */}
+      {}
       <motion.div
         animate={{
           scale: [1, 1.2, 1],
@@ -90,7 +90,7 @@ const EmailVerificationRequired = () => {
         animate="visible"
         className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative z-10"
       >
-        {/* Logo */}
+        {}
         <motion.div
           variants={itemVariants}
           className="flex items-center justify-center gap-2 mb-8"
@@ -113,7 +113,7 @@ const EmailVerificationRequired = () => {
           </span>
         </motion.div>
 
-        {/* Email Icon */}
+        {}
         <motion.div
           variants={itemVariants}
           className="flex justify-center mb-6"

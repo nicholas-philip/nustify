@@ -1,4 +1,4 @@
-// src/components/nurse/NurseProfile.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -45,7 +45,7 @@ const NurseProfile = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Image upload states
+  
   const [uploadingImage, setUploadingImage] = useState(false);
   const [previewImage, setPreviewImage] = useState(profile?.profileImage || "");
 
@@ -93,7 +93,7 @@ const NurseProfile = () => {
     }
   };
 
-  // Handle image upload
+  
   const handleImageChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -104,13 +104,13 @@ const NurseProfile = () => {
       size: file.size,
     });
 
-    // Validate file type
+    
     if (!file.type.startsWith("image/")) {
       setError("Please select an image file (JPG, PNG, WEBP)");
       return;
     }
 
-    // Validate file size (5MB)
+    
     if (file.size > 5 * 1024 * 1024) {
       setError("Image size must be less than 5MB");
       return;
@@ -138,7 +138,7 @@ const NurseProfile = () => {
         err.message || err.toString() || "Failed to upload image";
       setError(`Upload failed: ${errorMsg}`);
 
-      // Show more details in console for debugging
+      
       console.error("Full error details:", {
         message: err.message,
         stack: err.stack,
@@ -149,7 +149,7 @@ const NurseProfile = () => {
     }
   };
 
-  // Handle image deletion
+  
   const handleDeleteImage = async () => {
     if (
       !window.confirm("Are you sure you want to remove your profile picture?")
@@ -312,7 +312,7 @@ const NurseProfile = () => {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
-          {/* Profile Picture Section */}
+          
           <motion.div
             variants={itemVariants}
             whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
@@ -324,7 +324,7 @@ const NurseProfile = () => {
             </h2>
 
             <div className="flex flex-col md:flex-row items-center gap-6">
-              {/* Profile Picture Preview */}
+              
               <div className="relative">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
@@ -358,7 +358,7 @@ const NurseProfile = () => {
                 )}
               </div>
 
-              {/* Upload Controls */}
+              
               <div className="flex-1">
                 <p className="text-sm text-gray-600 mb-3">
                   Upload a professional photo to help patients recognize you.
@@ -407,7 +407,7 @@ const NurseProfile = () => {
             </div>
           </motion.div>
 
-          {/* Basic Information */}
+          
           <motion.div
             variants={itemVariants}
             whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
@@ -449,7 +449,7 @@ const NurseProfile = () => {
             </div>
           </motion.div>
 
-          {/* Professional Information */}
+          
           <motion.div
             variants={itemVariants}
             whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
@@ -565,7 +565,7 @@ const NurseProfile = () => {
             </div>
           </motion.div>
 
-          {/* Address */}
+          
           <motion.div
             variants={itemVariants}
             whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
@@ -620,7 +620,7 @@ const NurseProfile = () => {
             </div>
           </motion.div>
 
-          {/* Action Buttons */}
+          
           <motion.div variants={itemVariants} className="flex gap-4">
             <motion.button
               whileHover={{ scale: 1.02 }}

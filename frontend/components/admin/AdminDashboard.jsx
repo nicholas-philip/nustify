@@ -1,4 +1,4 @@
-// src/components/admin/AdminDashboard.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -123,7 +123,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
+      {}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -197,7 +197,7 @@ const AdminDashboard = () => {
             </button>
           </div>
 
-          {/* Mobile Menu */}
+          {}
           {showMenu && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
@@ -223,7 +223,7 @@ const AdminDashboard = () => {
       </motion.nav>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Welcome Section */}
+        {}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -237,7 +237,7 @@ const AdminDashboard = () => {
           </p>
         </motion.div>
 
-        {/* Stats Grid */}
+        {}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -280,7 +280,7 @@ const AdminDashboard = () => {
           ))}
         </motion.div>
 
-        {/* Quick Links */}
+        {}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -314,9 +314,9 @@ const AdminDashboard = () => {
           </div>
         </motion.div>
 
-        {/* Two Column Layout */}
+        {}
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Recent Appointments */}
+          {}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -373,14 +373,14 @@ const AdminDashboard = () => {
             )}
           </motion.div>
 
-          {/* System Health & Top Nurses */}
+          {}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6 }}
             className="space-y-6"
           >
-            {/* System Health */}
+            {}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Activity className="w-6 h-6 text-purple-600" />
@@ -408,7 +408,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            {/* Top Nurses */}
+            {}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
                 Top Rated Nurses

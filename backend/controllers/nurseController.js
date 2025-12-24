@@ -1,13 +1,13 @@
-// backend/controllers/nurseController.js
+
 import NurseProfile from "../models/NurseProfile.js";
 import Appointment from "../models/Appointments.js";
 import Review from "../models/Reviews.js";
 import PatientProfile from "../models/PatientProfile.js";
 import { deleteImage, extractPublicId } from "../config/cloudinary.js";
 
-// @desc Get nurse dashboard
-// @route GET /api/nurse/dashboard
-// @access Private (Nurse only)
+
+
+
 const getDashboard = async (req, res) => {
   try {
     console.log("🔍 Looking for nurse profile with userId:", req.user._id);
@@ -85,9 +85,9 @@ const getDashboard = async (req, res) => {
   }
 };
 
-// @desc Update nurse profile
-// @route PUT /api/nurse/profile
-// @access Private (Nurse only)
+
+
+
 const updateProfile = async (req, res) => {
   try {
     const updates = req.body;
@@ -126,9 +126,9 @@ const updateProfile = async (req, res) => {
   }
 };
 
-// @desc Update nurse availability
-// @route PUT /api/nurse/availability
-// @access Private (Nurse only)
+
+
+
 const updateAvailability = async (req, res) => {
   try {
     const { availability, isAvailable } = req.body;
@@ -174,9 +174,9 @@ const updateAvailability = async (req, res) => {
   }
 };
 
-// @desc Add certification
-// @route POST /api/nurse/certifications
-// @access Private (Nurse only)
+
+
+
 const addCertification = async (req, res) => {
   try {
     const {
@@ -225,9 +225,9 @@ const addCertification = async (req, res) => {
   }
 };
 
-// @desc Get nurse appointments
-// @route GET /api/nurse/appointments
-// @access Private (Nurse only)
+
+
+
 const getAppointments = async (req, res) => {
   try {
     const { status, startDate, endDate } = req.query;
@@ -286,9 +286,9 @@ const getAppointments = async (req, res) => {
   }
 };
 
-// @desc Respond to appointment request
-// @route PUT /api/nurse/appointments/:id/respond
-// @access Private (Nurse only)
+
+
+
 const respondToAppointment = async (req, res) => {
   try {
     const { status, nurseNotes } = req.body;
@@ -324,6 +324,21 @@ const respondToAppointment = async (req, res) => {
       message: `Appointment ${status} successfully`,
       appointment,
     });
+    
+    try {
+      await createNotification(
+        appointment.patientId._id || appointment.patientId,
+        "appointment_confirmed",
+        "Appointment Confirmed",
+        `Your appointment #${appointment._id} was confirmed by the nurse.`,
+        { relatedId: appointment._id, relatedModel: "Appointment" }
+      );
+    } catch (e) {
+      console.warn(
+        "Notification create failed for appointment confirm:",
+        e.message
+      );
+    }
   } catch (error) {
     console.error("❌ Respond to appointment error:", error);
     res
@@ -332,15 +347,15 @@ const respondToAppointment = async (req, res) => {
   }
 };
 
-// @desc Complete appointment
-// @route PUT /api/nurse/appointments/:id/complete
-// @access Private (Nurse only)
+
+
+
 const completeAppointment = async (req, res) => {
   try {
     const { completionNotes } = req.body;
     const appointmentId = req.params.id;
 
-    // Find the appointment and verify it belongs to this nurse
+    
     const appointment = await Appointment.findOne({
       _id: appointmentId,
       nurseId: req.user._id,
@@ -354,7 +369,7 @@ const completeAppointment = async (req, res) => {
       });
     }
 
-    // Check if appointment date has passed or is today
+    
     const appointmentDate = new Date(appointment.appointmentDate);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -366,7 +381,7 @@ const completeAppointment = async (req, res) => {
       });
     }
 
-    // Update appointment status to completed
+    
     appointment.status = "completed";
     appointment.completedAt = new Date();
 
@@ -381,6 +396,21 @@ const completeAppointment = async (req, res) => {
       message: "Appointment marked as completed",
       appointment,
     });
+    
+    try {
+      await createNotification(
+        appointment.patientId._id || appointment.patientId,
+        "appointment_completed",
+        "Appointment Completed",
+        `Your appointment #${appointment._id} has been marked completed.`,
+        { relatedId: appointment._id, relatedModel: "Appointment" }
+      );
+    } catch (e) {
+      console.warn(
+        "Notification create failed for appointment complete:",
+        e.message
+      );
+    }
   } catch (error) {
     console.error("❌ Complete appointment error:", error);
     res.status(500).json({
@@ -391,9 +421,9 @@ const completeAppointment = async (req, res) => {
   }
 };
 
-// @desc Get nurse reviews
-// @route GET /api/nurse/reviews
-// @access Private (Nurse only)
+
+
+
 const getReviews = async (req, res) => {
   try {
     const reviews = await Review.find({ nurseId: req.user._id })
@@ -421,9 +451,9 @@ const getReviews = async (req, res) => {
   }
 };
 
-// @desc Upload nurse profile picture
-// @route POST /api/nurse/profile/upload-image
-// @access Private (Nurse only)
+
+
+
 const uploadProfileImage = async (req, res) => {
   try {
     console.log("📤 Upload endpoint hit");
@@ -459,7 +489,7 @@ const uploadProfileImage = async (req, res) => {
       });
     }
 
-    // Delete old image if exists
+    
     if (nurseProfile.profileImage) {
       console.log("🗑️ Deleting old image:", nurseProfile.profileImage);
       const oldPublicId = extractPublicId(nurseProfile.profileImage);
@@ -470,7 +500,7 @@ const uploadProfileImage = async (req, res) => {
       }
     }
 
-    // Update with new image URL
+    
     nurseProfile.profileImage = req.file.path;
     await nurseProfile.save();
 
@@ -493,9 +523,9 @@ const uploadProfileImage = async (req, res) => {
   }
 };
 
-// @desc Delete nurse profile picture
-// @route DELETE /api/nurse/profile/delete-image
-// @access Private (Nurse only)
+
+
+
 const deleteProfileImage = async (req, res) => {
   try {
     console.log("🗑️ Delete image endpoint hit");
@@ -512,13 +542,13 @@ const deleteProfileImage = async (req, res) => {
 
     console.log("🗑️ Deleting image:", nurseProfile.profileImage);
 
-    // Delete from Cloudinary
+    
     const publicId = extractPublicId(nurseProfile.profileImage);
     if (publicId) {
       await deleteImage(publicId);
     }
 
-    // Remove from database
+    
     nurseProfile.profileImage = "";
     await nurseProfile.save();
 
@@ -538,6 +568,7 @@ const deleteProfileImage = async (req, res) => {
     });
   }
 };
+
 
 export {
   getDashboard,

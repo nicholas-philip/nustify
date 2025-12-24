@@ -1,4 +1,4 @@
-// backend/routes/nurseRoutes.js
+
 import express from "express";
 import {
   getDashboard,
@@ -7,7 +7,7 @@ import {
   addCertification,
   getAppointments,
   respondToAppointment,
-  completeAppointment, // ✅ ADD THIS IMPORT
+  completeAppointment,
   getReviews,
   uploadProfileImage,
   deleteProfileImage,
@@ -18,17 +18,17 @@ import { upload } from "../config/cloudinary.js";
 
 const router = express.Router();
 
-// All routes are protected and only accessible by nurses
+
 router.use(protect);
 router.use(authorize("nurse"));
 
-// Dashboard
+
 router.get("/dashboard", getDashboard);
 
-// Profile management
+
 router.put("/profile", updateProfile);
 
-// Profile picture upload/delete with error handling
+
 router.post(
   "/profile/upload-image",
   (req, res, next) => {
@@ -56,18 +56,18 @@ router.post(
 
 router.delete("/profile/delete-image", deleteProfileImage);
 
-// Availability management
+
 router.put("/availability", updateAvailability);
 
-// Certifications
+
 router.post("/certifications", addCertification);
 
-// Appointments
+
 router.get("/appointments", getAppointments);
 router.put("/appointments/:id/respond", respondToAppointment);
-router.put("/appointments/:id/complete", completeAppointment); // ✅ ADD THIS ROUTE
+router.put("/appointments/:id/complete", completeAppointment); 
 
-// Reviews
+
 router.get("/reviews", getReviews);
 
 export default router;

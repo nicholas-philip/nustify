@@ -1,4 +1,4 @@
-// src/components/patient/NurseDetails.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -117,7 +117,7 @@ const NurseDetails = () => {
               className="bg-white rounded-xl shadow-lg p-6"
             >
               <div className="text-center mb-6">
-                {/* ⭐ UPDATED: Profile Image */}
+                
                 <motion.div
                   whileHover={{ scale: 1.05, rotate: 5 }}
                   transition={{ duration: 0.3 }}

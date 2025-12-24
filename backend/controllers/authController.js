@@ -7,16 +7,16 @@ import PatientProfile from "../models/PatientProfile.js";
 import TokenBlacklist from "../models/TokenBlacklist.js";
 import getTransporter from "../services/emailService.js";
 
-// Generate JWT Token
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || "7d",
   });
 };
 
-// @desc    Register a new nurse
-// @route   POST /api/auth/register/nurse
-// @access  Public
+
+
+
 const registerNurse = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -34,7 +34,7 @@ const registerNurse = async (req, res) => {
       hourlyRate,
     } = req.body;
 
-    // Check if user exists
+    
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res
@@ -42,7 +42,7 @@ const registerNurse = async (req, res) => {
         .json({ success: false, message: "Email already registered" });
     }
 
-    // Check if license number exists
+    
     if (licenseNumber) {
       const licenseExists = await NurseProfile.findOne({ licenseNumber });
       if (licenseExists) {
@@ -53,7 +53,7 @@ const registerNurse = async (req, res) => {
       }
     }
 
-    // Create user first
+    
     const user = await User.create({
       email,
       password,
@@ -62,10 +62,10 @@ const registerNurse = async (req, res) => {
 
     console.log("✅ User created with ID:", user._id);
 
-    // Create nurse profile with explicit userId
+    
     try {
       const nurseProfile = await NurseProfile.create({
-        userId: user._id, // MongoDB ObjectId
+        userId: user._id, 
         fullName: fullName || "Not provided",
         phone: phone || "",
         specialization: specialization || "General Nursing",
@@ -86,7 +86,7 @@ const registerNurse = async (req, res) => {
       console.log("✅ Nurse profile created with ID:", nurseProfile._id);
       console.log("✅ Profile linked to userId:", nurseProfile.userId);
 
-      // Verify the profile was created correctly
+      
       const verifyProfile = await NurseProfile.findOne({ userId: user._id });
       if (!verifyProfile) {
         console.error("❌ Profile verification failed!");
@@ -95,7 +95,7 @@ const registerNurse = async (req, res) => {
       console.log("✅ Profile verification successful");
     } catch (profileError) {
       console.error("❌ Error creating nurse profile:", profileError);
-      // Rollback: delete the user if profile creation fails
+      
       await User.findByIdAndDelete(user._id);
       return res.status(500).json({
         success: false,
@@ -104,11 +104,11 @@ const registerNurse = async (req, res) => {
       });
     }
 
-    // Generate verification token
+    
     const verificationToken = user.createEmailVerificationToken();
     await user.save({ validateBeforeSave: false });
 
-    // Send verification email
+    
     try {
       const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
 
@@ -156,13 +156,13 @@ const registerNurse = async (req, res) => {
       console.log("✅ Verification email sent to:", email);
     } catch (error) {
       console.error("❌ Error sending verification email:", error);
-      // Don't fail registration if email fails
+      
     }
 
-    // Generate token
+    
     const token = generateToken(user._id);
 
-    // Fetch the created profile to return
+    
     const nurseProfile = await NurseProfile.findOne({ userId: user._id });
 
     res.status(201).json({
@@ -186,9 +186,9 @@ const registerNurse = async (req, res) => {
   }
 };
 
-// @desc    Register a new patient
-// @route   POST /api/auth/register/patient
-// @access  Public
+
+
+
 const registerPatient = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -205,7 +205,7 @@ const registerPatient = async (req, res) => {
       emergencyContactPhone,
     } = req.body;
 
-    // Check if user exists
+    
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res
@@ -213,14 +213,14 @@ const registerPatient = async (req, res) => {
         .json({ success: false, message: "Email already registered" });
     }
 
-    // Create user
+    
     const user = await User.create({
       email,
       password,
       role: "patient",
     });
 
-    // Create patient profile
+    
     const patientProfile = await PatientProfile.create({
       userId: user._id,
       fullName,
@@ -231,11 +231,11 @@ const registerPatient = async (req, res) => {
       },
     });
 
-    // Generate verification token
+    
     const verificationToken = user.createEmailVerificationToken();
     await user.save({ validateBeforeSave: false });
 
-    // Send verification email
+    
     try {
       const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
 
@@ -285,7 +285,7 @@ const registerPatient = async (req, res) => {
       console.error("Error sending verification email:", error);
     }
 
-    // Generate token
+    
     const token = generateToken(user._id);
 
     res.status(201).json({
@@ -309,9 +309,9 @@ const registerPatient = async (req, res) => {
   }
 };
 
-// @desc    Verify email
-// @route   GET /api/auth/verify-email/:token
-// @access  Public
+
+
+
 const verifyEmail = async (req, res) => {
   try {
     const hashedToken = crypto
@@ -331,7 +331,7 @@ const verifyEmail = async (req, res) => {
       });
     }
 
-    // Get profile for welcome email
+    
     let profile;
     if (user.role === "nurse") {
       profile = await NurseProfile.findOne({ userId: user._id });
@@ -339,13 +339,13 @@ const verifyEmail = async (req, res) => {
       profile = await PatientProfile.findOne({ userId: user._id });
     }
 
-    // Update user
+    
     user.isVerified = true;
     user.emailVerificationToken = undefined;
     user.emailVerificationExpires = undefined;
     await user.save();
 
-    // Send welcome email
+    
     try {
       const dashboardUrl =
         user.role === "nurse"
@@ -430,9 +430,9 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-// @desc    Resend verification email
-// @route   POST /api/auth/resend-verification
-// @access  Public
+
+
+
 const resendVerification = async (req, res) => {
   try {
     const { email } = req.body;
@@ -451,11 +451,11 @@ const resendVerification = async (req, res) => {
         .json({ success: false, message: "Email already verified" });
     }
 
-    // Generate new verification token
+    
     const verificationToken = user.createEmailVerificationToken();
     await user.save({ validateBeforeSave: false });
 
-    // Send verification email
+    
     const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
 
     await getTransporter().sendMail({
@@ -512,9 +512,9 @@ const resendVerification = async (req, res) => {
   }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
+
+
+
 const login = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -524,7 +524,7 @@ const login = async (req, res) => {
 
     const { email, password } = req.body;
 
-    // Check if user exists
+    
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res
@@ -532,7 +532,7 @@ const login = async (req, res) => {
         .json({ success: false, message: "Invalid email or password" });
     }
 
-    // Check if account is locked
+    
     if (user.isLocked) {
       return res.status(401).json({
         success: false,
@@ -540,14 +540,14 @@ const login = async (req, res) => {
       });
     }
 
-    // Check if account is active
+    
     if (!user.isActive) {
       return res
         .status(401)
         .json({ success: false, message: "Account has been deactivated" });
     }
 
-    // Verify password
+    
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       await user.incLoginAttempts();
@@ -556,12 +556,12 @@ const login = async (req, res) => {
         .json({ success: false, message: "Invalid email or password" });
     }
 
-    // Reset login attempts on successful login
+    
     if (user.loginAttempts > 0) {
       await user.resetLoginAttempts();
     }
 
-    // Check if 2FA is enabled
+    
     if (user.twoFactorEnabled) {
       const code = user.create2FACode();
       await user.save({ validateBeforeSave: false });
@@ -616,11 +616,11 @@ const login = async (req, res) => {
       });
     }
 
-    // Update last login
+    
     user.lastLogin = new Date();
     await user.save({ validateBeforeSave: false });
 
-    // Generate token
+    
     const token = generateToken(user._id);
 
     res.status(200).json({
@@ -642,9 +642,9 @@ const login = async (req, res) => {
   }
 };
 
-// @desc    Verify 2FA code
-// @route   POST /api/auth/verify-2fa
-// @access  Public
+
+
+
 const verify2FA = async (req, res) => {
   try {
     const { userId, code } = req.body;
@@ -664,13 +664,13 @@ const verify2FA = async (req, res) => {
       });
     }
 
-    // Clear 2FA code
+    
     user.twoFactorCode = undefined;
     user.twoFactorExpires = undefined;
     user.lastLogin = new Date();
     await user.save({ validateBeforeSave: false });
 
-    // Generate token
+    
     const token = generateToken(user._id);
 
     res.status(200).json({
@@ -692,9 +692,9 @@ const verify2FA = async (req, res) => {
   }
 };
 
-// @desc    Forgot password
-// @route   POST /api/auth/forgot-password
-// @access  Public
+
+
+
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -708,11 +708,11 @@ const forgotPassword = async (req, res) => {
       });
     }
 
-    // Generate reset token
+    
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    // Send password reset email
+    
     try {
       const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
@@ -787,9 +787,9 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-// @desc    Reset password
-// @route   POST /api/auth/reset-password/:token
-// @access  Public
+
+
+
 const resetPassword = async (req, res) => {
   try {
     const hashedToken = crypto
@@ -818,7 +818,7 @@ const resetPassword = async (req, res) => {
       });
     }
 
-    // Get profile for email
+    
     let profile;
     if (user.role === "nurse") {
       profile = await NurseProfile.findOne({ userId: user._id });
@@ -826,14 +826,14 @@ const resetPassword = async (req, res) => {
       profile = await PatientProfile.findOne({ userId: user._id });
     }
 
-    // Update password
+    
     user.password = password;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     user.passwordChangedAt = Date.now();
     await user.save();
 
-    // Send confirmation email
+    
     try {
       await getTransporter().sendMail({
         from: `"Nursify Platform" <${process.env.SENDER_EMAIL}>`,
@@ -894,16 +894,16 @@ const resetPassword = async (req, res) => {
   }
 };
 
-// @desc    Change password
-// @route   PUT /api/auth/change-password
-// @access  Private
+
+
+
 const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
     const user = await User.findById(req.user._id).select("+password");
 
-    // Verify current password
+    
     const isPasswordValid = await user.comparePassword(currentPassword);
     if (!isPasswordValid) {
       return res
@@ -918,7 +918,7 @@ const changePassword = async (req, res) => {
       });
     }
 
-    // Get profile for email
+    
     let profile;
     if (user.role === "nurse") {
       profile = await NurseProfile.findOne({ userId: user._id });
@@ -926,12 +926,12 @@ const changePassword = async (req, res) => {
       profile = await PatientProfile.findOne({ userId: user._id });
     }
 
-    // Update password
+    
     user.password = newPassword;
     user.passwordChangedAt = Date.now();
     await user.save();
 
-    // Send confirmation email
+    
     try {
       await getTransporter().sendMail({
         from: `"Nursify Platform" <${process.env.SENDER_EMAIL}>`,
@@ -992,9 +992,9 @@ const changePassword = async (req, res) => {
   }
 };
 
-// @desc    Toggle 2FA
-// @route   PUT /api/auth/toggle-2fa
-// @access  Private
+
+
+
 const toggle2FA = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -1017,18 +1017,18 @@ const toggle2FA = async (req, res) => {
   }
 };
 
-// @desc    Logout user
-// @route   POST /api/auth/logout
-// @access  Private
+
+
+
 const logout = async (req, res) => {
   try {
     const token = req.token;
 
-    // Decode token to get expiration time
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const expiresAt = new Date(decoded.exp * 1000);
 
-    // Add token to blacklist
+    
     await TokenBlacklist.create({
       token,
       userId: req.user._id,
@@ -1047,17 +1047,17 @@ const logout = async (req, res) => {
   }
 };
 
-// @desc    Logout from all devices
-// @route   POST /api/auth/logout-all
-// @access  Private
+
+
+
 const logoutAll = async (req, res) => {
   try {
-    // Update passwordChangedAt to invalidate all existing tokens
+    
     const user = await User.findById(req.user._id);
     user.passwordChangedAt = Date.now();
     await user.save({ validateBeforeSave: false });
 
-    // Also blacklist current token
+    
     const token = req.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const expiresAt = new Date(decoded.exp * 1000);
@@ -1080,9 +1080,9 @@ const logoutAll = async (req, res) => {
   }
 };
 
-// @desc    Get current user profile
-// @route   GET /api/auth/me
-// @access  Private
+
+
+
 const getMe = async (req, res) => {
   try {
     const user = req.user;

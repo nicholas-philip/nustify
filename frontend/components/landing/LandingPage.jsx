@@ -1,4 +1,3 @@
-// src/components/landing/LandingPage.jsx
 import {
   Heart,
   Search,
@@ -23,7 +22,6 @@ import { motion } from "framer-motion";
 const LandingPage = () => {
   const navigate = useNavigate();
 
-  // Animation variants
   const fadeInUp = {
     hidden: { opacity: 0, y: 60 },
     visible: {
@@ -81,7 +79,6 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
-      {/* Navigation */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -130,9 +127,7 @@ const LandingPage = () => {
         </div>
       </motion.nav>
 
-      {/* Hero Section */}
       <motion.div className="relative py-28 overflow-hidden mt-16">
-        {/* Animated Background Image */}
         <motion.div
           className="absolute inset-0 bg-cover bg-center"
           initial={{ scale: 1.05 }}
@@ -150,10 +145,8 @@ const LandingPage = () => {
           }}
         />
 
-        {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50" />
 
-        {/* Floating Blobs */}
         <motion.div
           animate={{ y: [0, -25, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -166,7 +159,6 @@ const LandingPage = () => {
           className="absolute bottom-24 left-24 w-72 h-72 bg-blue-400 rounded-full blur-3xl opacity-30"
         />
 
-        {/* Hero Content */}
         <div className="relative z-10 text-center text-white px-4">
           <motion.div
             initial="hidden"
@@ -219,7 +211,6 @@ const LandingPage = () => {
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-4">
-        {/* Features Grid */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -272,7 +263,6 @@ const LandingPage = () => {
               }}
               className="bg-white rounded-2xl shadow-lg transition-all duration-300 cursor-pointer group relative overflow-hidden"
             >
-              {/* Image Section */}
               <div className="relative h-48 overflow-hidden">
                 <motion.img
                   src={feature.image}
@@ -291,7 +281,6 @@ const LandingPage = () => {
                 </motion.div>
               </div>
 
-              {/* Content Section */}
               <div className="p-8">
                 <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:text-purple-600 transition-colors">
                   {feature.title}
@@ -304,7 +293,6 @@ const LandingPage = () => {
           ))}
         </motion.div>
 
-        {/* Stats Section */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -312,7 +300,6 @@ const LandingPage = () => {
           variants={staggerContainer}
           className="mt-20 relative rounded-2xl shadow-2xl overflow-hidden"
         >
-          {/* Background Image */}
           <div className="absolute inset-0">
             <img
               src="https://images.pexels.com/photos/7089400/pexels-photo-7089400.jpeg"
@@ -322,7 +309,6 @@ const LandingPage = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-purple-900/95 to-blue-900/95" />
           </div>
 
-          {/* Content */}
           <div className="relative z-10 p-12">
             <div className="grid md:grid-cols-4 gap-8 text-center">
               {[
@@ -388,7 +374,6 @@ const LandingPage = () => {
           </div>
         </motion.div>
 
-        {/* How It Works */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -453,7 +438,6 @@ const LandingPage = () => {
                 whileHover={{ y: -15, scale: 1.05 }}
                 className="relative text-center group"
               >
-                {/* Image Background */}
                 <div className="relative mb-4 rounded-2xl overflow-hidden h-40">
                   <motion.img
                     src={item.image}
@@ -464,7 +448,6 @@ const LandingPage = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-                  {/* Step Number */}
                   <motion.div
                     className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br ${item.gradient} text-white rounded-full flex items-center justify-center text-3xl font-bold shadow-2xl`}
                     whileHover={{ rotate: 360, scale: 1.2 }}
@@ -495,7 +478,6 @@ const LandingPage = () => {
           </div>
         </motion.div>
 
-        {/* CTA Section */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -503,7 +485,6 @@ const LandingPage = () => {
           variants={fadeInUp}
           className="mt-20 mb-20 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-12 text-center text-white relative overflow-hidden"
         >
-          {/* Animated background patterns */}
           <motion.div
             animate={{
               scale: [1, 1.2, 1],
@@ -584,7 +565,6 @@ const LandingPage = () => {
         </motion.div>
       </div>
 
-      {/* Footer */}
       <motion.footer
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -594,7 +574,6 @@ const LandingPage = () => {
       >
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
-            {/* Brand Column */}
             <div>
               <motion.div
                 className="flex items-center gap-2 mb-4"
@@ -614,7 +593,6 @@ const LandingPage = () => {
               </p>
             </div>
 
-            {/* Quick Links */}
             <div>
               <h3 className="font-bold text-lg mb-4">Quick Links</h3>
               <ul className="space-y-3">
@@ -637,7 +615,6 @@ const LandingPage = () => {
               </ul>
             </div>
 
-            {/* For Nurses */}
             <div>
               <h3 className="font-bold text-lg mb-4">For Nurses</h3>
               <ul className="space-y-3">
@@ -663,7 +640,6 @@ const LandingPage = () => {
               </ul>
             </div>
 
-            {/* Contact */}
             <div>
               <h3 className="font-bold text-lg mb-4">Contact Us</h3>
               <ul className="space-y-3 text-sm text-gray-400">
@@ -687,14 +663,12 @@ const LandingPage = () => {
             </div>
           </div>
 
-          {/* Divider */}
           <div className="border-t border-gray-800 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-gray-400 text-sm">
                 © 2024 Nursify. All rights reserved.
               </p>
 
-              {/* Social Links */}
               <div className="flex gap-4">
                 {[
                   { name: "Facebook", icon: Facebook },
@@ -715,7 +689,6 @@ const LandingPage = () => {
                 ))}
               </div>
 
-              {/* Legal Links */}
               <div className="flex gap-6 text-sm">
                 {["Privacy Policy", "Terms of Service"].map((link, i) => (
                   <motion.a

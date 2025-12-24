@@ -1,10 +1,9 @@
-// frontend/src/services/api.js
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4500";
 
 class ApiService {
   constructor() {
-    // ✅ Initialize token from localStorage
-    this.token = localStorage.getItem("token");
+    this.token =
+      sessionStorage.getItem("token") || localStorage.getItem("token");
     console.log("✅ ApiService initialized with URL:", API_URL);
     console.log(
       "🔑 Initial token from localStorage:",
@@ -15,21 +14,37 @@ class ApiService {
   setToken(token) {
     this.token = token;
     localStorage.setItem("token", token);
+    try {
+      sessionStorage.removeItem("token");
+    } catch (e) {}
     console.log("🔑 Token set in ApiService and localStorage");
   }
 
+  setSessionToken(token) {
+    this.token = token;
+    sessionStorage.setItem("token", token);
+    console.log("🔑 Session token set for this tab only");
+  }
+
   getToken() {
-    // ✅ Always check localStorage as fallback
     if (!this.token) {
-      this.token = localStorage.getItem("token");
+      this.token =
+        sessionStorage.getItem("token") || localStorage.getItem("token");
     }
     return this.token;
   }
 
   clearToken() {
     this.token = null;
-    localStorage.removeItem("token");
-    console.log("🗑️ Token cleared from ApiService and localStorage");
+    try {
+      localStorage.removeItem("token");
+    } catch (e) {}
+    try {
+      sessionStorage.removeItem("token");
+    } catch (e) {}
+    console.log(
+      "🗑️ Token cleared from ApiService, localStorage and sessionStorage"
+    );
   }
 
   async request(endpoint, options = {}) {
@@ -37,12 +52,10 @@ class ApiService {
 
     const headers = {};
 
-    // Only add Content-Type for JSON requests
     if (!(options.body instanceof FormData)) {
       headers["Content-Type"] = "application/json";
     }
 
-    // ✅ Always get fresh token before making request
     const currentToken = this.getToken();
     if (currentToken) {
       headers["Authorization"] = `Bearer ${currentToken}`;
@@ -51,7 +64,6 @@ class ApiService {
       console.warn("⚠️ No token available for request");
     }
 
-    // Merge with any additional headers
     if (options.headers) {
       Object.assign(headers, options.headers);
     }
@@ -69,7 +81,6 @@ class ApiService {
       console.log("📊 Response status:", response.status);
       console.log("📊 Response ok:", response.ok);
 
-      // Try to parse JSON response
       let data;
       try {
         data = await response.json();
@@ -97,7 +108,6 @@ class ApiService {
     }
   }
 
-  // ==================== AUTH ====================
   registerNurse = (data) => {
     console.log("🏥 Registering nurse...");
     return this.request("/api/auth/register/nurse", {
@@ -120,11 +130,6 @@ class ApiService {
       method: "POST",
       body: JSON.stringify(data),
     });
-
-    if (result.success && result.token) {
-      this.setToken(result.token);
-    }
-
     return result;
   }
 
@@ -147,7 +152,6 @@ class ApiService {
 
   logout = async () => {
     try {
-      // Only call API if we have a token
       if (this.token) {
         const result = await this.request("/api/auth/logout", {
           method: "POST",
@@ -161,13 +165,12 @@ class ApiService {
         return { success: true };
       }
     } catch (error) {
-      // Even if API call fails, clear token locally
       console.warn(
         "⚠️ Logout API failed, clearing token locally:",
         error.message
       );
       this.clearToken();
-      return { success: true }; // Don't throw error
+      return { success: true };
     }
   };
 
@@ -192,7 +195,6 @@ class ApiService {
     });
   };
 
-  // ==================== PATIENT ====================
   getPatientDashboard() {
     return this.request("/api/patient/dashboard");
   }
@@ -239,7 +241,6 @@ class ApiService {
     });
   }
 
-  // ==================== NURSE ====================
   getNurseDashboard() {
     return this.request("/api/nurse/dashboard");
   }
@@ -256,7 +257,6 @@ class ApiService {
     });
   }
 
-  // ✅ ADD THIS METHOD - Complete appointment
   completeAppointment(id, data) {
     console.log("✅ Completing appointment:", id);
     return this.request(`/api/nurse/appointments/${id}/complete`, {
@@ -283,7 +283,6 @@ class ApiService {
     return this.request("/api/nurse/reviews");
   }
 
-  // Nurse profile picture upload
   async uploadNurseProfileImage(file) {
     console.log("📤 Uploading nurse profile image...");
     console.log("📁 File details:", {
@@ -294,8 +293,6 @@ class ApiService {
 
     const formData = new FormData();
     formData.append("profileImage", file);
-
-    console.log("📦 FormData created");
 
     try {
       const result = await this.request("/api/nurse/profile/upload-image", {
@@ -310,7 +307,6 @@ class ApiService {
     }
   }
 
-  // Delete nurse profile picture
   deleteNurseProfileImage() {
     console.log("🗑️ Deleting nurse profile image...");
     return this.request("/api/nurse/profile/delete-image", {
@@ -318,7 +314,6 @@ class ApiService {
     });
   }
 
-  // ==================== ADMIN ====================
   getAdminDashboard() {
     return this.request("/api/admin/dashboard");
   }
@@ -366,7 +361,6 @@ class ApiService {
     return this.request(`/api/admin/analytics?${queryString}`);
   }
 
-  // ==================== NOTIFICATIONS ====================
   getNotifications(params) {
     const queryString = params ? new URLSearchParams(params).toString() : "";
     return this.request(`/api/notifications?${queryString}`);
@@ -390,7 +384,6 @@ class ApiService {
     });
   }
 
-  // ==================== PAYMENTS ====================
   createPayment(data) {
     return this.request("/api/payments", {
       method: "POST",
@@ -420,6 +413,14 @@ class ApiService {
 }
 
 const apiInstance = new ApiService();
+
+if (typeof window !== "undefined") {
+  try {
+    window.apiService = apiInstance;
+  } catch (e) {
+    console.warn("Could not attach apiService to window:", e);
+  }
+}
 
 export { ApiService };
 export default apiInstance;

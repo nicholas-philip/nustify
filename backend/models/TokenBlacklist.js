@@ -22,10 +22,10 @@ const tokenBlacklistSchema = new mongoose.Schema(
   }
 );
 
-// Index for automatic cleanup of expired tokens
+
 tokenBlacklistSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-// Index for quick token lookup
+
 tokenBlacklistSchema.index({ token: 1 });
 
 const TokenBlacklist = mongoose.model("TokenBlacklist", tokenBlacklistSchema);

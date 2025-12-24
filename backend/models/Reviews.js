@@ -31,10 +31,22 @@ const reviewSchema = new mongoose.Schema(
       maxlength: 1000,
     },
     categories: {
-      professionalism: { type: Number, min: 1, max: 5 },
-      punctuality: { type: Number, min: 1, max: 5 },
-      communication: { type: Number, min: 1, max: 5 },
-      care: { type: Number, min: 1, max: 5 },
+      professionalism: {
+        type: Number,
+        min: [1, "Rating must be at least 1"],
+        max: 5,
+      },
+      punctuality: {
+        type: Number,
+        min: [1, "Rating must be at least 1"],
+        max: 5,
+      },
+      communication: {
+        type: Number,
+        min: [1, "Rating must be at least 1"],
+        max: 5,
+      },
+      care: { type: Number, min: [1, "Rating must be at least 1"], max: 5 },
     },
     isVerified: {
       type: Boolean,
@@ -50,7 +62,7 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
+
 reviewSchema.index({ appointmentId: 1 }, { unique: true });
 reviewSchema.index({ nurseId: 1, createdAt: -1 });
 

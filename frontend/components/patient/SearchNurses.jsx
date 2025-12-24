@@ -1,4 +1,4 @@
-// src/components/patient/SearchNurses.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -80,7 +80,7 @@ const SearchNurses = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header with Background Image */}
+      
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -122,7 +122,7 @@ const SearchNurses = () => {
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search Bar */}
+        
         <motion.form
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -197,7 +197,7 @@ const SearchNurses = () => {
           </motion.button>
         </motion.form>
 
-        {/* Results */}
+        
         <AnimatePresence mode="wait">
           {loading ? (
             <motion.div
@@ -259,7 +259,7 @@ const SearchNurses = () => {
                     }}
                     className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer"
                   >
-                    {/* Profile Image Header */}
+                    
                     <div className="relative h-32 bg-gradient-to-br from-purple-500 to-blue-500">
                       <div className="absolute inset-0 opacity-20">
                         <img

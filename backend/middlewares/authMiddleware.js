@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import TokenBlacklist from "../models/TokenBlacklist.js";
 
-// Protect routes - verify JWT token
+
 export const protect = async (req, res, next) => {
   let token;
 
@@ -11,13 +11,13 @@ export const protect = async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     try {
-      // Get token from header
+      
       token = req.headers.authorization.split(" ")[1];
 
-      // ✅ Store token in req for later use (logout, etc.)
+      
       req.token = token;
 
-      // Check if token is blacklisted
+      
       const blacklisted = await TokenBlacklist.findOne({ token });
       if (blacklisted) {
         return res.status(401).json({
@@ -26,10 +26,10 @@ export const protect = async (req, res, next) => {
         });
       }
 
-      // Verify token
+      
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Get user from token
+      
       req.user = await User.findById(decoded.id).select("-password");
 
       if (!req.user) {
@@ -64,7 +64,7 @@ export const protect = async (req, res, next) => {
   }
 };
 
-// Check if user has specific role
+
 export const authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {

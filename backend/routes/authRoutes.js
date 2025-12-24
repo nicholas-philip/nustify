@@ -19,7 +19,7 @@ import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// Validation rules
+
 const nurseRegistrationValidation = [
   body("email").isEmail().withMessage("Please provide a valid email"),
   body("password")
@@ -81,7 +81,7 @@ const verify2FAValidation = [
     .withMessage("Code must be 6 digits"),
 ];
 
-// Public routes
+
 router.post("/register/nurse", nurseRegistrationValidation, registerNurse);
 router.post(
   "/register/patient",
@@ -95,7 +95,7 @@ router.post("/verify-2fa", verify2FAValidation, verify2FA);
 router.post("/forgot-password", forgotPasswordValidation, forgotPassword);
 router.post("/reset-password/:token", resetPasswordValidation, resetPassword);
 
-// Protected routes
+
 router.use(protect);
 router.get("/me", getMe);
 router.post("/logout", logout);

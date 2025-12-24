@@ -1,4 +1,4 @@
-// src/components/patient/SubmitReview.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -68,14 +68,33 @@ const SubmitReview = () => {
       return;
     }
 
+    
+    const categoriesRated = Object.values(formData.categories).some(
+      (cat) => cat > 0
+    );
+    if (!categoriesRated) {
+      setError("Please rate at least one category");
+      return;
+    }
+
     setError("");
     setSubmitting(true);
 
     try {
+      
+      const filteredCategories = {};
+      Object.entries(formData.categories).forEach(([key, value]) => {
+        if (value >= 1) {
+          filteredCategories[key] = value;
+        }
+      });
+
       const reviewData = {
         nurseId: appointment.nurseId._id || appointment.nurseId,
         appointmentId: appointmentId,
-        ...formData,
+        rating: formData.rating,
+        comment: formData.comment,
+        categories: filteredCategories,
       };
 
       const data = await api.submitReview(reviewData);

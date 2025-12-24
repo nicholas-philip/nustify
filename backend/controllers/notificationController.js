@@ -1,8 +1,9 @@
 import Notification from "../models/Notification.js";
+import { getIO } from "../libs/socket.js";
 
-// @desc    Get user notifications
-// @route   GET /api/notifications
-// @access  Private
+
+
+
 const getNotifications = async (req, res) => {
   try {
     const { isRead, type, page = 1, limit = 20 } = req.query;
@@ -49,9 +50,9 @@ const getNotifications = async (req, res) => {
   }
 };
 
-// @desc    Mark notification as read
-// @route   PUT /api/notifications/:id/read
-// @access  Private
+
+
+
 const markAsRead = async (req, res) => {
   try {
     const notification = await Notification.findOneAndUpdate(
@@ -87,9 +88,9 @@ const markAsRead = async (req, res) => {
   }
 };
 
-// @desc    Mark all notifications as read
-// @route   PUT /api/notifications/read-all
-// @access  Private
+
+
+
 const markAllAsRead = async (req, res) => {
   try {
     await Notification.updateMany(
@@ -116,9 +117,9 @@ const markAllAsRead = async (req, res) => {
   }
 };
 
-// @desc    Delete notification
-// @route   DELETE /api/notifications/:id
-// @access  Private
+
+
+
 const deleteNotification = async (req, res) => {
   try {
     const notification = await Notification.findOneAndDelete({
@@ -147,9 +148,9 @@ const deleteNotification = async (req, res) => {
   }
 };
 
-// @desc    Delete all notifications
-// @route   DELETE /api/notifications
-// @access  Private
+
+
+
 const deleteAllNotifications = async (req, res) => {
   try {
     await Notification.deleteMany({ userId: req.user._id });
@@ -168,7 +169,7 @@ const deleteAllNotifications = async (req, res) => {
   }
 };
 
-// Helper function to create notification (used by other controllers)
+
 export const createNotification = async (
   userId,
   type,
@@ -187,6 +188,19 @@ export const createNotification = async (
       actionUrl: options.actionUrl,
       priority: options.priority || "medium",
     });
+
+    
+    try {
+      const io = getIO();
+      if (io) {
+        io.to(String(userId)).emit("notification", notification);
+      }
+    } catch (emitErr) {
+      console.warn(
+        "Failed to emit notification via Socket.io:",
+        emitErr.message
+      );
+    }
     return notification;
   } catch (error) {
     console.error("Create notification error:", error);

@@ -1,4 +1,4 @@
-// src/components/nurse/NurseDashboard.jsx
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../services/api";
+import NotificationCenter from "../common/NotificationCenter";
 
 const NurseDashboard = () => {
   const navigate = useNavigate();
@@ -186,7 +187,7 @@ const NurseDashboard = () => {
                   animate={{ x: 0 }}
                   exit={{ x: "100%" }}
                   transition={{ type: "spring", damping: 25 }}
-                  className="fixed top-0 right-0 bottom-0 w-64 bg-white shadow-xl z-50 md:hidden p-6"
+                  className="fixed top-0 right-0 bottom-0 w-64 bg-white shadow-xl z-50 md:hidden p-6 flex flex-col"
                 >
                   <div className="flex justify-between items-center mb-8">
                     <h2 className="text-xl font-bold text-gray-900">Menu</h2>
@@ -199,7 +200,7 @@ const NurseDashboard = () => {
                       <X className="w-6 h-6" />
                     </motion.button>
                   </div>
-                  <div className="space-y-4">
+                  <div className="space-y-4 flex-1">
                     {[
                       { label: "Appointments", path: "/nurse/appointments" },
                       { label: "Profile", path: "/nurse/profile" },
@@ -218,6 +219,9 @@ const NurseDashboard = () => {
                     >
                       Logout
                     </button>
+                  </div>
+                  <div className="border-t border-gray-200 pt-4 flex justify-end">
+                    <NotificationCenter />
                   </div>
                 </motion.div>
               </>

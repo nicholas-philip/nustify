@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 let transporter = null;
 
-// Create transporter lazily (only when first used)
+
 const getTransporter = () => {
   if (!transporter) {
     console.log("Creating SMTP transporter with credentials:");
@@ -28,7 +28,7 @@ const getTransporter = () => {
       },
     });
 
-    // Verify connection
+    
     transporter.verify((error, success) => {
       if (error) {
         console.error("❌ SMTP Connection Error:", error.message);

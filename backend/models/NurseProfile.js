@@ -1,4 +1,4 @@
-// backend/models/NurseProfile.js
+
 import mongoose from "mongoose";
 
 const nurseProfileSchema = new mongoose.Schema(
@@ -16,7 +16,7 @@ const nurseProfileSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: false, // Changed to not required for easier testing
+      required: false, 
     },
     specialization: {
       type: String,
@@ -29,8 +29,8 @@ const nurseProfileSchema = new mongoose.Schema(
     },
     licenseNumber: {
       type: String,
-      required: false, // Changed to not required - can be added later
-      sparse: true, // Allows null values while maintaining uniqueness for non-null values
+      required: false, 
+      sparse: true, 
     },
     bio: {
       type: String,
@@ -100,7 +100,7 @@ const nurseProfileSchema = new mongoose.Schema(
   }
 );
 
-// Index for searching
+
 nurseProfileSchema.index({
   specialization: 1,
   "address.city": 1,

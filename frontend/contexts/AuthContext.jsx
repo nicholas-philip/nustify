@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../services/api";
 
@@ -17,20 +16,23 @@ export const AuthProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Initialize auth on mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("🔄 AuthProvider mounted, token exists:", !!token);
+    const sessionToken = sessionStorage.getItem("token");
+    const localToken = localStorage.getItem("token");
+    console.log(
+      "🔄 AuthProvider mounted, sessionToken exists:",
+      !!sessionToken,
+      "localToken exists:",
+      !!localToken
+    );
     initializeAuth();
   }, []);
 
   const initializeAuth = async () => {
-    const token = localStorage.getItem("token");
-    console.log("🔍 Checking for token:", token ? "EXISTS" : "NONE");
-    console.log(
-      "Token value:",
-      token ? token.substring(0, 20) + "..." : "null"
-    );
+    const sessionToken = sessionStorage.getItem("token");
+    const localToken = localStorage.getItem("token");
+    const token = sessionToken || localToken;
+    console.log("🔍 Checking for token: ", token ? "EXISTS" : "NONE");
 
     if (!token) {
       console.log("❌ No token found, user not authenticated");
@@ -41,9 +43,13 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log("🔄 Initializing auth with token...");
 
-      // CRITICAL: Set token in API service BEFORE making request
-      api.setToken(token);
-      console.log("✅ Token set in API service");
+      if (sessionToken) {
+        api.setSessionToken(sessionToken);
+        console.log("✅ Session token set in API service");
+      } else {
+        api.setToken(localToken);
+        console.log("✅ Local token set in API service");
+      }
 
       const data = await api.getMe();
       console.log("📥 getMe response:", data);
@@ -68,53 +74,67 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (newToken, userData) => {
+  const login = async (newToken, userData = {}) => {
     console.log("🔐 Login called");
     console.log("Token:", newToken ? "EXISTS" : "NONE");
     console.log("User data:", userData);
 
-    // Store token in localStorage
-    localStorage.setItem("token", newToken);
-    console.log("✅ Token saved to localStorage");
+    const sessionPreference = userData?.session || false;
 
-    // Set token in API service
-    api.setToken(newToken);
-    console.log("✅ Token set in API service");
+    if (sessionPreference) {
+      try {
+        sessionStorage.setItem("token", newToken);
+      } catch (e) {
+        console.error("Error saving token to sessionStorage:", e);
+      }
+      api.setSessionToken(newToken);
+      console.log("✅ Session token saved for this tab");
+    } else {
+      try {
+        localStorage.setItem("token", newToken);
+      } catch (e) {}
+      api.setToken(newToken);
+      console.log("✅ Token saved to localStorage");
+    }
 
-    // Set user immediately
-    setUser(userData);
+    const safeUser = { ...userData };
+    delete safeUser.session;
+    setUser(safeUser);
     console.log("✅ User state updated");
 
-    // Fetch full profile
     try {
       await refreshUser();
     } catch (error) {
       console.error("Warning: Could not fetch full profile:", error);
-      // Don't fail login if profile fetch fails
     }
   };
 
   const logout = async () => {
     console.log("🚪 Logout called");
 
-    // FIRST: Clear user state immediately to prevent any API calls
     setUser(null);
     setProfile(null);
     console.log("✅ User state cleared immediately");
 
     try {
-      // THEN: Try to call logout API (this might fail if token is already invalid)
       await api.logout();
       console.log("✅ Logout API call successful");
     } catch (error) {
       console.error("⚠️ Logout API error (ignoring):", error.message);
-      // Ignore errors - we're logging out anyway
     }
 
-    // FINALLY: Clear everything
-    localStorage.removeItem("token");
+    try {
+      localStorage.removeItem("token");
+    } catch (e) {
+      console.error("Error clearing token from localStorage:", e);
+    }
+    try {
+      sessionStorage.removeItem("token");
+    } catch (e) {
+      console.error("Error clearing token from sessionStorage:", e);
+    }
     api.clearToken();
-    console.log("✅ Token cleared from storage");
+    console.log("✅ Token cleared from storage (local + session)");
   };
 
   const refreshUser = async () => {

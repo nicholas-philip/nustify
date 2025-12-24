@@ -5,26 +5,26 @@ import Appointment from "../models/Appointments.js";
 import Review from "../models/Reviews.js";
 import Message from "../models/Messages.js";
 
-// @desc    Get admin dashboard statistics
-// @route   GET /api/admin/dashboard
-// @access  Private (Admin only)
+
+
+
 const getDashboard = async (req, res) => {
   try {
-    // User Statistics
+    
     const totalUsers = await User.countDocuments();
     const totalNurses = await User.countDocuments({ role: "nurse" });
     const totalPatients = await User.countDocuments({ role: "patient" });
     const verifiedUsers = await User.countDocuments({ isVerified: true });
     const activeUsers = await User.countDocuments({ isActive: true });
 
-    // Recent registrations (last 30 days)
+    
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     const newUsersThisMonth = await User.countDocuments({
       createdAt: { $gte: thirtyDaysAgo },
     });
 
-    // Appointment Statistics
+    
     const totalAppointments = await Appointment.countDocuments();
     const pendingAppointments = await Appointment.countDocuments({
       status: "pending",
@@ -39,7 +39,7 @@ const getDashboard = async (req, res) => {
       status: "cancelled",
     });
 
-    // Revenue calculation (completed appointments)
+    
     const revenueData = await Appointment.aggregate([
       { $match: { status: "completed" } },
       {
@@ -54,7 +54,7 @@ const getDashboard = async (req, res) => {
     const totalRevenue = revenueData[0]?.totalRevenue || 0;
     const avgAppointmentCost = revenueData[0]?.avgAppointmentCost || 0;
 
-    // Monthly revenue trend (last 6 months)
+    
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
@@ -78,7 +78,7 @@ const getDashboard = async (req, res) => {
       { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
-    // Review Statistics
+    
     const totalReviews = await Review.countDocuments();
     const averageRatingData = await Review.aggregate([
       {
@@ -90,20 +90,20 @@ const getDashboard = async (req, res) => {
     ]);
     const averageRating = averageRatingData[0]?.avgRating || 0;
 
-    // Top rated nurses
+    
     const topNurses = await NurseProfile.find()
       .sort({ rating: -1, totalReviews: -1 })
       .limit(5)
       .populate("userId", "email isVerified");
 
-    // Recent activities
+    
     const recentAppointments = await Appointment.find()
       .sort({ createdAt: -1 })
       .limit(10)
       .populate("patientId", "email")
       .populate("nurseId", "email");
 
-    // System health
+    
     const unreadMessages = await Message.countDocuments({ isRead: false });
     const lockedAccounts = await User.countDocuments({
       lockUntil: { $gt: Date.now() },
@@ -154,9 +154,9 @@ const getDashboard = async (req, res) => {
   }
 };
 
-// @desc    Get all users with filters
-// @route   GET /api/admin/users
-// @access  Private (Admin only)
+
+
+
 const getUsers = async (req, res) => {
   try {
     const {
@@ -190,7 +190,7 @@ const getUsers = async (req, res) => {
 
     const total = await User.countDocuments(query);
 
-    // Get profile info for each user
+    
     const usersWithProfiles = await Promise.all(
       users.map(async (user) => {
         let profile = null;
@@ -224,9 +224,9 @@ const getUsers = async (req, res) => {
   }
 };
 
-// @desc    Get user by ID
-// @route   GET /api/admin/users/:id
-// @access  Private (Admin only)
+
+
+
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
@@ -245,14 +245,14 @@ const getUserById = async (req, res) => {
       profile = await PatientProfile.findOne({ userId: user._id });
     }
 
-    // Get user's appointments
+    
     const appointments = await Appointment.find({
       $or: [{ patientId: user._id }, { nurseId: user._id }],
     })
       .sort({ createdAt: -1 })
       .limit(10);
 
-    // Get user's reviews
+    
     let reviews = [];
     if (user.role === "nurse") {
       reviews = await Review.find({ nurseId: user._id })
@@ -283,9 +283,9 @@ const getUserById = async (req, res) => {
   }
 };
 
-// @desc    Update user status
-// @route   PUT /api/admin/users/:id/status
-// @access  Private (Admin only)
+
+
+
 const updateUserStatus = async (req, res) => {
   try {
     const { isActive, isVerified } = req.body;
@@ -322,9 +322,9 @@ const updateUserStatus = async (req, res) => {
   }
 };
 
-// @desc    Delete user
-// @route   DELETE /api/admin/users/:id
-// @access  Private (Admin only)
+
+
+
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -336,14 +336,14 @@ const deleteUser = async (req, res) => {
       });
     }
 
-    // Delete associated profile
+    
     if (user.role === "nurse") {
       await NurseProfile.deleteOne({ userId: user._id });
     } else if (user.role === "patient") {
       await PatientProfile.deleteOne({ userId: user._id });
     }
 
-    // Delete user's appointments, messages, reviews
+    
     await Appointment.deleteMany({
       $or: [{ patientId: user._id }, { nurseId: user._id }],
     });
@@ -370,9 +370,9 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// @desc    Get all appointments
-// @route   GET /api/admin/appointments
-// @access  Private (Admin only)
+
+
+
 const getAppointments = async (req, res) => {
   try {
     const { status, startDate, endDate, page = 1, limit = 20 } = req.query;
@@ -416,9 +416,9 @@ const getAppointments = async (req, res) => {
   }
 };
 
-// @desc    Get all reviews
-// @route   GET /api/admin/reviews
-// @access  Private (Admin only)
+
+
+
 const getReviews = async (req, res) => {
   try {
     const { page = 1, limit = 20, minRating, maxRating } = req.query;
@@ -458,9 +458,9 @@ const getReviews = async (req, res) => {
   }
 };
 
-// @desc    Delete review
-// @route   DELETE /api/admin/reviews/:id
-// @access  Private (Admin only)
+
+
+
 const deleteReview = async (req, res) => {
   try {
     const review = await Review.findByIdAndDelete(req.params.id);
@@ -472,7 +472,7 @@ const deleteReview = async (req, res) => {
       });
     }
 
-    // Recalculate nurse rating
+    
     const allReviews = await Review.find({ nurseId: review.nurseId });
     const avgRating = allReviews.length
       ? allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length
@@ -502,9 +502,9 @@ const deleteReview = async (req, res) => {
   }
 };
 
-// @desc    Get platform analytics
-// @route   GET /api/admin/analytics
-// @access  Private (Admin only)
+
+
+
 const getAnalytics = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
@@ -517,7 +517,7 @@ const getAnalytics = async (req, res) => {
       };
     }
 
-    // User growth over time
+    
     const userGrowth = await User.aggregate([
       { $match: dateFilter },
       {
@@ -533,7 +533,7 @@ const getAnalytics = async (req, res) => {
       { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
-    // Appointment trends
+    
     const appointmentTrends = await Appointment.aggregate([
       { $match: dateFilter },
       {
@@ -550,7 +550,7 @@ const getAnalytics = async (req, res) => {
       { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
-    // Popular specializations
+    
     const popularSpecializations = await Appointment.aggregate([
       {
         $lookup: {
@@ -572,7 +572,7 @@ const getAnalytics = async (req, res) => {
       { $limit: 10 },
     ]);
 
-    // Peak booking times
+    
     const peakBookingTimes = await Appointment.aggregate([
       {
         $group: {
