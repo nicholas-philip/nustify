@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -48,9 +47,10 @@ const RegisterPage = () => {
         setSuccess(
           "Registration successful! Please check your email to verify your account."
         );
+        const email = formData.email;
         setTimeout(() => {
-          navigate("/login");
-        }, 3000);
+          navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+        }, 800);
       }
     } catch (err) {
       setError(err.message || "Registration failed. Please try again.");

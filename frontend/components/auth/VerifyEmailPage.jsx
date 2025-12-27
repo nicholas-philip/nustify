@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Heart,
   CheckCircle,
@@ -15,9 +14,13 @@ import api from "../../services/api";
 const VerifyEmailPage = () => {
   const navigate = useNavigate();
   const { token } = useParams();
-  const [status, setStatus] = useState("verifying"); 
+  const [searchParams] = useSearchParams();
+  const queryEmail = searchParams.get("email") || "";
+  const [status, setStatus] = useState(token ? "verifying" : "idle");
   const [message, setMessage] = useState("");
   const [resending, setResending] = useState(false);
+  const [email, setEmail] = useState(queryEmail);
+  const [code, setCode] = useState("");
 
   useEffect(() => {
     if (token) {
@@ -47,13 +50,14 @@ const VerifyEmailPage = () => {
   const handleResendVerification = async () => {
     setResending(true);
     try {
-      const email = prompt("Please enter your email to resend verification:");
-      if (!email) {
+      const e =
+        email || prompt("Please enter your email to resend verification:");
+      if (!e) {
         setResending(false);
         return;
       }
 
-      const data = await api.resendVerification({ email });
+      const data = await api.resendVerification({ email: e });
 
       if (data.success) {
         setMessage("Verification email sent! Please check your inbox.");
@@ -63,6 +67,23 @@ const VerifyEmailPage = () => {
       setMessage(error.message || "Failed to resend verification email.");
     } finally {
       setResending(false);
+    }
+  };
+
+  const handleVerifyByCode = async () => {
+    setStatus("verifying");
+    try {
+      const data = await api.verifyEmailByCode({ email, code });
+      if (data.success) {
+        setStatus("success");
+        setMessage("Email verified successfully! Redirecting to login...");
+        setTimeout(() => navigate("/login"), 2000);
+      }
+    } catch (error) {
+      setStatus("error");
+      setMessage(
+        error.message || "Verification failed. Check code and try again."
+      );
     }
   };
 
@@ -171,6 +192,58 @@ const VerifyEmailPage = () => {
               <p className="text-gray-600">
                 Please wait while we verify your email address...
               </p>
+            </motion.div>
+          )}
+
+          {status === "idle" && (
+            <motion.div
+              key="form"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center"
+            >
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Verify Your Email
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Enter the verification code sent to your email.
+              </p>
+
+              <div className="space-y-3">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                />
+                <input
+                  type="text"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  placeholder="6-digit code"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                />
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleVerifyByCode}
+                  className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold"
+                >
+                  Verify Code
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleResendVerification}
+                  disabled={resending}
+                  className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold"
+                >
+                  {resending ? "Sending..." : "Resend Code"}
+                </motion.button>
+              </div>
             </motion.div>
           )}
 

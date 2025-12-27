@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,16 +28,14 @@ const PatientDashboard = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
-    
     if (user) {
       fetchDashboard();
     } else {
       setLoading(false);
     }
-  }, [user]); 
+  }, [user]);
 
   const fetchDashboard = async () => {
-    
     if (!user) {
       console.log("⚠️ No user, skipping dashboard fetch");
       setLoading(false);
@@ -53,7 +50,7 @@ const PatientDashboard = () => {
       }
     } catch (error) {
       console.error("Error fetching dashboard:", error);
-      
+
       if (error.message.includes("Not authorized")) {
         console.log("🚪 Unauthorized, logging out");
         await logout();
@@ -72,7 +69,7 @@ const PatientDashboard = () => {
       navigate("/login", { replace: true });
     } catch (error) {
       console.error("Logout error:", error);
-      
+
       navigate("/login", { replace: true });
     }
   };
@@ -163,13 +160,7 @@ const PatientDashboard = () => {
                   {item.label}
                 </motion.button>
               ))}
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-2 hover:bg-gray-100 rounded-lg relative"
-              >
-                <Bell className="w-5 h-5 text-gray-600" />
-              </motion.button>
+              <NotificationCenter />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

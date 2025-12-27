@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -135,20 +134,7 @@ const NurseDashboard = () => {
                   {item.label}
                 </motion.button>
               ))}
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-2 hover:bg-gray-100 rounded-lg relative"
-              >
-                <Bell className="w-5 h-5 text-gray-600" />
-                {dashboard?.stats?.pendingAppointments > 0 && (
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"
-                  />
-                )}
-              </motion.button>
+              <NotificationCenter />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

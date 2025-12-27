@@ -4,6 +4,7 @@ import {
   registerNurse,
   registerPatient,
   verifyEmail,
+  verifyEmailByCode,
   resendVerification,
   login,
   verify2FA,
@@ -18,7 +19,6 @@ import {
 import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
-
 
 const nurseRegistrationValidation = [
   body("email").isEmail().withMessage("Please provide a valid email"),
@@ -81,7 +81,6 @@ const verify2FAValidation = [
     .withMessage("Code must be 6 digits"),
 ];
 
-
 router.post("/register/nurse", nurseRegistrationValidation, registerNurse);
 router.post(
   "/register/patient",
@@ -90,11 +89,11 @@ router.post(
 );
 router.post("/login", loginValidation, login);
 router.get("/verify-email/:token", verifyEmail);
+router.post("/verify-email-code", verifyEmailByCode);
 router.post("/resend-verification", resendVerification);
 router.post("/verify-2fa", verify2FAValidation, verify2FA);
 router.post("/forgot-password", forgotPasswordValidation, forgotPassword);
 router.post("/reset-password/:token", resetPasswordValidation, resetPassword);
-
 
 router.use(protect);
 router.get("/me", getMe);

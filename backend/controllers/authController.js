@@ -7,15 +7,11 @@ import PatientProfile from "../models/PatientProfile.js";
 import TokenBlacklist from "../models/TokenBlacklist.js";
 import getTransporter from "../services/emailService.js";
 
-
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || "7d",
   });
 };
-
-
-
 
 const registerNurse = async (req, res) => {
   try {
@@ -34,7 +30,6 @@ const registerNurse = async (req, res) => {
       hourlyRate,
     } = req.body;
 
-    
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res
@@ -42,7 +37,6 @@ const registerNurse = async (req, res) => {
         .json({ success: false, message: "Email already registered" });
     }
 
-    
     if (licenseNumber) {
       const licenseExists = await NurseProfile.findOne({ licenseNumber });
       if (licenseExists) {
@@ -53,7 +47,6 @@ const registerNurse = async (req, res) => {
       }
     }
 
-    
     const user = await User.create({
       email,
       password,
@@ -62,10 +55,9 @@ const registerNurse = async (req, res) => {
 
     console.log("✅ User created with ID:", user._id);
 
-    
     try {
       const nurseProfile = await NurseProfile.create({
-        userId: user._id, 
+        userId: user._id,
         fullName: fullName || "Not provided",
         phone: phone || "",
         specialization: specialization || "General Nursing",
@@ -86,7 +78,6 @@ const registerNurse = async (req, res) => {
       console.log("✅ Nurse profile created with ID:", nurseProfile._id);
       console.log("✅ Profile linked to userId:", nurseProfile.userId);
 
-      
       const verifyProfile = await NurseProfile.findOne({ userId: user._id });
       if (!verifyProfile) {
         console.error("❌ Profile verification failed!");
@@ -95,7 +86,7 @@ const registerNurse = async (req, res) => {
       console.log("✅ Profile verification successful");
     } catch (profileError) {
       console.error("❌ Error creating nurse profile:", profileError);
-      
+
       await User.findByIdAndDelete(user._id);
       return res.status(500).json({
         success: false,
@@ -104,11 +95,10 @@ const registerNurse = async (req, res) => {
       });
     }
 
-    
     const verificationToken = user.createEmailVerificationToken();
+    const verificationCode = user.createEmailVerificationCode();
     await user.save({ validateBeforeSave: false });
 
-    
     try {
       const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
 
@@ -142,6 +132,8 @@ const registerNurse = async (req, res) => {
                 </div>
                 <p>Or copy and paste this link into your browser:</p>
                 <p style="word-break: break-all; color: #667eea;">${verificationUrl}</p>
+                <h3>Your verification code</h3>
+                <p style="font-size: 20px; font-weight: 700; color: #333;">${verificationCode}</p>
                 <p><strong>This link will expire in 24 hours.</strong></p>
                 <p>If you didn't create an account with Nursify, please ignore this email.</p>
               </div>
@@ -156,13 +148,10 @@ const registerNurse = async (req, res) => {
       console.log("✅ Verification email sent to:", email);
     } catch (error) {
       console.error("❌ Error sending verification email:", error);
-      
     }
 
-    
     const token = generateToken(user._id);
 
-    
     const nurseProfile = await NurseProfile.findOne({ userId: user._id });
 
     res.status(201).json({
@@ -186,9 +175,6 @@ const registerNurse = async (req, res) => {
   }
 };
 
-
-
-
 const registerPatient = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -205,7 +191,6 @@ const registerPatient = async (req, res) => {
       emergencyContactPhone,
     } = req.body;
 
-    
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res
@@ -213,14 +198,12 @@ const registerPatient = async (req, res) => {
         .json({ success: false, message: "Email already registered" });
     }
 
-    
     const user = await User.create({
       email,
       password,
       role: "patient",
     });
 
-    
     const patientProfile = await PatientProfile.create({
       userId: user._id,
       fullName,
@@ -231,11 +214,10 @@ const registerPatient = async (req, res) => {
       },
     });
 
-    
     const verificationToken = user.createEmailVerificationToken();
+    const verificationCode = user.createEmailVerificationCode();
     await user.save({ validateBeforeSave: false });
 
-    
     try {
       const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
 
@@ -269,6 +251,8 @@ const registerPatient = async (req, res) => {
                 </div>
                 <p>Or copy and paste this link into your browser:</p>
                 <p style="word-break: break-all; color: #667eea;">${verificationUrl}</p>
+                <h3>Your verification code</h3>
+                <p style="font-size: 20px; font-weight: 700; color: #333;">${verificationCode}</p>
                 <p><strong>This link will expire in 24 hours.</strong></p>
                 <p>If you didn't create an account with Nursify, please ignore this email.</p>
               </div>
@@ -285,7 +269,6 @@ const registerPatient = async (req, res) => {
       console.error("Error sending verification email:", error);
     }
 
-    
     const token = generateToken(user._id);
 
     res.status(201).json({
@@ -309,8 +292,77 @@ const registerPatient = async (req, res) => {
   }
 };
 
+const verifyEmailByCode = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    if (!email || !code) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email and code are required" });
+    }
 
+    const user = await User.findOne({ email }).select(
+      "+emailVerificationCode +emailVerificationCodeExpires"
+    );
 
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email already verified" });
+    }
+
+    if (!user.emailVerificationCode || !user.emailVerificationCodeExpires) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "No verification code found. Please request a new one.",
+        });
+    }
+
+    if (user.emailVerificationCodeExpires < Date.now()) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Verification code expired" });
+    }
+
+    const hashed = crypto.createHash("sha256").update(code).digest("hex");
+
+    if (hashed !== user.emailVerificationCode) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid verification code" });
+    }
+
+    let profile;
+    if (user.role === "nurse")
+      profile = await NurseProfile.findOne({ userId: user._id });
+    else if (user.role === "patient")
+      profile = await PatientProfile.findOne({ userId: user._id });
+
+    user.isVerified = true;
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpires = undefined;
+    user.emailVerificationCode = undefined;
+    user.emailVerificationCodeExpires = undefined;
+    await user.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Email verified successfully" });
+  } catch (error) {
+    console.error("Verify email by code error:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
+  }
+};
 
 const verifyEmail = async (req, res) => {
   try {
@@ -331,7 +383,6 @@ const verifyEmail = async (req, res) => {
       });
     }
 
-    
     let profile;
     if (user.role === "nurse") {
       profile = await NurseProfile.findOne({ userId: user._id });
@@ -339,13 +390,11 @@ const verifyEmail = async (req, res) => {
       profile = await PatientProfile.findOne({ userId: user._id });
     }
 
-    
     user.isVerified = true;
     user.emailVerificationToken = undefined;
     user.emailVerificationExpires = undefined;
     await user.save();
 
-    
     try {
       const dashboardUrl =
         user.role === "nurse"
@@ -430,9 +479,6 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-
-
-
 const resendVerification = async (req, res) => {
   try {
     const { email } = req.body;
@@ -451,11 +497,10 @@ const resendVerification = async (req, res) => {
         .json({ success: false, message: "Email already verified" });
     }
 
-    
     const verificationToken = user.createEmailVerificationToken();
+    const verificationCode = user.createEmailVerificationCode();
     await user.save({ validateBeforeSave: false });
 
-    
     const verificationUrl = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
 
     await getTransporter().sendMail({
@@ -488,6 +533,8 @@ const resendVerification = async (req, res) => {
               </div>
               <p>Or copy and paste this link into your browser:</p>
               <p style="word-break: break-all; color: #667eea;">${verificationUrl}</p>
+              <h3>Your verification code</h3>
+              <p style="font-size: 20px; font-weight: 700; color: #333;">${verificationCode}</p>
               <p><strong>This link will expire in 24 hours.</strong></p>
               <p>If you didn't create an account with Nursify, please ignore this email.</p>
             </div>
@@ -512,9 +559,6 @@ const resendVerification = async (req, res) => {
   }
 };
 
-
-
-
 const login = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -524,7 +568,6 @@ const login = async (req, res) => {
 
     const { email, password } = req.body;
 
-    
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res
@@ -532,7 +575,6 @@ const login = async (req, res) => {
         .json({ success: false, message: "Invalid email or password" });
     }
 
-    
     if (user.isLocked) {
       return res.status(401).json({
         success: false,
@@ -540,14 +582,12 @@ const login = async (req, res) => {
       });
     }
 
-    
     if (!user.isActive) {
       return res
         .status(401)
         .json({ success: false, message: "Account has been deactivated" });
     }
 
-    
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       await user.incLoginAttempts();
@@ -556,12 +596,10 @@ const login = async (req, res) => {
         .json({ success: false, message: "Invalid email or password" });
     }
 
-    
     if (user.loginAttempts > 0) {
       await user.resetLoginAttempts();
     }
 
-    
     if (user.twoFactorEnabled) {
       const code = user.create2FACode();
       await user.save({ validateBeforeSave: false });
@@ -616,11 +654,9 @@ const login = async (req, res) => {
       });
     }
 
-    
     user.lastLogin = new Date();
     await user.save({ validateBeforeSave: false });
 
-    
     const token = generateToken(user._id);
 
     res.status(200).json({
@@ -642,9 +678,6 @@ const login = async (req, res) => {
   }
 };
 
-
-
-
 const verify2FA = async (req, res) => {
   try {
     const { userId, code } = req.body;
@@ -664,13 +697,11 @@ const verify2FA = async (req, res) => {
       });
     }
 
-    
     user.twoFactorCode = undefined;
     user.twoFactorExpires = undefined;
     user.lastLogin = new Date();
     await user.save({ validateBeforeSave: false });
 
-    
     const token = generateToken(user._id);
 
     res.status(200).json({
@@ -692,9 +723,6 @@ const verify2FA = async (req, res) => {
   }
 };
 
-
-
-
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -708,11 +736,9 @@ const forgotPassword = async (req, res) => {
       });
     }
 
-    
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    
     try {
       const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
@@ -787,9 +813,6 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-
-
-
 const resetPassword = async (req, res) => {
   try {
     const hashedToken = crypto
@@ -818,7 +841,6 @@ const resetPassword = async (req, res) => {
       });
     }
 
-    
     let profile;
     if (user.role === "nurse") {
       profile = await NurseProfile.findOne({ userId: user._id });
@@ -826,14 +848,12 @@ const resetPassword = async (req, res) => {
       profile = await PatientProfile.findOne({ userId: user._id });
     }
 
-    
     user.password = password;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     user.passwordChangedAt = Date.now();
     await user.save();
 
-    
     try {
       await getTransporter().sendMail({
         from: `"Nursify Platform" <${process.env.SENDER_EMAIL}>`,
@@ -894,16 +914,12 @@ const resetPassword = async (req, res) => {
   }
 };
 
-
-
-
 const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
     const user = await User.findById(req.user._id).select("+password");
 
-    
     const isPasswordValid = await user.comparePassword(currentPassword);
     if (!isPasswordValid) {
       return res
@@ -918,7 +934,6 @@ const changePassword = async (req, res) => {
       });
     }
 
-    
     let profile;
     if (user.role === "nurse") {
       profile = await NurseProfile.findOne({ userId: user._id });
@@ -926,12 +941,10 @@ const changePassword = async (req, res) => {
       profile = await PatientProfile.findOne({ userId: user._id });
     }
 
-    
     user.password = newPassword;
     user.passwordChangedAt = Date.now();
     await user.save();
 
-    
     try {
       await getTransporter().sendMail({
         from: `"Nursify Platform" <${process.env.SENDER_EMAIL}>`,
@@ -992,9 +1005,6 @@ const changePassword = async (req, res) => {
   }
 };
 
-
-
-
 const toggle2FA = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -1017,18 +1027,13 @@ const toggle2FA = async (req, res) => {
   }
 };
 
-
-
-
 const logout = async (req, res) => {
   try {
     const token = req.token;
 
-    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const expiresAt = new Date(decoded.exp * 1000);
 
-    
     await TokenBlacklist.create({
       token,
       userId: req.user._id,
@@ -1047,17 +1052,12 @@ const logout = async (req, res) => {
   }
 };
 
-
-
-
 const logoutAll = async (req, res) => {
   try {
-    
     const user = await User.findById(req.user._id);
     user.passwordChangedAt = Date.now();
     await user.save({ validateBeforeSave: false });
 
-    
     const token = req.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const expiresAt = new Date(decoded.exp * 1000);
@@ -1079,9 +1079,6 @@ const logoutAll = async (req, res) => {
       .json({ success: false, message: "Server error", error: error.message });
   }
 };
-
-
-
 
 const getMe = async (req, res) => {
   try {
@@ -1118,6 +1115,7 @@ export {
   registerNurse,
   registerPatient,
   verifyEmail,
+  verifyEmailByCode,
   resendVerification,
   login,
   verify2FA,

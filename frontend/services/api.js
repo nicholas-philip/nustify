@@ -138,6 +138,14 @@ class ApiService {
     return this.request(`/api/auth/verify-email/${token}`);
   };
 
+  verifyEmailByCode = (data) => {
+    console.log("✉️ Verifying email by code...");
+    return this.request(`/api/auth/verify-email-code`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  };
+
   resendVerification = (data) => {
     console.log("📧 Resending verification email...");
     return this.request("/api/auth/resend-verification", {

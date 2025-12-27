@@ -42,6 +42,14 @@ const userSchema = new mongoose.Schema(
       type: Date,
       select: false,
     },
+    emailVerificationCode: {
+      type: String,
+      select: false,
+    },
+    emailVerificationCodeExpires: {
+      type: Date,
+      select: false,
+    },
     passwordResetToken: {
       type: String,
       select: false,
@@ -79,7 +87,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
 
@@ -87,19 +94,15 @@ userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
-
 
 userSchema.virtual("isLocked").get(function () {
   return !!(this.lockUntil && this.lockUntil > Date.now());
 });
 
-
 userSchema.methods.incLoginAttempts = async function () {
-  
   if (this.lockUntil && this.lockUntil < Date.now()) {
     return this.updateOne({
       $set: { loginAttempts: 1 },
@@ -109,9 +112,8 @@ userSchema.methods.incLoginAttempts = async function () {
 
   const updates = { $inc: { loginAttempts: 1 } };
 
-  
   const maxAttempts = 5;
-  const lockTime = 2 * 60 * 60 * 1000; 
+  const lockTime = 2 * 60 * 60 * 1000;
 
   if (this.loginAttempts + 1 >= maxAttempts && !this.isLocked) {
     updates.$set = { lockUntil: Date.now() + lockTime };
@@ -120,14 +122,12 @@ userSchema.methods.incLoginAttempts = async function () {
   return this.updateOne(updates);
 };
 
-
 userSchema.methods.resetLoginAttempts = async function () {
   return this.updateOne({
     $set: { loginAttempts: 0 },
     $unset: { lockUntil: 1 },
   });
 };
-
 
 userSchema.methods.createEmailVerificationToken = function () {
   const verificationToken = crypto.randomBytes(32).toString("hex");
@@ -137,11 +137,23 @@ userSchema.methods.createEmailVerificationToken = function () {
     .update(verificationToken)
     .digest("hex");
 
-  this.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000; 
+  this.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
 
   return verificationToken;
 };
 
+userSchema.methods.createEmailVerificationCode = function () {
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+  this.emailVerificationCode = crypto
+    .createHash("sha256")
+    .update(code)
+    .digest("hex");
+
+  this.emailVerificationCodeExpires = Date.now() + 24 * 60 * 60 * 1000;
+
+  return code;
+};
 
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString("hex");
@@ -151,22 +163,20 @@ userSchema.methods.createPasswordResetToken = function () {
     .update(resetToken)
     .digest("hex");
 
-  this.passwordResetExpires = Date.now() + 60 * 60 * 1000; 
+  this.passwordResetExpires = Date.now() + 60 * 60 * 1000;
 
   return resetToken;
 };
 
-
 userSchema.methods.create2FACode = function () {
-  const code = Math.floor(100000 + Math.random() * 900000).toString(); 
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
 
   this.twoFactorCode = crypto.createHash("sha256").update(code).digest("hex");
 
-  this.twoFactorExpires = Date.now() + 10 * 60 * 1000; 
+  this.twoFactorExpires = Date.now() + 10 * 60 * 1000;
 
   return code;
 };
-
 
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
@@ -179,12 +189,13 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   return false;
 };
 
-
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
   delete obj.emailVerificationToken;
   delete obj.emailVerificationExpires;
+  delete obj.emailVerificationCode;
+  delete obj.emailVerificationCodeExpires;
   delete obj.passwordResetToken;
   delete obj.passwordResetExpires;
   delete obj.twoFactorCode;
