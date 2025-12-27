@@ -8,7 +8,7 @@ import {
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
 import NotificationCenter from "../components/common/NotificationCenter";
 import LandingPage from "../components/landing/LandingPage";
-import LoginPage from "../components/auth/Loginpage";
+import LoginPage from "../components/auth/LoginPage";
 import RegisterPage from "../components/auth/RegisterPage";
 import PatientDashboard from "../components/patient/PatientDashboard";
 import SearchNurses from "../components/patient/SearchNurses";
