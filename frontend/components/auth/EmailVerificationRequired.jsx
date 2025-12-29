@@ -57,7 +57,7 @@ const EmailVerificationRequired = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
       {}
       <motion.div
         animate={{
@@ -69,7 +69,7 @@ const EmailVerificationRequired = () => {
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute top-0 left-0 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        className="absolute top-0 left-0 w-96 h-96 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       />
       <motion.div
         animate={{
@@ -106,9 +106,9 @@ const EmailVerificationRequired = () => {
               repeatDelay: 1,
             }}
           >
-            <Heart className="w-10 h-10 text-purple-600" />
+            <Heart className="w-10 h-10 text-teal-600" />
           </motion.div>
-          <span className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          <span className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
             Nursify
           </span>
         </motion.div>
@@ -127,9 +127,9 @@ const EmailVerificationRequired = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center"
+            className="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center"
           >
-            <Mail className="w-10 h-10 text-purple-600" />
+            <Mail className="w-10 h-10 text-teal-600" />
           </motion.div>
         </motion.div>
 
@@ -145,7 +145,7 @@ const EmailVerificationRequired = () => {
           className="text-gray-600 text-center mb-6"
         >
           We've sent a verification link to{" "}
-          <span className="font-semibold text-purple-600">{user?.email}</span>
+          <span className="font-semibold text-teal-600">{user?.email}</span>
         </motion.p>
 
         <motion.div
@@ -158,15 +158,15 @@ const EmailVerificationRequired = () => {
           </h3>
           <ul className="space-y-2 text-sm text-blue-800">
             <li className="flex items-start gap-2">
-              <span className="text-purple-600 font-bold">1.</span>
+              <span className="text-teal-600 font-bold">1.</span>
               <span>Check your email inbox (and spam folder)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-purple-600 font-bold">2.</span>
+              <span className="text-teal-600 font-bold">2.</span>
               <span>Click the verification link in the email</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-purple-600 font-bold">3.</span>
+              <span className="text-teal-600 font-bold">3.</span>
               <span>Return here and log in</span>
             </li>
           </ul>
@@ -199,21 +199,17 @@ const EmailVerificationRequired = () => {
 
         <motion.div variants={itemVariants} className="space-y-3">
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
             onClick={handleResendVerification}
             disabled={resending}
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
           >
             <Mail className="w-5 h-5" />
             {resending ? "Sending..." : "Resend Verification Email"}
           </motion.button>
 
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
             onClick={handleLogout}
-            className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-black text-white rounded-lg font-semibold flex items-center justify-center gap-2"
           >
             <LogOut className="w-5 h-5" />
             Logout

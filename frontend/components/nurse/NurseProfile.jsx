@@ -217,7 +217,7 @@ const NurseProfile = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full"
+          className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full"
         />
       </div>
     );
@@ -237,20 +237,18 @@ const NurseProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-blue-50">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-white shadow-sm"
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <motion.button
-            whileHover={{ x: -5 }}
-            whileTap={{ scale: 0.95 }}
+            <motion.button
             onClick={() => navigate("/nurse/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-teal-600 mb-4 text-sm font-medium flex items-center gap-2"
           >
-            ← Back to Dashboard
+            <span>←</span> Back to Dashboard
           </motion.button>
           <motion.h1
             initial={{ opacity: 0 }}
@@ -262,7 +260,7 @@ const NurseProfile = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-teal-600" />
             </motion.div>
             My Profile
           </motion.h1>
@@ -315,11 +313,10 @@ const NurseProfile = () => {
           
           <motion.div
             variants={itemVariants}
-            whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Camera className="w-5 h-5 text-purple-600" />
+              <Camera className="w-5 h-5 text-teal-600" />
               Profile Picture
             </h2>
 
@@ -327,8 +324,7 @@ const NurseProfile = () => {
               
               <div className="relative">
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-purple-100 to-blue-100 border-4 border-purple-200 shadow-lg"
+                  className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 border-4 border-gray-200 shadow-lg"
                 >
                   {previewImage ? (
                     <img
@@ -366,13 +362,8 @@ const NurseProfile = () => {
                 </p>
 
                 <div className="flex flex-wrap gap-3">
-                  <motion.label
-                    whileHover={{
-                      scale: 1.02,
-                      boxShadow: "0 5px 15px rgba(139, 92, 246, 0.3)",
-                    }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`px-4 py-2 bg-purple-600 text-white rounded-lg cursor-pointer hover:bg-purple-700 flex items-center gap-2 ${
+                  <label
+                    className={`px-4 py-2 bg-black text-white rounded-lg cursor-pointer flex items-center gap-2 ${
                       uploadingImage ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
@@ -385,22 +376,20 @@ const NurseProfile = () => {
                       disabled={uploadingImage}
                       className="hidden"
                     />
-                  </motion.label>
+                  </label>
 
                   {previewImage && (
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                    <button
                       onClick={handleDeleteImage}
                       disabled={uploadingImage}
                       type="button"
-                      className={`px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 flex items-center gap-2 ${
+                      className={`px-4 py-2 bg-black text-white rounded-lg flex items-center gap-2 ${
                         uploadingImage ? "opacity-50 cursor-not-allowed" : ""
                       }`}
                     >
                       <X className="w-4 h-4" />
                       Remove
-                    </motion.button>
+                    </button>
                   )}
                 </div>
               </div>
@@ -410,11 +399,10 @@ const NurseProfile = () => {
           
           <motion.div
             variants={itemVariants}
-            whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <User className="w-5 h-5 text-purple-600" />
+              <User className="w-5 h-5 text-teal-600" />
               Basic Information
             </h2>
             <div className="grid md:grid-cols-2 gap-4">
@@ -426,7 +414,7 @@ const NurseProfile = () => {
                   whileFocus={{ scale: 1.02 }}
                   type="text"
                   name="fullName"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                   value={formData.fullName}
                   onChange={handleChange}
                   required
@@ -440,7 +428,7 @@ const NurseProfile = () => {
                   whileFocus={{ scale: 1.02 }}
                   type="tel"
                   name="phone"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                   value={formData.phone}
                   onChange={handleChange}
                   required
@@ -452,11 +440,10 @@ const NurseProfile = () => {
           
           <motion.div
             variants={itemVariants}
-            whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-purple-600" />
+              <Briefcase className="w-5 h-5 text-teal-600" />
               Professional Information
             </h2>
             <div className="space-y-4">
@@ -470,7 +457,7 @@ const NurseProfile = () => {
                     type="text"
                     name="specialization"
                     placeholder="e.g., Pediatric Nurse"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                     value={formData.specialization}
                     onChange={handleChange}
                     required
@@ -485,7 +472,7 @@ const NurseProfile = () => {
                     type="number"
                     name="yearsOfExperience"
                     placeholder="5"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                     value={formData.yearsOfExperience}
                     onChange={handleChange}
                     min="0"
@@ -502,7 +489,7 @@ const NurseProfile = () => {
                   type="number"
                   name="hourlyRate"
                   placeholder="50"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                   value={formData.hourlyRate}
                   onChange={handleChange}
                   min="0"
@@ -519,7 +506,7 @@ const NurseProfile = () => {
                   whileFocus={{ scale: 1.02 }}
                   name="bio"
                   placeholder="Tell patients about yourself, your experience, and what makes you unique..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                   rows="4"
                   value={formData.bio}
                   onChange={handleChange}
@@ -539,7 +526,7 @@ const NurseProfile = () => {
                   type="text"
                   name="services"
                   placeholder="e.g., Wound Care, IV Therapy, Post-Op Care (comma separated)"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                   value={formData.services}
                   onChange={handleChange}
                 />
@@ -557,7 +544,7 @@ const NurseProfile = () => {
                   type="text"
                   name="languages"
                   placeholder="e.g., English, Spanish, French (comma separated)"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                   value={formData.languages}
                   onChange={handleChange}
                 />
@@ -568,11 +555,10 @@ const NurseProfile = () => {
           
           <motion.div
             variants={itemVariants}
-            whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-purple-600" />
+              <MapPin className="w-5 h-5 text-teal-600" />
               Address
             </h2>
             <div className="space-y-4">
@@ -585,7 +571,7 @@ const NurseProfile = () => {
                   type="text"
                   name="address.street"
                   placeholder="123 Main St"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                   value={formData.address.street}
                   onChange={handleChange}
                 />
@@ -610,7 +596,7 @@ const NurseProfile = () => {
                       type="text"
                       name={`address.${field.name}`}
                       placeholder={field.placeholder}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
                       value={formData.address[field.name]}
                       onChange={handleChange}
                     />
@@ -623,23 +609,16 @@ const NurseProfile = () => {
           
           <motion.div variants={itemVariants} className="flex gap-4">
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
               type="button"
               onClick={() => navigate("/nurse/dashboard")}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              className="flex-1 px-6 py-3.5 bg-black text-white rounded-xl font-semibold"
             >
               Cancel
             </motion.button>
             <motion.button
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
-              }}
-              whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={saving}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-6 py-3.5 bg-black text-white rounded-xl font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <Save className="w-5 h-5" />
               {saving ? "Saving..." : "Save Changes"}

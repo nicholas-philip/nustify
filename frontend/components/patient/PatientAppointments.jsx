@@ -143,7 +143,7 @@ const PatientAppointments = () => {
                 onClick={() => setFilter(status)}
                 className={`px-6 py-2 rounded-lg font-medium transition ${
                   filter === status
-                    ? "bg-purple-600 text-white"
+                    ? "bg-black text-white"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
@@ -188,7 +188,7 @@ const PatientAppointments = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/patient/search")}
-                className="mt-4 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                className="mt-4 px-6 py-3 bg-black text-white rounded-lg"
               >
                 Book an Appointment
               </motion.button>
@@ -299,7 +299,7 @@ const PatientAppointments = () => {
                       onClick={() =>
                         navigate(`/patient/review/${appointment._id}`)
                       }
-                      className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                      className="mt-4 px-4 py-2 bg-black text-white rounded-lg"
                     >
                       Leave a Review
                     </motion.button>

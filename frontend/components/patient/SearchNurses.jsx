@@ -97,7 +97,7 @@ const SearchNurses = () => {
           <motion.button
             whileHover={{ x: -5 }}
             onClick={() => navigate("/patient/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-teal-600 mb-4"
           >
             ← Back to Dashboard
           </motion.button>
@@ -111,7 +111,7 @@ const SearchNurses = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-teal-600" />
             </motion.div>
             Find a Nurse
           </motion.h1>
@@ -190,7 +190,7 @@ const SearchNurses = () => {
             }}
             whileTap={{ scale: 0.98 }}
             type="submit"
-            className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold flex items-center justify-center gap-2"
+            className="w-full md:w-auto px-8 py-3 bg-black text-white rounded-lg font-semibold flex items-center justify-center gap-2"
           >
             <Search className="w-5 h-5" />
             Search Nurses
@@ -210,7 +210,7 @@ const SearchNurses = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto"
+                className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full mx-auto"
               />
             </motion.div>
           ) : nurses.length === 0 ? (
@@ -260,7 +260,7 @@ const SearchNurses = () => {
                     className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer"
                   >
                     
-                    <div className="relative h-32 bg-gradient-to-br from-purple-500 to-blue-500">
+                    <div className="relative h-32 bg-gray-200">
                       <div className="absolute inset-0 opacity-20">
                         <img
                           src="https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg"
@@ -285,15 +285,15 @@ const SearchNurses = () => {
                                 }}
                               />
                               <div
-                                className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center border-4 border-white"
+                                className="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center border-4 border-white"
                                 style={{ display: "none" }}
                               >
-                                <User className="w-12 h-12 text-purple-600" />
+                                <User className="w-12 h-12 text-teal-600" />
                               </div>
                             </div>
                           ) : (
-                            <div className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center border-4 border-white shadow-xl">
-                              <User className="w-12 h-12 text-purple-600" />
+                            <div className="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center border-4 border-white shadow-xl">
+                              <User className="w-12 h-12 text-teal-600" />
                             </div>
                           )}
                         </motion.div>
@@ -354,7 +354,7 @@ const SearchNurses = () => {
                           onClick={() =>
                             navigate(`/patient/nurse/${nurse._id}`)
                           }
-                          className="flex-1 px-4 py-2 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition"
+                          className="flex-1 px-4 py-2 bg-black text-white rounded-lg"
                         >
                           View Profile
                         </motion.button>
@@ -365,7 +365,7 @@ const SearchNurses = () => {
                           }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => navigate(`/patient/book/${nurse._id}`)}
-                          className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+                          className="flex-1 px-4 py-2 bg-black text-white rounded-lg"
                         >
                           Book Now
                         </motion.button>

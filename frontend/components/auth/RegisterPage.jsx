@@ -126,7 +126,7 @@ const RegisterPage = () => {
             alt="Healthcare Team"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent flex items-end p-12">
+          <div className="absolute inset-0 bg-black/50 flex items-end p-12">
             <div className="text-white">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
@@ -207,12 +207,10 @@ const RegisterPage = () => {
                 key={r}
                 type="button"
                 onClick={() => setRole(r)}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className={`flex-1 py-3 rounded-lg font-semibold transition ${
+                className={`flex-1 py-3 rounded-lg font-semibold ${
                   role === r
-                    ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "bg-black text-white"
+                    : "bg-gray-100 text-gray-700"
                 }`}
               >
                 I'm a {r.charAt(0).toUpperCase() + r.slice(1)}
@@ -413,19 +411,14 @@ const RegisterPage = () => {
 
             <motion.button
               variants={itemVariants}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0 20px 40px rgba(139, 92, 246, 0.3)",
-              }}
-              whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="group w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 mt-6 relative overflow-hidden"
+              className="w-full py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50 mt-6"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {loading ? "Creating Account..." : "Create Account"}
                 {!loading && (
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5" />
                 )}
               </span>
             </motion.button>

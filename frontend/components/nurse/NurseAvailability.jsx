@@ -120,7 +120,7 @@ const NurseAvailability = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full"
+          className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full"
         />
       </div>
     );
@@ -151,7 +151,7 @@ const NurseAvailability = () => {
             whileHover={{ x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/nurse/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-teal-600 mb-4"
           >
             ← Back to Dashboard
           </motion.button>
@@ -363,7 +363,7 @@ const NurseAvailability = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={saving}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-6 py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <Save className="w-5 h-5" />
               {saving ? "Saving..." : "Save Availability"}

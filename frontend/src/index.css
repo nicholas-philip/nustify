@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+/* Ensure all button-like elements show a pointer cursor */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"] {
+  cursor: pointer;
+}

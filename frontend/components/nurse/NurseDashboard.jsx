@@ -73,7 +73,7 @@ const NurseDashboard = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full"
+          className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full"
         />
       </div>
     );
@@ -106,10 +106,10 @@ const NurseDashboard = () => {
               whileHover={{ scale: 1.05 }}
               className="flex items-center gap-2"
             >
-              <span className="text-2xl font-bold text-purple-600">
+              <span className="text-2xl font-bold text-teal-600">
                 Nursify
               </span>
-              <span className="px-2 py-1 bg-purple-100 text-purple-600 text-xs font-semibold rounded">
+              <span className="px-2 py-1 bg-teal-100 text-teal-600 text-xs font-semibold rounded">
                 NURSE
               </span>
             </motion.div>
@@ -127,8 +127,8 @@ const NurseDashboard = () => {
                   onClick={() => navigate(item.path)}
                   className={
                     item.active
-                      ? "text-purple-600 font-semibold"
-                      : "text-gray-600 hover:text-purple-600"
+                      ? "text-teal-600 font-semibold"
+                      : "text-gray-600 hover:text-teal-600"
                   }
                 >
                   {item.label}
@@ -232,7 +232,7 @@ const NurseDashboard = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-teal-600" />
             </motion.div>
             Welcome, {dashboard?.profile?.fullName || user?.email}!
           </motion.h1>
@@ -248,7 +248,7 @@ const NurseDashboard = () => {
           {[
             {
               icon: Calendar,
-              color: "text-purple-600",
+              color: "text-teal-600",
               label: "Total Appointments",
               value: dashboard?.stats?.totalAppointments || 0,
             },
@@ -311,7 +311,7 @@ const NurseDashboard = () => {
             scale: 1.02,
             boxShadow: "0 25px 50px rgba(139, 92, 246, 0.3)",
           }}
-          className="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl shadow-lg p-6 mb-8"
+          className="bg-black text-white rounded-xl shadow-lg p-6 mb-8"
         >
           <div className="flex items-center gap-4">
             {/* Profile Image */}
@@ -364,7 +364,7 @@ const NurseDashboard = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/nurse/profile")}
-              className="px-6 py-2 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition"
+              className="px-6 py-2 bg-black text-white rounded-lg font-semibold"
             >
               Edit Profile
             </motion.button>
@@ -384,7 +384,7 @@ const NurseDashboard = () => {
             <motion.button
               whileHover={{ x: 5 }}
               onClick={() => navigate("/nurse/appointments")}
-              className="text-purple-600 hover:text-purple-700 font-semibold text-sm"
+              className="text-teal-600 hover:text-teal-700 font-semibold text-sm"
             >
               View All →
             </motion.button>
@@ -490,7 +490,7 @@ const NurseDashboard = () => {
                         }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => navigate("/nurse/appointments")}
-                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm"
+                        className="px-4 py-2 bg-black text-white rounded-lg text-sm"
                       >
                         Respond
                       </motion.button>

@@ -78,7 +78,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-blue-50 overflow-hidden">
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -95,31 +95,24 @@ const LandingPage = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
             >
-              <Heart className="w-8 h-8 text-purple-600" />
+              <Heart className="w-8 h-8 text-teal-600" />
             </motion.div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
               Nursify
             </span>
           </motion.div>
 
           <div className="flex gap-3">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/login")}
-              className="px-6 py-2 text-purple-600 rounded-lg font-medium hover:bg-purple-50 transition-colors"
+              className="px-6 py-2 text-teal-600 rounded-lg font-medium"
             >
               Login
             </motion.button>
 
             <motion.button
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 10px 30px rgba(147, 51, 234, 0.3)",
-              }}
-              whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/register")}
-              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium shadow-lg"
+              className="px-6 py-2 bg-black text-white rounded-lg font-medium"
             >
               Sign Up
             </motion.button>
@@ -145,12 +138,12 @@ const LandingPage = () => {
           }}
         />
 
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50" />
+        <div className="absolute inset-0 bg-black/30" />
 
         <motion.div
           animate={{ y: [0, -25, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-24 right-24 w-72 h-72 bg-purple-500 rounded-full blur-3xl opacity-30"
+          className="absolute top-24 right-24 w-72 h-72 bg-teal-500 rounded-full blur-3xl opacity-30"
         />
 
         <motion.div
@@ -177,7 +170,7 @@ const LandingPage = () => {
               className="text-6xl md:text-7xl font-bold mb-6 leading-tight"
             >
               Find Your Perfect{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
                 Doctors
               </span>
             </motion.h1>
@@ -192,18 +185,12 @@ const LandingPage = () => {
 
             <motion.button
               variants={fadeInUp}
-              whileHover={{
-                scale: 1.08,
-                y: -4,
-                boxShadow: "0 25px 50px rgba(147, 51, 234, 0.4)",
-              }}
-              whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/register")}
-              className="group px-10 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl text-lg font-semibold shadow-2xl"
+              className="px-10 py-4 bg-black text-white rounded-xl text-lg font-semibold"
             >
               <span className="flex items-center gap-2">
                 Get Started Today
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                <ArrowRight className="w-5 h-5" />
               </span>
             </motion.button>
           </motion.div>
@@ -224,9 +211,9 @@ const LandingPage = () => {
               title: "Search & Book",
               description:
                 "Find qualified nurses by specialty, location, and availability. Book appointments that work for your schedule.",
-              gradient: "from-purple-500 to-purple-600",
-              bgColor: "bg-purple-50",
-              iconColor: "text-purple-600",
+              gradient: "from-teal-500 to-teal-600",
+              bgColor: "bg-teal-50",
+              iconColor: "text-teal-600",
               image:
                 "https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg",
             },
@@ -282,7 +269,7 @@ const LandingPage = () => {
               </div>
 
               <div className="p-8">
-                <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:text-purple-600 transition-colors">
+                <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:text-teal-600 transition-colors">
                   {feature.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
@@ -306,7 +293,7 @@ const LandingPage = () => {
               alt="Healthcare team"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-900/95 to-blue-900/95" />
+            <div className="absolute inset-0 bg-black/60" />
           </div>
 
           <div className="relative z-10 p-12">
@@ -316,7 +303,7 @@ const LandingPage = () => {
                   number: "500+",
                   label: "Qualified Nurses",
                   icon: Users,
-                  gradient: "from-purple-400 to-purple-300",
+                  gradient: "from-teal-400 to-teal-300",
                 },
                 {
                   number: "10k+",
@@ -400,7 +387,7 @@ const LandingPage = () => {
                 title: "Sign Up",
                 desc: "Create your account in minutes",
                 icon: Users,
-                gradient: "from-purple-500 to-purple-600",
+                gradient: "from-teal-500 to-teal-600",
                 image:
                   "https://images.pexels.com/photos/5867731/pexels-photo-5867731.jpeg",
               },
@@ -467,9 +454,9 @@ const LandingPage = () => {
                   animate={{ rotate: [0, 10, -10, 0] }}
                   transition={{ duration: 0.5, repeat: Infinity }}
                 >
-                  <item.icon className="w-6 h-6 text-purple-600" />
+                  <item.icon className="w-6 h-6 text-teal-600" />
                 </motion.div>
-                <h3 className="font-bold mb-2 text-lg text-gray-900 group-hover:text-purple-600 transition-colors">
+                <h3 className="font-bold mb-2 text-lg text-gray-900 group-hover:text-teal-600 transition-colors">
                   {item.title}
                 </h3>
                 <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -483,7 +470,7 @@ const LandingPage = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="mt-20 mb-20 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-12 text-center text-white relative overflow-hidden"
+          className="mt-20 mb-20 bg-black border-2 border-gray-800 rounded-2xl p-12 text-center text-white relative overflow-hidden shadow-lg"
         >
           <motion.div
             animate={{
@@ -493,7 +480,7 @@ const LandingPage = () => {
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
             className="absolute inset-0 opacity-10"
           >
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white to-transparent" />
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-800 to-transparent" />
           </motion.div>
 
           <motion.div
@@ -502,7 +489,7 @@ const LandingPage = () => {
               opacity: [0.3, 0.5, 0.3],
             }}
             transition={{ duration: 5, repeat: Infinity }}
-            className="absolute top-10 right-10 w-32 h-32 bg-white rounded-full blur-3xl"
+            className="absolute top-10 right-10 w-32 h-32 bg-teal-500 rounded-full blur-3xl"
           />
 
           <motion.div
@@ -511,7 +498,7 @@ const LandingPage = () => {
               opacity: [0.3, 0.5, 0.3],
             }}
             transition={{ duration: 7, repeat: Infinity }}
-            className="absolute bottom-10 left-10 w-40 h-40 bg-white rounded-full blur-3xl"
+            className="absolute bottom-10 left-10 w-40 h-40 bg-blue-500 rounded-full blur-3xl"
           />
 
           <div className="relative z-10">
@@ -522,14 +509,14 @@ const LandingPage = () => {
               transition={{ delay: 0.1 }}
               className="inline-block mb-6"
             >
-              <Sparkles className="w-12 h-12 mx-auto" />
+              <Sparkles className="w-12 h-12 mx-auto text-teal-400" />
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-5xl font-bold mb-4"
+              className="text-5xl font-bold mb-4 text-white"
             >
               Ready to Get Started?
             </motion.h2>
@@ -538,7 +525,7 @@ const LandingPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="text-xl mb-8 opacity-90"
+              className="text-xl mb-8 text-gray-300"
             >
               Join thousands of patients receiving quality care
             </motion.p>
@@ -547,18 +534,12 @@ const LandingPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
-                y: -5,
-              }}
-              whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/register")}
-              className="group px-10 py-4 bg-white text-purple-600 rounded-xl text-lg font-semibold shadow-2xl"
+              className="px-10 py-4 bg-white text-black rounded-xl text-lg font-semibold hover:bg-teal-400 hover:text-white transition-all"
             >
               <span className="flex items-center gap-2">
                 Create Account Now
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                <ArrowRight className="w-5 h-5" />
               </span>
             </motion.button>
           </div>
@@ -583,7 +564,7 @@ const LandingPage = () => {
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <Heart className="w-8 h-8 text-purple-400" />
+                  <Heart className="w-8 h-8 text-teal-400" />
                 </motion.div>
                 <span className="text-2xl font-bold">Nursify</span>
               </motion.div>
@@ -605,7 +586,7 @@ const LandingPage = () => {
                     >
                       <a
                         href="#"
-                        className="text-gray-400 hover:text-purple-400 transition-colors text-sm"
+                        className="text-gray-400 hover:text-teal-400 transition-colors text-sm"
                       >
                         {link}
                       </a>
@@ -631,7 +612,7 @@ const LandingPage = () => {
                   >
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-purple-400 transition-colors text-sm"
+                      className="text-gray-400 hover:text-teal-400 transition-colors text-sm"
                     >
                       {link}
                     </a>
@@ -644,15 +625,15 @@ const LandingPage = () => {
               <h3 className="font-bold text-lg mb-4">Contact Us</h3>
               <ul className="space-y-3 text-sm text-gray-400">
                 <li className="flex items-start gap-2">
-                  <Mail className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                  <Mail className="w-5 h-5 text-teal-400 flex-shrink-0" />
                   <span>support@nursify.com</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Phone className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                  <Phone className="w-5 h-5 text-teal-400 flex-shrink-0" />
                   <span>+1 (555) 123-4567</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <MapPin className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                  <MapPin className="w-5 h-5 text-teal-400 flex-shrink-0" />
                   <span>
                     123 Healthcare Ave,
                     <br />
@@ -681,7 +662,7 @@ const LandingPage = () => {
                     href="#"
                     whileHover={{ scale: 1.2, y: -3 }}
                     whileTap={{ scale: 0.9 }}
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-purple-600 transition-colors"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-teal-600 transition-colors"
                     title={social.name}
                   >
                     <social.icon className="w-5 h-5" />
@@ -695,7 +676,7 @@ const LandingPage = () => {
                     key={i}
                     href="#"
                     whileHover={{ color: "#a78bfa" }}
-                    className="text-gray-400 hover:text-purple-400 transition-colors"
+                    className="text-gray-400 hover:text-teal-400 transition-colors"
                   >
                     {link}
                   </motion.a>

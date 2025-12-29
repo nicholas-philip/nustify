@@ -64,7 +64,7 @@ const NurseDetails = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/search")}
-            className="px-6 py-2 bg-purple-600 text-white rounded-lg"
+            className="px-6 py-2 bg-black text-white rounded-lg"
           >
             Back to Search
           </motion.button>
@@ -195,7 +195,7 @@ const NurseDetails = () => {
                   }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate(`/patient/book/${id}`)}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg transition"
+                  className="w-full px-6 py-3 bg-black text-white rounded-lg font-semibold"
                 >
                   Book Appointment
                 </motion.button>

@@ -113,7 +113,7 @@ const VerifyEmailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
       {}
       <motion.div
         animate={{
@@ -125,7 +125,7 @@ const VerifyEmailPage = () => {
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute top-0 left-0 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        className="absolute top-0 left-0 w-96 h-96 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       />
       <motion.div
         animate={{
@@ -159,9 +159,9 @@ const VerifyEmailPage = () => {
               repeatDelay: 1,
             }}
           >
-            <Heart className="w-10 h-10 text-purple-600" />
+            <Heart className="w-10 h-10 text-teal-600" />
           </motion.div>
-          <span className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          <span className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
             Nursify
           </span>
         </div>
@@ -184,7 +184,7 @@ const VerifyEmailPage = () => {
                 }}
                 className="inline-block mb-6"
               >
-                <Loader className="w-16 h-16 text-purple-600" />
+                <Loader className="w-16 h-16 text-teal-600" />
               </motion.div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 Verifying Your Email
@@ -225,11 +225,9 @@ const VerifyEmailPage = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                 />
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  <motion.button
                   onClick={handleVerifyByCode}
-                  className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold"
+                  className="w-full py-3 bg-black text-white rounded-lg font-semibold"
                 >
                   Verify Code
                 </motion.button>
@@ -275,7 +273,7 @@ const VerifyEmailPage = () => {
                   duration: 1,
                   repeat: Infinity,
                 }}
-                className="flex items-center justify-center gap-2 text-purple-600"
+                className="flex items-center justify-center gap-2 text-teal-600"
               >
                 <Loader className="w-5 h-5 animate-spin" />
                 <span>Redirecting to login...</span>
@@ -312,17 +310,15 @@ const VerifyEmailPage = () => {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleResendVerification}
                   disabled={resending}
-                  className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   <Mail className="w-5 h-5" />
                   {resending ? "Sending..." : "Resend Verification Email"}
                 </motion.button>
 
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   onClick={() => navigate("/login")}
-                  className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-black text-white rounded-lg font-semibold flex items-center justify-center gap-2"
                 >
                   Back to Login
                   <ArrowRight className="w-5 h-5" />

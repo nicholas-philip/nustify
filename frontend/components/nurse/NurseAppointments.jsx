@@ -144,7 +144,7 @@ const NurseAppointments = () => {
             whileHover={{ x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/nurse/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-teal-600 mb-4"
           >
             ← Back to Dashboard
           </motion.button>
@@ -158,7 +158,7 @@ const NurseAppointments = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-teal-600" />
             </motion.div>
             My Appointments
           </motion.h1>
@@ -193,7 +193,7 @@ const NurseAppointments = () => {
               onClick={() => setFilter(status)}
               className={`px-6 py-2 rounded-lg font-medium transition ${
                 filter === status
-                  ? "bg-purple-600 text-white"
+                  ? "bg-black text-white"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -214,7 +214,7 @@ const NurseAppointments = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto"
+                className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full mx-auto"
               />
             </motion.div>
           ) : appointments.length === 0 ? (
@@ -411,7 +411,7 @@ const NurseAppointments = () => {
                         onClick={() =>
                           setRespondModal({ show: true, appointment })
                         }
-                        className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2"
+                         className="flex-1 px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
                       >
                         <Check className="w-5 h-5" />
                         Accept
@@ -425,7 +425,7 @@ const NurseAppointments = () => {
                         onClick={() =>
                           handleRespond(appointment._id, "rejected")
                         }
-                        className="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2"
+                         className="flex-1 px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
                       >
                         <X className="w-5 h-5" />
                         Decline
@@ -450,7 +450,7 @@ const NurseAppointments = () => {
                           onClick={() =>
                             setCompleteModal({ show: true, appointment })
                           }
-                          className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                           className="w-full px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
                         >
                           <CheckCircle2 className="w-5 h-5" />
                           Mark as Completed
@@ -535,7 +535,7 @@ const NurseAppointments = () => {
                     handleRespond(respondModal.appointment._id, "confirmed")
                   }
                   disabled={responding}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-black text-white rounded-lg disabled:opacity-50"
                 >
                   {responding ? "Accepting..." : "Accept Appointment"}
                 </motion.button>
@@ -614,7 +614,7 @@ const NurseAppointments = () => {
                   whileTap={{ scale: 0.95 }}
                   onClick={handleComplete}
                   disabled={completing}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2 bg-black text-white rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   <CheckCircle2 className="w-5 h-5" />
                   {completing ? "Completing..." : "Mark as Complete"}

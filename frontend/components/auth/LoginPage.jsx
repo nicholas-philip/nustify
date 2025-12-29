@@ -112,7 +112,7 @@ const LoginPage = () => {
             alt="Healthcare Professional"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-purple-900/80 to-transparent flex items-end p-12">
+          <div className="absolute inset-0 bg-black/40 flex items-end p-12">
             <div className="text-white">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
@@ -263,27 +263,16 @@ const LoginPage = () => {
 
             <motion.button
               variants={itemVariants}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0 20px 40px rgba(139, 92, 246, 0.3)",
-              }}
-              whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="group w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+              className="w-full py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <motion.span className="relative z-10 flex items-center justify-center gap-2">
                 {loading ? "Signing in..." : "Sign In"}
                 {!loading && (
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5" />
                 )}
               </motion.span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600"
-                initial={{ x: "100%" }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.3 }}
-              />
             </motion.button>
           </motion.form>
 

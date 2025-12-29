@@ -168,7 +168,7 @@ const SubmitReview = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/appointments")}
-            className="px-6 py-2 bg-purple-600 text-white rounded-lg"
+            className="px-6 py-2 bg-black text-white rounded-lg"
           >
             Back to Appointments
           </motion.button>
@@ -356,7 +356,7 @@ const SubmitReview = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={submitting || formData.rating === 0}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="flex-1 px-6 py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? "Submitting..." : "Submit Review"}
             </motion.button>

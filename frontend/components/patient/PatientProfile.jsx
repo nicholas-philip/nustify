@@ -134,7 +134,7 @@ const PatientProfile = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full"
+          className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full"
         />
       </div>
     );
@@ -154,27 +154,25 @@ const PatientProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-blue-50">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-white shadow-sm border-b"
       >
         <div className="max-w-5xl mx-auto px-4 py-6">
-          <motion.button
-            whileHover={{ x: -5 }}
-            whileTap={{ scale: 0.95 }}
+            <motion.button
             onClick={() => navigate("/patient/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-3 text-sm font-medium"
+            className="text-teal-600 mb-4 text-sm font-medium flex items-center gap-2"
           >
-            ← Back to Dashboard
+            <span>←</span> Back to Dashboard
           </motion.button>
           <div className="flex items-center gap-3">
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-7 h-7 text-purple-600" />
+              <User className="w-8 h-8 text-teal-600" />
             </motion.div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
@@ -226,12 +224,12 @@ const PatientProfile = () => {
                 variants={itemVariants}
                 className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
               >
-                <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4">
-                  <div className="flex items-center gap-2 text-white">
-                    <User className="w-5 h-5" />
-                    <h2 className="text-lg font-semibold">Basic Information</h2>
-                  </div>
-                </div>
+                 <div className="bg-gray-100 border-b border-gray-200 px-6 py-5">
+                   <div className="flex items-center gap-2 text-gray-900">
+                     <User className="w-5 h-5" />
+                     <h2 className="text-lg font-semibold">Basic Information</h2>
+                   </div>
+                 </div>
                 <div className="p-6 space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     {[
@@ -302,7 +300,7 @@ const PatientProfile = () => {
                           <motion.select
                             whileFocus={{ scale: 1.01 }}
                             name={field.name}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all bg-white"
                             value={formData[field.name]}
                             onChange={handleChange}
                           >
@@ -324,9 +322,9 @@ const PatientProfile = () => {
                               whileFocus={{ scale: 1.01 }}
                               type={field.type || "text"}
                               name={field.name}
-                              className={`w-full ${
-                                field.icon ? "pl-10" : "pl-4"
-                              } pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all`}
+                                className={`w-full ${
+                                  field.icon ? "pl-12" : "pl-4"
+                                } pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all`}
                               value={formData[field.name]}
                               onChange={handleChange}
                               required={field.required}
@@ -343,8 +341,8 @@ const PatientProfile = () => {
                 variants={itemVariants}
                 className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
               >
-                <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4">
-                  <div className="flex items-center gap-2 text-white">
+                <div className="bg-gray-100 border-b border-gray-200 px-6 py-5">
+                  <div className="flex items-center gap-2 text-gray-900">
                     <Heart className="w-5 h-5" />
                     <h2 className="text-lg font-semibold">
                       Medical Information
@@ -382,7 +380,7 @@ const PatientProfile = () => {
                         whileFocus={{ scale: 1.01 }}
                         name={field.name}
                         placeholder={field.placeholder}
-                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all resize-none"
                         rows={field.rows}
                         value={formData[field.name]}
                         onChange={handleChange}
@@ -396,8 +394,8 @@ const PatientProfile = () => {
                 variants={itemVariants}
                 className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
               >
-                <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4">
-                  <div className="flex items-center gap-2 text-white">
+                <div className="bg-gray-100 border-b border-gray-200 px-6 py-5">
+                  <div className="flex items-center gap-2 text-gray-900">
                     <MapPin className="w-5 h-5" />
                     <h2 className="text-lg font-semibold">Address</h2>
                   </div>
@@ -412,7 +410,7 @@ const PatientProfile = () => {
                       type="text"
                       name="address.street"
                       placeholder="123 Main St"
-                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all bg-white"
                       value={formData.address.street}
                       onChange={handleChange}
                     />
@@ -441,7 +439,7 @@ const PatientProfile = () => {
                           type="text"
                           name={`address.${field.name}`}
                           placeholder={field.placeholder}
-                          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all bg-white"
                           value={formData.address[field.name]}
                           onChange={handleChange}
                         />
@@ -458,8 +456,8 @@ const PatientProfile = () => {
                 variants={itemVariants}
                 className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden sticky top-6"
               >
-                <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4">
-                  <div className="flex items-center gap-2 text-white">
+                <div className="bg-gray-100 border-b border-gray-200 px-6 py-5">
+                  <div className="flex items-center gap-2 text-gray-900">
                     <AlertTriangle className="w-5 h-5" />
                     <h2 className="text-lg font-semibold">Emergency Contact</h2>
                   </div>
@@ -491,7 +489,7 @@ const PatientProfile = () => {
                         type={field.type || "text"}
                         name={`emergencyContact.${field.name}`}
                         placeholder={field.placeholder}
-                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all bg-white"
                         value={formData.emergencyContact[field.name]}
                         onChange={handleChange}
                         required={field.required}
@@ -502,24 +500,17 @@ const PatientProfile = () => {
 
                 <div className="px-6 pb-6 space-y-3">
                   <motion.button
-                    whileHover={{
-                      scale: 1.02,
-                      boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
-                    }}
-                    whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={saving}
-                    className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full px-6 py-3.5 bg-black text-white rounded-xl font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     <Save className="w-5 h-5" />
                     {saving ? "Saving..." : "Save Changes"}
                   </motion.button>
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
                     type="button"
                     onClick={() => navigate("/patient/dashboard")}
-                    className="w-full px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50"
+                    className="w-full px-6 py-3.5 bg-black text-white rounded-xl font-semibold"
                   >
                     Cancel
                   </motion.button>
