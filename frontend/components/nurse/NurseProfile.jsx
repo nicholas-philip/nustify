@@ -51,6 +51,7 @@ const NurseProfile = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
 
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -418,7 +419,8 @@ const NurseProfile = () => {
                       whileFocus={{ scale: 1.02 }}
                       type="text"
                       name="fullName"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all"
+                      disabled={!isEditing}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                       value={formData.fullName}
                       onChange={handleChange}
                       required
@@ -432,7 +434,8 @@ const NurseProfile = () => {
                       whileFocus={{ scale: 1.02 }}
                       type="tel"
                       name="phone"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all"
+                      disabled={!isEditing}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                       value={formData.phone}
                       onChange={handleChange}
                       required
@@ -481,7 +484,8 @@ const NurseProfile = () => {
                         type="number"
                         name="yearsOfExperience"
                         placeholder="5"
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all"
+                        disabled={!isEditing}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                         value={formData.yearsOfExperience}
                         onChange={handleChange}
                         min="0"
@@ -498,7 +502,8 @@ const NurseProfile = () => {
                       type="number"
                       name="hourlyRate"
                       placeholder="50"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all"
+                      disabled={!isEditing}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                       value={formData.hourlyRate}
                       onChange={handleChange}
                       min="0"
@@ -515,7 +520,8 @@ const NurseProfile = () => {
                       whileFocus={{ scale: 1.02 }}
                       name="bio"
                       placeholder="Tell patients about yourself, your experience, and what makes you unique..."
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all"
+                      disabled={!isEditing}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                       rows="4"
                       value={formData.bio}
                       onChange={handleChange}
@@ -535,7 +541,8 @@ const NurseProfile = () => {
                       type="text"
                       name="services"
                       placeholder="e.g., Wound Care, IV Therapy, Post-Op Care (comma separated)"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all"
+                      disabled={!isEditing}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                       value={formData.services}
                       onChange={handleChange}
                     />
@@ -550,7 +557,8 @@ const NurseProfile = () => {
                       type="text"
                       name="languages"
                       placeholder="e.g., English, Spanish, French (comma separated)"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all"
+                      disabled={!isEditing}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-black focus:border-black outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                       value={formData.languages}
                       onChange={handleChange}
                     />
@@ -612,21 +620,65 @@ const NurseProfile = () => {
               </motion.div>
 
               <motion.div variants={itemVariants} className="flex gap-4">
-                <motion.button
-                  type="button"
-                  onClick={() => navigate("/nurse/dashboard")}
-                  className="flex-1 px-6 py-3.5 bg-black text-white rounded-xl font-semibold"
-                >
-                  Cancel
-                </motion.button>
-                <motion.button
-                  type="submit"
-                  disabled={saving}
-                  className="flex-1 px-6 py-3.5 bg-black text-white rounded-xl font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  <Save className="w-5 h-5" />
-                  {saving ? "Saving..." : "Save Changes"}
-                </motion.button>
+                {!isEditing ? (
+                  <motion.button
+                    type="button"
+                    onClick={() => setIsEditing(true)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full px-6 py-3.5 bg-black text-white rounded-xl font-semibold flex items-center justify-center gap-2"
+                  >
+                    <User className="w-5 h-5" />
+                    Edit Profile
+                  </motion.button>
+                ) : (
+                  <>
+                    <motion.button
+                      type="button"
+                      onClick={() => {
+                        setIsEditing(false);
+                        // Reset form data to original profile values
+                        if (profile) {
+                          setFormData({
+                            fullName: profile.fullName || "",
+                            phone: profile.phone || "",
+                            specialization: profile.specialization || "",
+                            yearsOfExperience: profile.yearsOfExperience || "",
+                            bio: profile.bio || "",
+                            hourlyRate: profile.hourlyRate || "",
+                            address: {
+                              street: profile.address?.street || "",
+                              city: profile.address?.city || "",
+                              state: profile.address?.state || "",
+                              country: profile.address?.country || "",
+                              postalCode: profile.address?.postalCode || "",
+                            },
+                            services: profile.services?.join(", ") || "",
+                            languages: profile.languages?.join(", ") || "",
+                            verificationStatus: profile.verificationStatus || "unverified",
+                            trustScore: profile.trustScore || 0,
+                            specializations: profile.specializations || [],
+                          });
+                        }
+                      }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex-1 px-6 py-3.5 bg-gray-200 text-gray-800 rounded-xl font-semibold"
+                    >
+                      Cancel
+                    </motion.button>
+                    <motion.button
+                      type="submit"
+                      disabled={saving}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex-1 px-6 py-3.5 bg-black text-white rounded-xl font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                      <Save className="w-5 h-5" />
+                      {saving ? "Saving..." : "Save Changes"}
+                    </motion.button>
+                  </>
+                )}
               </motion.div>
             </motion.form>
           </div>
