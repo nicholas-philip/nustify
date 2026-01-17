@@ -60,8 +60,7 @@ const AdminUsers = () => {
   const handleToggleStatus = async (userId, field, currentValue) => {
     if (
       !confirm(
-        `Are you sure you want to ${
-          currentValue ? "deactivate" : "activate"
+        `Are you sure you want to ${currentValue ? "deactivate" : "activate"
         } this user?`
       )
     ) {
@@ -125,7 +124,7 @@ const AdminUsers = () => {
             whileHover={{ x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/admin/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-black hover:text-purple-700 mb-4"
           >
             ← Back to Dashboard
           </motion.button>
@@ -139,7 +138,7 @@ const AdminUsers = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
             Manage Users
           </motion.h1>
@@ -195,7 +194,7 @@ const AdminUsers = () => {
                     type="text"
                     name={filter.name}
                     placeholder={filter.placeholder}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                     value={filters[filter.name]}
                     onChange={handleFilterChange}
                   />
@@ -203,7 +202,7 @@ const AdminUsers = () => {
                   <motion.select
                     whileFocus={{ scale: 1.02 }}
                     name={filter.name}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                     value={filters[filter.name]}
                     onChange={handleFilterChange}
                   >
@@ -214,10 +213,10 @@ const AdminUsers = () => {
                           i === 0
                             ? ""
                             : opt === "Not Verified" || opt === "Inactive"
-                            ? "false"
-                            : opt === "Verified" || opt === "Active"
-                            ? "true"
-                            : opt.toLowerCase()
+                              ? "false"
+                              : opt === "Verified" || opt === "Active"
+                                ? "true"
+                                : opt.toLowerCase()
                         }
                       >
                         {opt}
@@ -242,7 +241,7 @@ const AdminUsers = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto"
+                className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full mx-auto"
               />
             </motion.div>
           ) : users.length === 0 ? (
@@ -312,13 +311,12 @@ const AdminUsers = () => {
                           <td className="px-6 py-4">
                             <motion.span
                               whileHover={{ scale: 1.1 }}
-                              className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                                user.role === "admin"
+                              className={`px-2 py-1 text-xs font-semibold rounded-full ${user.role === "admin"
                                   ? "bg-purple-100 text-purple-800"
                                   : user.role === "nurse"
-                                  ? "bg-blue-100 text-blue-800"
-                                  : "bg-green-100 text-green-800"
-                              }`}
+                                    ? "bg-blue-100 text-blue-800"
+                                    : "bg-green-100 text-green-800"
+                                }`}
                             >
                               {user.role}
                             </motion.span>
@@ -337,11 +335,10 @@ const AdminUsers = () => {
                                   user.isActive
                                 )
                               }
-                              className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                                user.isActive
+                              className={`px-3 py-1 text-xs font-semibold rounded-full ${user.isActive
                                   ? "bg-green-100 text-green-800 hover:bg-green-200"
                                   : "bg-red-100 text-red-800 hover:bg-red-200"
-                              }`}
+                                }`}
                             >
                               {user.isActive ? "Active" : "Inactive"}
                             </motion.button>
@@ -357,11 +354,10 @@ const AdminUsers = () => {
                                   user.isVerified
                                 )
                               }
-                              className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                                user.isVerified
+                              className={`px-3 py-1 text-xs font-semibold rounded-full ${user.isVerified
                                   ? "bg-green-100 text-green-800 hover:bg-green-200"
                                   : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-                              }`}
+                                }`}
                             >
                               {user.isVerified ? "Verified" : "Not Verified"}
                             </motion.button>

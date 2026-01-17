@@ -101,7 +101,7 @@ const AdminReviews = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
             Manage Reviews
           </motion.h1>
@@ -135,7 +135,7 @@ const AdminReviews = () => {
                 <motion.select
                   whileFocus={{ scale: 1.02 }}
                   name={filter.name}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                   value={filters[filter.name]}
                   onChange={handleFilterChange}
                 >
@@ -163,7 +163,7 @@ const AdminReviews = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto"
+                className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full mx-auto"
               />
             </motion.div>
           ) : reviews.length === 0 ? (
@@ -212,11 +212,10 @@ const AdminReviews = () => {
                               transition={{ delay: i * 0.1, type: "spring" }}
                             >
                               <Star
-                                className={`w-5 h-5 ${
-                                  i < review.rating
+                                className={`w-5 h-5 ${i < review.rating
                                     ? "text-yellow-500 fill-current"
                                     : "text-gray-300"
-                                }`}
+                                  }`}
                               />
                             </motion.div>
                           ))}

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart, Mail, Lock, AlertCircle, ArrowRight } from "lucide-react";
@@ -9,7 +8,7 @@ import { motion } from "framer-motion";
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [useSession, setUseSession] = useState(true);
+  const [useSession, setUseSession] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -26,8 +25,7 @@ const LoginPage = () => {
       const data = await api.login(formData);
 
       if (data.success) {
-        
-        login(data.token, { ...data.user, session: useSession });
+        login(data.token, { ...data.user, session: !useSession });
 
         if (data.user.role === "patient") {
           navigate("/patient/dashboard");
@@ -72,8 +70,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {}
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+      { }
       <motion.div
         animate={{
           scale: [1, 1.2, 1],
@@ -84,7 +82,7 @@ const LoginPage = () => {
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute top-0 left-0 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        className="absolute top-0 left-0 w-96 h-96 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       />
       <motion.div
         animate={{
@@ -96,11 +94,11 @@ const LoginPage = () => {
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute bottom-0 right-0 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        className="absolute bottom-0 right-0 w-96 h-96 bg-gray-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       />
 
       <div className="flex max-w-6xl w-full gap-8 relative z-10">
-        {}
+        { }
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -134,17 +132,17 @@ const LoginPage = () => {
           </div>
         </motion.div>
 
-        {}
+        { }
         <div className="lg:hidden absolute inset-0 z-0">
           <img
             src="https://images.pexels.com/photos/4021775/pexels-photo-4021775.jpeg"
             alt="Healthcare"
             className="w-full h-full object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-50/80 to-blue-50/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-50/80 to-gray-100/80" />
         </div>
 
-        {}
+        { }
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -166,10 +164,10 @@ const LoginPage = () => {
                 repeatDelay: 1,
               }}
             >
-              <Heart className="w-10 h-10 text-purple-600" />
+              <Heart className="w-10 h-10 text-black font-bold" />
             </motion.div>
             <motion.span
-              className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"
+              className="text-3xl font-bold text-black"
               animate={{
                 backgroundPosition: ["0%", "100%", "0%"],
               }}
@@ -225,8 +223,8 @@ const LoginPage = () => {
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <motion.input
                   whileFocus={{
-                    boxShadow: "0 0 0 3px rgba(139, 92, 246, 0.1)",
-                    borderColor: "rgb(139, 92, 246)",
+                    boxShadow: "0 0 0 3px rgba(0, 0, 0, 0.1)",
+                    borderColor: "rgb(0, 0, 0)",
                   }}
                   type="email"
                   name="email"
@@ -247,8 +245,8 @@ const LoginPage = () => {
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <motion.input
                   whileFocus={{
-                    boxShadow: "0 0 0 3px rgba(139, 92, 246, 0.1)",
-                    borderColor: "rgb(139, 92, 246)",
+                    boxShadow: "0 0 0 3px rgba(0, 0, 0, 0.1)",
+                    borderColor: "rgb(0, 0, 0)",
                   }}
                   type="password"
                   name="password"
@@ -269,9 +267,7 @@ const LoginPage = () => {
             >
               <motion.span className="relative z-10 flex items-center justify-center gap-2">
                 {loading ? "Signing in..." : "Sign In"}
-                {!loading && (
-                  <ArrowRight className="w-5 h-5" />
-                )}
+                {!loading && <ArrowRight className="w-5 h-5" />}
               </motion.span>
             </motion.button>
           </motion.form>
@@ -285,7 +281,7 @@ const LoginPage = () => {
                 className="w-4 h-4"
               />
               <span className="text-sm text-gray-600">
-                Sign in to all tabs (remember login)
+                Remember me (sign in to all tabs)
               </span>
             </label>
             <p className="text-gray-600">
@@ -294,7 +290,7 @@ const LoginPage = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/register")}
-                className="text-purple-600 font-semibold hover:underline"
+                className="text-black font-semibold hover:underline"
               >
                 Sign up
               </motion.button>

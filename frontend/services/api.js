@@ -16,7 +16,7 @@ class ApiService {
     localStorage.setItem("token", token);
     try {
       sessionStorage.removeItem("token");
-    } catch (e) {}
+    } catch (e) { }
     console.log("🔑 Token set in ApiService and localStorage");
   }
 
@@ -38,17 +38,25 @@ class ApiService {
     this.token = null;
     try {
       localStorage.removeItem("token");
-    } catch (e) {}
+    } catch (e) { }
     try {
       sessionStorage.removeItem("token");
-    } catch (e) {}
+    } catch (e) { }
     console.log(
       "🗑️ Token cleared from ApiService, localStorage and sessionStorage"
     );
   }
 
+  post(endpoint, body) {
+    return this.request(endpoint, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  }
+
   async request(endpoint, options = {}) {
-    console.log("📡 Making request to:", `${API_URL}${endpoint}`);
+    const fullUrl = `${API_URL}${endpoint}`;
+    console.log("📡 Making request to:", fullUrl);
 
     const headers = {};
 
@@ -94,6 +102,7 @@ class ApiService {
         const errorMessage =
           data.message || `Request failed with status ${response.status}`;
         console.error("❌ Request failed:", errorMessage);
+        console.error("❌ Server Response Data:", data); // Log full data to see requestedUrl
         throw new Error(errorMessage);
       }
 
@@ -392,31 +401,212 @@ class ApiService {
     });
   }
 
-  createPayment(data) {
-    return this.request("/api/payments", {
-      method: "POST",
-      body: JSON.stringify(data),
+  clearAllNotifications() {
+    return this.request("/api/notifications", {
+      method: "DELETE",
     });
   }
 
-  getPayments(params) {
+  // Health Records
+  getHealthRecords(params) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/api/health-records?${queryString}`);
+  }
+
+  getHealthTimeline(params) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/api/health-records/timeline?${queryString}`);
+  }
+
+  getHealthSummary(params) {
     const queryString = params ? new URLSearchParams(params).toString() : "";
-    return this.request(`/api/payments?${queryString}`);
+    return this.request(`/api/health-records/summary?${queryString}`);
   }
 
-  getPaymentById(id) {
-    return this.request(`/api/payments/${id}`);
-  }
-
-  requestRefund(id, data) {
-    return this.request(`/api/payments/${id}/refund`, {
+  createHealthRecord(data) {
+    return this.request("/api/health-records", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  getPaymentStatistics() {
-    return this.request("/api/payments/statistics");
+  updateHealthRecord(id, data) {
+    return this.request(`/api/health-records/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
+  deleteHealthRecord(id) {
+    return this.request(`/api/health-records/${id}`, {
+      method: "DELETE",
+    });
+  }
+
+  // Vital Signs
+  recordVitalSigns(data) {
+    return this.request("/api/vital-signs", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  getVitalSigns(params) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/api/vital-signs?${queryString}`);
+  }
+
+  getVitalSignsTrends(metric, days = 30) {
+    return this.request(`/api/vital-signs/trends?metric=${metric}&days=${days}`);
+  }
+
+  getLatestVitalSigns() {
+    return this.request("/api/vital-signs/latest");
+  }
+
+  getAbnormalVitalSigns() {
+    return this.request("/api/vital-signs/abnormal");
+  }
+
+  // Medical Documents
+  uploadMedicalDocument(file, data) {
+    console.log("📤 Uploading medical document...");
+    const formData = new FormData();
+    formData.append("document", file);
+
+    // Append other data fields
+    Object.keys(data).forEach(key => {
+      formData.append(key, data[key]);
+    });
+
+    return this.request("/api/medical-documents/upload", {
+      method: "POST",
+      body: formData,
+    });
+  }
+
+  getMedicalDocuments(params) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/api/medical-documents?${queryString}`);
+  }
+
+  deleteMedicalDocument(id) {
+    return this.request(`/api/medical-documents/${id}`, {
+      method: "DELETE",
+    });
+  }
+
+  shareMedicalDocument(id, data) {
+    return this.request(`/api/medical-documents/${id}/share`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Messaging Methods
+  getConversations() {
+    return this.request("/api/chat/conversations");
+  }
+
+  getChatMessages(userId) {
+    return this.request(`/api/chat/${userId}`);
+  }
+
+  sendChatMessage(data) {
+    return this.request("/api/chat/send", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  getChatUserInfo(userId) {
+    return this.request(`/api/chat/user/${userId}`);
+  }
+
+  // Maternal Health
+  createPregnancyRecord(data) {
+    return this.request("/api/maternal-health", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  getPregnancyRecords() {
+    return this.request("/api/maternal-health");
+  }
+
+  updatePregnancyRecord(id, data) {
+    return this.request(`/api/maternal-health/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
+  getPregnancyTimeline(id) {
+    return this.request(`/api/maternal-health/${id}/timeline`);
+  }
+  // Child Health
+  createChildHealthRecord(data) {
+    return this.request("/api/child-health", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  getChildHealthRecords() {
+    return this.request("/api/child-health");
+  }
+
+  updateChildHealthRecord(id, data) {
+    return this.request(`/api/child-health/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
+  getVaccinationSchedule(id) {
+    return this.request(`/api/child-health/${id}/vaccinations`);
+  }
+
+  recordMilestone(id, data) {
+    return this.request(`/api/child-health/${id}/milestone`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Credential Methods
+  getCredentialStatus() {
+    return this.request("/api/credentials/status");
+  }
+
+  submitCredentials(data) {
+    const formData = new FormData();
+    if (data.file) {
+      formData.append("licenseDocument", data.file);
+    }
+    formData.append("licenseNumber", data.licenseNumber);
+    formData.append("licenseType", data.licenseType);
+    formData.append("issuingAuthority", data.issuingAuthority);
+    formData.append("expiryDate", data.expiryDate);
+
+    return this.request("/api/credentials/submit", {
+      method: "POST",
+      body: formData,
+    });
+  }
+
+  getBadges(nurseId) {
+    const endpoint = nurseId ? `/api/credentials/badges/${nurseId}` : "/api/credentials/badges";
+    return this.request(endpoint);
+  }
+
+  updateTrustScore(nurseId, score) {
+    const endpoint = nurseId ? `/api/credentials/trust-score/${nurseId}` : "/api/credentials/trust-score";
+    return this.request(endpoint, {
+      method: "PUT",
+      body: JSON.stringify({ trustScore: score }),
+    });
   }
 }
 

@@ -5,26 +5,20 @@ import Appointment from "../models/Appointments.js";
 import Review from "../models/Reviews.js";
 import Message from "../models/Messages.js";
 
-
-
-
 const getDashboard = async (req, res) => {
   try {
-    
     const totalUsers = await User.countDocuments();
     const totalNurses = await User.countDocuments({ role: "nurse" });
     const totalPatients = await User.countDocuments({ role: "patient" });
     const verifiedUsers = await User.countDocuments({ isVerified: true });
     const activeUsers = await User.countDocuments({ isActive: true });
 
-    
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     const newUsersThisMonth = await User.countDocuments({
       createdAt: { $gte: thirtyDaysAgo },
     });
 
-    
     const totalAppointments = await Appointment.countDocuments();
     const pendingAppointments = await Appointment.countDocuments({
       status: "pending",
@@ -39,7 +33,6 @@ const getDashboard = async (req, res) => {
       status: "cancelled",
     });
 
-    
     const revenueData = await Appointment.aggregate([
       { $match: { status: "completed" } },
       {
@@ -54,14 +47,13 @@ const getDashboard = async (req, res) => {
     const totalRevenue = revenueData[0]?.totalRevenue || 0;
     const avgAppointmentCost = revenueData[0]?.avgAppointmentCost || 0;
 
-    
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
     const monthlyRevenue = await Appointment.aggregate([
       {
         $match: {
-          status: "completed",
+          status: { $in: ["completed", "paid-cash"] },
           createdAt: { $gte: sixMonthsAgo },
         },
       },
@@ -78,7 +70,6 @@ const getDashboard = async (req, res) => {
       { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
-    
     const totalReviews = await Review.countDocuments();
     const averageRatingData = await Review.aggregate([
       {
@@ -90,20 +81,17 @@ const getDashboard = async (req, res) => {
     ]);
     const averageRating = averageRatingData[0]?.avgRating || 0;
 
-    
     const topNurses = await NurseProfile.find()
       .sort({ rating: -1, totalReviews: -1 })
       .limit(5)
       .populate("userId", "email isVerified");
 
-    
     const recentAppointments = await Appointment.find()
       .sort({ createdAt: -1 })
       .limit(10)
       .populate("patientId", "email")
       .populate("nurseId", "email");
 
-    
     const unreadMessages = await Message.countDocuments({ isRead: false });
     const lockedAccounts = await User.countDocuments({
       lockUntil: { $gt: Date.now() },
@@ -154,9 +142,6 @@ const getDashboard = async (req, res) => {
   }
 };
 
-
-
-
 const getUsers = async (req, res) => {
   try {
     const {
@@ -190,7 +175,6 @@ const getUsers = async (req, res) => {
 
     const total = await User.countDocuments(query);
 
-    
     const usersWithProfiles = await Promise.all(
       users.map(async (user) => {
         let profile = null;
@@ -224,9 +208,6 @@ const getUsers = async (req, res) => {
   }
 };
 
-
-
-
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
@@ -245,14 +226,12 @@ const getUserById = async (req, res) => {
       profile = await PatientProfile.findOne({ userId: user._id });
     }
 
-    
     const appointments = await Appointment.find({
       $or: [{ patientId: user._id }, { nurseId: user._id }],
     })
       .sort({ createdAt: -1 })
       .limit(10);
 
-    
     let reviews = [];
     if (user.role === "nurse") {
       reviews = await Review.find({ nurseId: user._id })
@@ -282,9 +261,6 @@ const getUserById = async (req, res) => {
     });
   }
 };
-
-
-
 
 const updateUserStatus = async (req, res) => {
   try {
@@ -322,9 +298,6 @@ const updateUserStatus = async (req, res) => {
   }
 };
 
-
-
-
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -336,14 +309,12 @@ const deleteUser = async (req, res) => {
       });
     }
 
-    
     if (user.role === "nurse") {
       await NurseProfile.deleteOne({ userId: user._id });
     } else if (user.role === "patient") {
       await PatientProfile.deleteOne({ userId: user._id });
     }
 
-    
     await Appointment.deleteMany({
       $or: [{ patientId: user._id }, { nurseId: user._id }],
     });
@@ -369,9 +340,6 @@ const deleteUser = async (req, res) => {
     });
   }
 };
-
-
-
 
 const getAppointments = async (req, res) => {
   try {
@@ -416,9 +384,6 @@ const getAppointments = async (req, res) => {
   }
 };
 
-
-
-
 const getReviews = async (req, res) => {
   try {
     const { page = 1, limit = 20, minRating, maxRating } = req.query;
@@ -458,9 +423,6 @@ const getReviews = async (req, res) => {
   }
 };
 
-
-
-
 const deleteReview = async (req, res) => {
   try {
     const review = await Review.findByIdAndDelete(req.params.id);
@@ -472,7 +434,6 @@ const deleteReview = async (req, res) => {
       });
     }
 
-    
     const allReviews = await Review.find({ nurseId: review.nurseId });
     const avgRating = allReviews.length
       ? allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length
@@ -502,9 +463,6 @@ const deleteReview = async (req, res) => {
   }
 };
 
-
-
-
 const getAnalytics = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
@@ -517,7 +475,6 @@ const getAnalytics = async (req, res) => {
       };
     }
 
-    
     const userGrowth = await User.aggregate([
       { $match: dateFilter },
       {
@@ -533,7 +490,6 @@ const getAnalytics = async (req, res) => {
       { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
-    
     const appointmentTrends = await Appointment.aggregate([
       { $match: dateFilter },
       {
@@ -550,7 +506,6 @@ const getAnalytics = async (req, res) => {
       { $sort: { "_id.year": 1, "_id.month": 1 } },
     ]);
 
-    
     const popularSpecializations = await Appointment.aggregate([
       {
         $lookup: {
@@ -572,7 +527,6 @@ const getAnalytics = async (req, res) => {
       { $limit: 10 },
     ]);
 
-    
     const peakBookingTimes = await Appointment.aggregate([
       {
         $group: {

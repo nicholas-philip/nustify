@@ -1,6 +1,6 @@
 import PatientProfile from "../models/PatientProfile.js";
 import NurseProfile from "../models/NurseProfile.js";
-import Appointment from "../models/Appointments.js"; 
+import Appointment from "../models/Appointments.js";
 import Message from "../models/Messages.js";
 import Review from "../models/Reviews.js";
 
@@ -11,7 +11,7 @@ const updateProfile = async (req, res) => {
   try {
     const updates = req.body;
 
-    
+
     delete updates.userId;
 
     const patientProfile = await PatientProfile.findOneAndUpdate(
@@ -92,7 +92,7 @@ const searchNurses = async (req, res) => {
       .limit(parseInt(limit))
       .lean();
 
-    
+
     const nursesWithUserId = nurses.map((nurse) => ({
       ...nurse,
       userIdString: nurse.userId?._id?.toString() || nurse.userId,
@@ -121,10 +121,17 @@ const searchNurses = async (req, res) => {
 
 const getNurseDetails = async (req, res) => {
   try {
-    const nurse = await NurseProfile.findById(req.params.id).populate(
+    let nurse = await NurseProfile.findById(req.params.id).populate(
       "userId",
       "email isVerified createdAt"
     );
+
+    if (!nurse) {
+      nurse = await NurseProfile.findOne({ userId: req.params.id }).populate(
+        "userId",
+        "email isVerified createdAt"
+      );
+    }
 
     if (!nurse) {
       return res
@@ -132,23 +139,29 @@ const getNurseDetails = async (req, res) => {
         .json({ success: false, message: "Nurse not found" });
     }
 
-    
-    const reviews = await Review.find({ nurseId: nurse.userId })
-      .populate({
-        path: "patientId",
-        populate: {
-          path: "userId",
-          model: "PatientProfile",
-          select: "fullName",
-        },
+    const reviews = await Review.find({ nurseId: nurse.userId }).lean();
+
+    const reviewsWithProfiles = await Promise.all(
+      reviews.map(async (review) => {
+        const patientProfile = await PatientProfile.findOne({
+          userId: review.patientId,
+        }).select("fullName profileImage");
+
+        return {
+          ...review,
+          patientId: {
+            _id: review.patientId,
+            fullName: patientProfile?.fullName || "Verified Patient",
+            profileImage: patientProfile?.profileImage || null,
+          },
+        };
       })
-      .sort({ createdAt: -1 })
-      .limit(5);
+    );
 
     res.status(200).json({
       success: true,
       nurse,
-      reviews,
+      reviews: reviewsWithProfiles,
     });
   } catch (error) {
     console.error("Get nurse details error:", error);
@@ -176,15 +189,15 @@ const bookAppointment = async (req, res) => {
       duration,
     } = req.body;
 
-    
+
     let nurse = await NurseProfile.findById(nurseId);
     let actualNurseUserId = nurseId;
 
     if (nurse) {
-      
+
       actualNurseUserId = nurse.userId;
     } else {
-      
+
       nurse = await NurseProfile.findOne({ userId: nurseId });
       if (!nurse) {
         return res
@@ -194,17 +207,17 @@ const bookAppointment = async (req, res) => {
       actualNurseUserId = nurseId;
     }
 
-    
+
     if (!nurse.isAvailable) {
       return res
         .status(400)
         .json({ success: false, message: "Nurse is not currently available" });
     }
 
-    
+
     const totalCost = nurse.hourlyRate * (duration || 1);
 
-    
+
     const appointment = await Appointment.create({
       patientId: req.user._id,
       nurseId: actualNurseUserId,
@@ -246,13 +259,13 @@ const getAppointments = async (req, res) => {
       query.status = status;
     }
 
-    
+
     const appointments = await Appointment.find(query)
       .populate("nurseId", "email")
       .sort({ appointmentDate: -1 })
       .lean();
 
-    
+
     const appointmentsWithNurseDetails = await Promise.all(
       appointments.map(async (appointment) => {
         if (appointment.nurseId) {
@@ -349,9 +362,9 @@ const sendMessage = async (req, res) => {
       appointmentId: appointmentId || null,
     });
 
-    
+
     try {
-      
+
       const { createNotification } = await import(
         "./notificationController.js"
       );
@@ -386,7 +399,7 @@ const submitReview = async (req, res) => {
   try {
     const { nurseId, appointmentId, rating, comment, categories } = req.body;
 
-    
+
     const appointment = await Appointment.findOne({
       _id: appointmentId,
       patientId: req.user._id,
@@ -401,7 +414,7 @@ const submitReview = async (req, res) => {
       });
     }
 
-    
+
     const existingReview = await Review.findOne({ appointmentId });
     if (existingReview) {
       return res.status(400).json({
@@ -410,7 +423,7 @@ const submitReview = async (req, res) => {
       });
     }
 
-    
+
     const review = await Review.create({
       nurseId,
       patientId: req.user._id,
@@ -421,7 +434,7 @@ const submitReview = async (req, res) => {
       isVerified: true,
     });
 
-    
+
     try {
       await createNotification(
         nurseId,
@@ -434,7 +447,7 @@ const submitReview = async (req, res) => {
       console.warn("Notification create failed for new review:", e.message);
     }
 
-    
+
     const allReviews = await Review.find({ nurseId });
     const avgRating =
       allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
@@ -463,7 +476,7 @@ const submitReview = async (req, res) => {
 };
 const getDashboard = async (req, res) => {
   try {
-    
+
     const profile = await PatientProfile.findOne({ userId: req.user._id });
 
     if (!profile) {
@@ -473,7 +486,7 @@ const getDashboard = async (req, res) => {
       });
     }
 
-    
+
     const totalAppointments = await Appointment.countDocuments({
       patientId: req.user._id,
     });
@@ -489,7 +502,7 @@ const getDashboard = async (req, res) => {
       status: "completed",
     });
 
-    
+
     const upcomingAppointmentsList = await Appointment.find({
       patientId: req.user._id,
       status: { $in: ["pending", "confirmed"] },
@@ -503,7 +516,7 @@ const getDashboard = async (req, res) => {
       .limit(5)
       .lean();
 
-    
+
     const appointmentsWithNurseDetails = await Promise.all(
       upcomingAppointmentsList.map(async (appointment) => {
         const nurseProfile = await NurseProfile.findOne({

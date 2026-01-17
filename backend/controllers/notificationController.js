@@ -189,7 +189,7 @@ export const createNotification = async (
       priority: options.priority || "medium",
     });
 
-    
+
     try {
       const io = getIO();
       if (io) {

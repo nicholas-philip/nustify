@@ -47,6 +47,8 @@ const reviewSchema = new mongoose.Schema(
         max: 5,
       },
       care: { type: Number, min: [1, "Rating must be at least 1"], max: 5 },
+      hygiene: { type: Number, min: [1, "Rating must be at least 1"], max: 5 },
+      protocol: { type: Number, min: [1, "Rating must be at least 1"], max: 5 },
     },
     isVerified: {
       type: Boolean,
@@ -63,7 +65,7 @@ const reviewSchema = new mongoose.Schema(
 );
 
 
-reviewSchema.index({ appointmentId: 1 }, { unique: true });
+// reviewSchema.index({ appointmentId: 1 }, { unique: true });
 reviewSchema.index({ nurseId: 1, createdAt: -1 });
 
 const Review = mongoose.model("Review", reviewSchema);

@@ -35,7 +35,13 @@ import nurseRoutes from "./routes/nurseRoute.js";
 import patientRoutes from "./routes/patientRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
-import paymentRoutes from "./routes/paymentRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import healthRecordRoutes from "./routes/healthRecordRoutes.js";
+import medicalDocumentRoutes from "./routes/medicalDocumentRoutes.js";
+import vitalSignsRoutes from "./routes/vitalSignsRoutes.js";
+import credentialRoutes from "./routes/credentialRoutes.js";
+import maternalHealthRoutes from "./routes/maternalHealthRoutes.js";
+import childHealthRoutes from "./routes/childHealthRoutes.js";
 
 
 const app = express();
@@ -45,8 +51,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+const allowedOrigins = [
+  process.env.CORS_ORIGIN,
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+].filter(Boolean);
+
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === "development") {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -61,7 +81,13 @@ app.use("/api/nurse", nurseRoutes);
 app.use("/api/patient", patientRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notifications", notificationRoutes);
-app.use("/api/payments", paymentRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/health-records", healthRecordRoutes);
+app.use("/api/medical-documents", medicalDocumentRoutes);
+app.use("/api/vital-signs", vitalSignsRoutes);
+app.use("/api/credentials", credentialRoutes);
+app.use("/api/maternal-health", maternalHealthRoutes);
+app.use("/api/child-health", childHealthRoutes);
 
 
 app.get("/", (req, res) => {
@@ -77,8 +103,14 @@ app.get("/", (req, res) => {
       "Reviews & Ratings",
       "Messaging System",
       "Notifications",
-      "Payment Processing",
+      "Real-time Chat",
+      "Video Consultation",
       "Admin Dashboard & Analytics",
+      "Patient Health Passport",
+      "Medical Document Management",
+      "Vital Signs Tracking",
+      "Provider Verification System",
+      "Maternal & Child Health",
     ],
   });
 });
@@ -94,7 +126,13 @@ app.get("/api", (req, res) => {
       patient: "/api/patient - Patient-specific endpoints",
       admin: "/api/admin - Admin dashboard and management",
       notifications: "/api/notifications - Notification management",
-      payments: "/api/payments - Payment processing",
+      chat: "/api/chat - Chat messages",
+      healthRecords: "/api/health-records - Patient health records",
+      medicalDocuments: "/api/medical-documents - Medical document uploads",
+      vitalSigns: "/api/vital-signs - Vital signs tracking",
+      credentials: "/api/credentials - Nurse credential verification",
+      maternalHealth: "/api/maternal-health - Pregnancy tracking",
+      childHealth: "/api/child-health - Child health records",
     },
   });
 });
@@ -143,7 +181,7 @@ startReminderWorker();
 io.on("connection", (socket) => {
   console.log("🔌 Socket connected:", socket.id);
 
-  
+
   try {
     const token = socket.handshake.auth?.token;
     if (!token) {
@@ -171,12 +209,30 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("🔌 Socket disconnected:", socket.id);
   });
+
+  // --- WebRTC Signaling ---
+  socket.on("join-room", ({ roomId, userId }) => {
+    socket.join(roomId);
+    console.log(`🎥 Socket ${socket.id} joined room ${roomId}`);
+    socket.to(roomId).emit("user-connected", { userId });
+  });
+
+  socket.on("offer", ({ offer, roomId, to }) => {
+    socket.to(roomId).emit("offer", { offer, from: socket.id });
+  });
+
+  socket.on("answer", ({ answer, roomId, to }) => {
+    socket.to(roomId).emit("answer", { answer });
+  });
+
+  socket.on("ice-candidate", ({ candidate, roomId }) => {
+    socket.to(roomId).emit("ice-candidate", { candidate });
+  });
 });
 
 server.listen(PORT, () => {
   console.log(
-    `🚀 Server running in ${
-      process.env.NODE_ENV || "development"
+    `🚀 Server running in ${process.env.NODE_ENV || "development"
     } mode on port ${PORT}`
   );
   console.log(`📍 API endpoint: http://localhost:${PORT}`);
@@ -187,6 +243,5 @@ server.listen(PORT, () => {
   console.log(`   - Nurse: http://localhost:${PORT}/api/nurse`);
   console.log(`   - Patient: http://localhost:${PORT}/api/patient`);
   console.log(`   - Admin: http://localhost:${PORT}/api/admin`);
-  console.log(`   - Notifications: http://localhost:${PORT}/api/notifications`);
-  console.log(`   - Payments: http://localhost:${PORT}/api/payments\n`);
+  console.log(`   - Notifications: http://localhost:${PORT}/api/notifications\n`);
 });

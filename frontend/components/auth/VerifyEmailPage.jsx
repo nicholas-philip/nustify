@@ -113,8 +113,8 @@ const VerifyEmailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {}
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+      { }
       <motion.div
         animate={{
           scale: [1, 1.2, 1],
@@ -125,7 +125,7 @@ const VerifyEmailPage = () => {
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute top-0 left-0 w-96 h-96 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        className="absolute top-0 left-0 w-96 h-96 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       />
       <motion.div
         animate={{
@@ -146,7 +146,7 @@ const VerifyEmailPage = () => {
         animate="visible"
         className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative z-10"
       >
-        {}
+        { }
         <div className="flex items-center justify-center gap-2 mb-8">
           <motion.div
             animate={{
@@ -159,9 +159,9 @@ const VerifyEmailPage = () => {
               repeatDelay: 1,
             }}
           >
-            <Heart className="w-10 h-10 text-teal-600" />
+            <Heart className="w-10 h-10 text-black" />
           </motion.div>
-          <span className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+          <span className="text-3xl font-bold text-black">
             Nursify
           </span>
         </div>
@@ -184,7 +184,7 @@ const VerifyEmailPage = () => {
                 }}
                 className="inline-block mb-6"
               >
-                <Loader className="w-16 h-16 text-teal-600" />
+                <Loader className="w-16 h-16 text-black" />
               </motion.div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 Verifying Your Email
@@ -225,7 +225,7 @@ const VerifyEmailPage = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                 />
 
-                  <motion.button
+                <motion.button
                   onClick={handleVerifyByCode}
                   className="w-full py-3 bg-black text-white rounded-lg font-semibold"
                 >
@@ -273,7 +273,7 @@ const VerifyEmailPage = () => {
                   duration: 1,
                   repeat: Infinity,
                 }}
-                className="flex items-center justify-center gap-2 text-teal-600"
+                className="flex items-center justify-center gap-2 text-black"
               >
                 <Loader className="w-5 h-5 animate-spin" />
                 <span>Redirecting to login...</span>

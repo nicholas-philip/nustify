@@ -12,6 +12,13 @@ import {
   X,
   CheckCircle2,
   Sparkles,
+  Activity,
+  Thermometer,
+  Droplets,
+  Scale,
+  Stethoscope,
+  FileEdit,
+  ClipboardList
 } from "lucide-react";
 import api from "../../services/api";
 
@@ -32,6 +39,24 @@ const NurseAppointments = () => {
   const [completionNotes, setCompletionNotes] = useState("");
   const [responding, setResponding] = useState(false);
   const [completing, setCompleting] = useState(false);
+  const [activeTab, setActiveTab] = useState("notes"); // 'notes', 'vitals', 'assessment'
+  const [healthData, setHealthData] = useState({
+    vitals: {
+      bloodPressure: { systolic: "", diastolic: "" },
+      heartRate: "",
+      temperature: "",
+      oxygenSaturation: "",
+      respiratoryRate: "",
+      weight: "",
+    },
+    assessment: {
+      title: "",
+      description: "",
+      diagnosisCode: "",
+      severity: "mild",
+      treatmentPlan: "",
+    }
+  });
 
   useEffect(() => {
     fetchAppointments();
@@ -80,6 +105,7 @@ const NurseAppointments = () => {
         completeModal.appointment._id,
         {
           completionNotes,
+          healthData
         }
       );
 
@@ -87,6 +113,23 @@ const NurseAppointments = () => {
         alert("Appointment marked as completed successfully!");
         setCompleteModal({ show: false, appointment: null });
         setCompletionNotes("");
+        setHealthData({
+          vitals: {
+            bloodPressure: { systolic: "", diastolic: "" },
+            heartRate: "",
+            temperature: "",
+            oxygenSaturation: "",
+            respiratoryRate: "",
+            weight: "",
+          },
+          assessment: {
+            title: "",
+            description: "",
+            diagnosisCode: "",
+            severity: "mild",
+            treatmentPlan: "",
+          }
+        });
         fetchAppointments();
       }
     } catch (error) {
@@ -94,6 +137,40 @@ const NurseAppointments = () => {
     } finally {
       setCompleting(false);
     }
+  };
+
+  const handleVitalsChange = (field, value) => {
+    if (field.includes('.')) {
+      const [parent, child] = field.split('.');
+      setHealthData(prev => ({
+        ...prev,
+        vitals: {
+          ...prev.vitals,
+          [parent]: {
+            ...prev.vitals[parent],
+            [child]: value
+          }
+        }
+      }));
+    } else {
+      setHealthData(prev => ({
+        ...prev,
+        vitals: {
+          ...prev.vitals,
+          [field]: value
+        }
+      }));
+    }
+  };
+
+  const handleAssessmentChange = (field, value) => {
+    setHealthData(prev => ({
+      ...prev,
+      assessment: {
+        ...prev.assessment,
+        [field]: value
+      }
+    }));
   };
 
   const canCompleteAppointment = (appointment) => {
@@ -104,7 +181,7 @@ const NurseAppointments = () => {
     today.setHours(0, 0, 0, 0);
     appointmentDate.setHours(0, 0, 0, 0);
 
-    
+
     return appointmentDate <= today;
   };
 
@@ -191,11 +268,10 @@ const NurseAppointments = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setFilter(status)}
-              className={`px-6 py-2 rounded-lg font-medium transition ${
-                filter === status
-                  ? "bg-black text-white"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
+              className={`px-6 py-2 rounded-lg font-medium transition ${filter === status
+                ? "bg-black text-white"
+                : "text-gray-600 hover:bg-gray-100"
+                }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </motion.button>
@@ -411,7 +487,7 @@ const NurseAppointments = () => {
                         onClick={() =>
                           setRespondModal({ show: true, appointment })
                         }
-                         className="flex-1 px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
+                        className="flex-1 px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
                       >
                         <Check className="w-5 h-5" />
                         Accept
@@ -425,10 +501,23 @@ const NurseAppointments = () => {
                         onClick={() =>
                           handleRespond(appointment._id, "rejected")
                         }
-                         className="flex-1 px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
+                        className="flex-1 px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
                       >
                         <X className="w-5 h-5" />
                         Decline
+                      </motion.button>
+                    </motion.div>
+                  )}
+
+                  {(appointment.status === 'confirmed' || appointment.status === 'pending') && (
+                    <motion.div className="mt-4 pt-4 border-t">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => navigate(`/consultation/${appointment._id}`)}
+                        className="w-full px-4 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                      >
+                        Open Consultation Room
                       </motion.button>
                     </motion.div>
                   )}
@@ -450,7 +539,7 @@ const NurseAppointments = () => {
                           onClick={() =>
                             setCompleteModal({ show: true, appointment })
                           }
-                           className="w-full px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
+                          className="w-full px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
                         >
                           <CheckCircle2 className="w-5 h-5" />
                           Mark as Completed
@@ -464,7 +553,7 @@ const NurseAppointments = () => {
         </AnimatePresence>
       </div>
 
-      {}
+      { }
       <AnimatePresence>
         {respondModal.show && (
           <motion.div
@@ -558,7 +647,7 @@ const NurseAppointments = () => {
               initial={{ scale: 0.9, y: 50 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 50 }}
-              className="bg-white rounded-xl p-6 max-w-md w-full"
+              className="bg-white rounded-xl p-6 max-w-2xl w-full"
             >
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold text-gray-900">
@@ -576,23 +665,200 @@ const NurseAppointments = () => {
                 </motion.button>
               </div>
 
-              <div className="mb-4">
-                <p className="text-gray-600 mb-4">
-                  Mark this appointment as completed. You can add final notes
-                  about the service provided.
-                </p>
+              <div className="flex border-b mb-6 overflow-x-auto">
+                {[
+                  { id: "notes", label: "General Notes", icon: FileEdit },
+                  { id: "vitals", label: "Vital Signs", icon: Activity },
+                  { id: "assessment", label: "Assessment", icon: ClipboardList },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === tab.id
+                      ? "border-black text-black"
+                      : "border-transparent text-gray-500 hover:text-gray-700"
+                      }`}
+                  >
+                    <tab.icon className="w-4 h-4" />
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
 
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Completion Notes (Optional)
-                </label>
-                <motion.textarea
-                  whileFocus={{ scale: 1.02 }}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
-                  rows="4"
-                  placeholder="Add notes about the service provided, any recommendations, etc..."
-                  value={completionNotes}
-                  onChange={(e) => setCompletionNotes(e.target.value)}
-                />
+              <div className="mb-6 max-h-[400px] overflow-y-auto px-1 custom-scrollbar">
+                {activeTab === "notes" && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                  >
+                    <p className="text-gray-600 mb-4 text-sm">
+                      Mark this appointment as completed. Add final notes about the service provided.
+                    </p>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Completion Notes (Optional)
+                    </label>
+                    <textarea
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                      rows="4"
+                      placeholder="Add notes about the service provided..."
+                      value={completionNotes}
+                      onChange={(e) => setCompletionNotes(e.target.value)}
+                    />
+                  </motion.div>
+                )}
+
+                {activeTab === "vitals" && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="grid grid-cols-2 gap-4"
+                  >
+                    <div className="col-span-2">
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Blood Pressure (mmHg)</label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          placeholder="Systolic"
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                          value={healthData.vitals.bloodPressure.systolic}
+                          onChange={(e) => handleVitalsChange('bloodPressure.systolic', e.target.value)}
+                        />
+                        <span className="text-gray-400 font-bold">/</span>
+                        <input
+                          type="number"
+                          placeholder="Diastolic"
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                          value={healthData.vitals.bloodPressure.diastolic}
+                          onChange={(e) => handleVitalsChange('bloodPressure.diastolic', e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Heart Rate (bpm)</label>
+                      <input
+                        type="number"
+                        placeholder="72"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                        value={healthData.vitals.heartRate}
+                        onChange={(e) => handleVitalsChange('heartRate', e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Temp (°C)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        placeholder="36.5"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                        value={healthData.vitals.temperature}
+                        onChange={(e) => handleVitalsChange('temperature', e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">SpO2 (%)</label>
+                      <input
+                        type="number"
+                        placeholder="98"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                        value={healthData.vitals.oxygenSaturation}
+                        onChange={(e) => handleVitalsChange('oxygenSaturation', e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Resp. Rate</label>
+                      <input
+                        type="number"
+                        placeholder="16"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                        value={healthData.vitals.respiratoryRate}
+                        onChange={(e) => handleVitalsChange('respiratoryRate', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="col-span-2">
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Weight (kg)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        placeholder="70.5"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                        value={healthData.vitals.weight}
+                        onChange={(e) => handleVitalsChange('weight', e.target.value)}
+                      />
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeTab === "assessment" && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Diagnosis/Visit Title</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Hypertension, General Consultation"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                        value={healthData.assessment.title}
+                        onChange={(e) => handleAssessmentChange('title', e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Clinical Observations</label>
+                      <textarea
+                        rows="3"
+                        placeholder="Describe patient condition..."
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                        value={healthData.assessment.description}
+                        onChange={(e) => handleAssessmentChange('description', e.target.value)}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">ICD-10 Code</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. I10"
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                          value={healthData.assessment.diagnosisCode}
+                          onChange={(e) => handleAssessmentChange('diagnosisCode', e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Severity</label>
+                        <select
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none bg-white"
+                          value={healthData.assessment.severity}
+                          onChange={(e) => handleAssessmentChange('severity', e.target.value)}
+                        >
+                          <option value="mild">Mild</option>
+                          <option value="moderate">Moderate</option>
+                          <option value="severe">Severe</option>
+                          <option value="critical">Critical</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Treatment Plan & Prescriptions</label>
+                      <textarea
+                        rows="3"
+                        placeholder="Medications, follow-up advice..."
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                        value={healthData.assessment.treatmentPlan}
+                        onChange={(e) => handleAssessmentChange('treatmentPlan', e.target.value)}
+                      />
+                    </div>
+                  </motion.div>
+                )}
               </div>
 
               <div className="flex gap-3">

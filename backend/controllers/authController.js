@@ -428,9 +428,8 @@ const verifyEmail = async (req, res) => {
                 <h2>Hi ${profile?.fullName || "User"}!</h2>
                 <p>Your email has been verified successfully. Welcome to the Nursify community!</p>
                 
-                ${
-                  user.role === "nurse"
-                    ? `
+                ${user.role === "nurse"
+            ? `
                 <h3>As a Nurse, you can:</h3>
                 <div class="feature-box">✅ Create and manage your professional profile</div>
                 <div class="feature-box">📅 Set your availability and schedule</div>
@@ -438,7 +437,7 @@ const verifyEmail = async (req, res) => {
                 <div class="feature-box">💰 Track your earnings and payments</div>
                 <div class="feature-box">⭐ Build your reputation with reviews</div>
                 `
-                    : `
+            : `
                 <h3>As a Patient, you can:</h3>
                 <div class="feature-box">🔍 Search and find qualified nurses</div>
                 <div class="feature-box">📅 Book appointments at your convenience</div>
@@ -446,7 +445,7 @@ const verifyEmail = async (req, res) => {
                 <div class="feature-box">⭐ Leave reviews after appointments</div>
                 <div class="feature-box">💳 Secure payment processing</div>
                 `
-                }
+          }
                 
                 <div style="text-align: center;">
                   <a href="${dashboardUrl}" class="button">Go to Dashboard</a>
@@ -1014,9 +1013,8 @@ const toggle2FA = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `2FA ${
-        user.twoFactorEnabled ? "enabled" : "disabled"
-      } successfully`,
+      message: `2FA ${user.twoFactorEnabled ? "enabled" : "disabled"
+        } successfully`,
       twoFactorEnabled: user.twoFactorEnabled,
     });
   } catch (error) {

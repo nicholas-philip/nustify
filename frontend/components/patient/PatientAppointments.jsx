@@ -23,6 +23,10 @@ const PatientAppointments = () => {
     show: false,
     appointmentId: null,
   });
+  const [paymentModal, setPaymentModal] = useState({
+    show: false,
+    appointment: null,
+  });
   const [cancelReason, setCancelReason] = useState("");
   const [cancelling, setCancelling] = useState(false);
 
@@ -37,12 +41,20 @@ const PatientAppointments = () => {
       const data = await api.getPatientAppointments(status);
       if (data.success) {
         setAppointments(data.appointments);
+        // Check for any payments related to appointments to update status if needed
+        // For simplicity, relying on appointment status updates from backend webhooks/logic
       }
     } catch (error) {
       console.error("Error fetching appointments:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePaymentSuccess = () => {
+    alert("Payment Completed Successfully!");
+    setPaymentModal({ show: false, appointment: null });
+    fetchAppointments();
   };
 
   const handleCancelAppointment = async () => {
@@ -105,7 +117,7 @@ const PatientAppointments = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -115,7 +127,7 @@ const PatientAppointments = () => {
           <motion.button
             whileHover={{ x: -5 }}
             onClick={() => navigate("/patient/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-black hover:text-gray-900 mb-4"
           >
             ← Back to Dashboard
           </motion.button>
@@ -125,7 +137,7 @@ const PatientAppointments = () => {
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -141,11 +153,10 @@ const PatientAppointments = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setFilter(status)}
-                className={`px-6 py-2 rounded-lg font-medium transition ${
-                  filter === status
-                    ? "bg-black text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
+                className={`px-6 py-2 rounded-lg font-medium transition ${filter === status
+                  ? "bg-black text-white"
+                  : "text-gray-600 hover:bg-gray-100"
+                  }`}
               >
                 {status.charAt(0).toUpperCase() + status.slice(1)}
               </motion.button>
@@ -153,7 +164,7 @@ const PatientAppointments = () => {
           )}
         </motion.div>
 
-        
+
         <AnimatePresence mode="wait">
           {loading ? (
             <motion.div
@@ -166,7 +177,7 @@ const PatientAppointments = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto"
+                className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full mx-auto"
               />
             </motion.div>
           ) : appointments.length === 0 ? (
@@ -276,6 +287,29 @@ const PatientAppointments = () => {
                     </motion.div>
                   </div>
 
+                  {appointment.status === 'confirmed' && !appointment.paymentStatus && !appointment.completedAt && (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      disabled={true}
+                      className="w-full mb-3 px-4 py-2 bg-gray-200 text-gray-500 rounded-lg font-medium cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      <DollarSign className="w-4 h-4" />
+                      Pay with Cash (${appointment.totalCost}) - Online Payment Not Active
+                    </motion.button>
+                  )}
+
+                  {(appointment.status === 'confirmed' || appointment.status === 'pending') && (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => navigate(`/consultation/${appointment._id}`)}
+                      className="w-full mb-3 px-4 py-2 bg-black text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all"
+                    >
+                      Join Consultation Room
+                    </motion.button>
+                  )}
+
                   {canCancelAppointment(appointment) && (
                     <motion.button
                       whileHover={{ scale: 1.02 }}
@@ -311,7 +345,7 @@ const PatientAppointments = () => {
         </AnimatePresence>
       </div>
 
-      
+
       <AnimatePresence>
         {cancelModal.show && (
           <motion.div
@@ -384,6 +418,52 @@ const PatientAppointments = () => {
                   {cancelling ? "Cancelling..." : "Cancel Appointment"}
                 </motion.button>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {paymentModal.show && paymentModal.appointment && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl text-center"
+            >
+              <div className="flex justify-between items-center mb-6 border-b pb-4">
+                <h3 className="text-2xl font-bold text-gray-900">Payment Information</h3>
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setPaymentModal({ show: false, appointment: null })}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                >
+                  <X className="w-5 h-5" />
+                </motion.button>
+              </div>
+              <div className="py-8">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <DollarSign className="w-10 h-10 text-black" />
+                </div>
+                <h4 className="text-xl font-bold text-gray-900 mb-2">Cash Only</h4>
+                <p className="text-gray-600">
+                  Online payments are currently disabled. Please pay ${paymentModal.appointment.totalCost} in cash directly to your nurse.
+                </p>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setPaymentModal({ show: false, appointment: null })}
+                className="w-full px-6 py-3 bg-black text-white rounded-xl font-semibold"
+              >
+                Understood
+              </motion.button>
             </motion.div>
           </motion.div>
         )}

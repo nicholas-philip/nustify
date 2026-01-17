@@ -16,7 +16,7 @@ const nurseProfileSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: false, 
+      required: false,
     },
     specialization: {
       type: String,
@@ -29,8 +29,8 @@ const nurseProfileSchema = new mongoose.Schema(
     },
     licenseNumber: {
       type: String,
-      required: false, 
-      sparse: true, 
+      required: false,
+      sparse: true,
     },
     bio: {
       type: String,
@@ -92,6 +92,29 @@ const nurseProfileSchema = new mongoose.Schema(
     languages: [
       {
         type: String,
+      },
+    ],
+    // Verification & Trust System
+    verificationStatus: {
+      type: String,
+      enum: ["unverified", "pending", "verified", "rejected"],
+      default: "unverified",
+    },
+    trustScore: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+    specializations: [
+      {
+        type: String,
+      },
+    ],
+    complianceBadges: [
+      {
+        badgeType: String,
+        earnedDate: Date,
       },
     ],
   },

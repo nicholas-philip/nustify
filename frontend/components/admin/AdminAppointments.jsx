@@ -104,7 +104,7 @@ const AdminAppointments = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
             All Appointments
           </motion.h1>
@@ -152,7 +152,7 @@ const AdminAppointments = () => {
                     whileFocus={{ scale: 1.02 }}
                     type="date"
                     name={filter.name}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                     value={filters[filter.name]}
                     onChange={handleFilterChange}
                   />
@@ -160,7 +160,7 @@ const AdminAppointments = () => {
                   <motion.select
                     whileFocus={{ scale: 1.02 }}
                     name={filter.name}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                     value={filters[filter.name]}
                     onChange={handleFilterChange}
                   >
@@ -188,7 +188,7 @@ const AdminAppointments = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto"
+                className="w-12 h-12 border-4 border-t-black border-gray-200 rounded-full mx-auto"
               />
             </motion.div>
           ) : appointments.length === 0 ? (

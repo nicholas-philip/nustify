@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
   Calendar,
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full"
+          className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full"
         />
       </div>
     );
@@ -73,30 +73,29 @@ const AdminDashboard = () => {
       title: "Total Users",
       value: dashboard?.userStats?.total || 0,
       icon: Users,
-      color: "purple",
+      color: "gray",
       subtext: `${dashboard?.userStats?.newThisMonth || 0} new this month`,
     },
     {
       title: "Total Appointments",
       value: dashboard?.appointmentStats?.total || 0,
       icon: Calendar,
-      color: "blue",
+      color: "gray",
       subtext: `${dashboard?.appointmentStats?.pending || 0} pending`,
     },
     {
-      title: "Total Revenue",
+      title: "Potential Cash Revenue",
       value: `$${dashboard?.financialStats?.totalRevenue || "0.00"}`,
       icon: DollarSign,
-      color: "green",
-      subtext: `Avg: $${
-        dashboard?.financialStats?.avgAppointmentCost || "0.00"
-      }`,
+      color: "gray",
+      subtext: `Avg: $${dashboard?.financialStats?.avgAppointmentCost || "0.00"
+        }`,
     },
     {
       title: "Average Rating",
       value: dashboard?.reviewStats?.averageRating || "0.0",
       icon: Star,
-      color: "yellow",
+      color: "gray",
       subtext: `${dashboard?.reviewStats?.total || 0} reviews`,
     },
   ];
@@ -123,7 +122,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {}
+      { }
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -136,12 +135,12 @@ const AdminDashboard = () => {
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Sparkles className="w-8 h-8 text-purple-600" />
+                <Sparkles className="w-8 h-8 text-black" />
               </motion.div>
-              <span className="text-2xl font-bold text-purple-600">
+              <span className="text-2xl font-bold text-black">
                 Nursify
               </span>
-              <span className="px-2 py-1 bg-purple-100 text-purple-600 text-xs font-semibold rounded">
+              <span className="px-2 py-1 bg-gray-100 text-gray-900 text-xs font-semibold rounded">
                 ADMIN
               </span>
             </div>
@@ -152,6 +151,7 @@ const AdminDashboard = () => {
                 { label: "Users", path: "/admin/users" },
                 { label: "Appointments", path: "/admin/appointments" },
                 { label: "Reviews", path: "/admin/reviews" },
+                { label: "Analytics", path: "/admin/analytics" },
               ].map((item) => (
                 <motion.button
                   key={item.path}
@@ -160,8 +160,8 @@ const AdminDashboard = () => {
                   onClick={() => navigate(item.path)}
                   className={
                     item.active
-                      ? "text-purple-600 font-semibold"
-                      : "text-gray-600 hover:text-purple-600"
+                      ? "text-black font-semibold"
+                      : "text-gray-600 hover:text-black"
                   }
                 >
                   {item.label}
@@ -197,33 +197,73 @@ const AdminDashboard = () => {
             </button>
           </div>
 
-          {}
-          {showMenu && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden mt-4 space-y-2"
-            >
-              {quickLinks.map((link) => (
-                <button
-                  key={link.path}
-                  onClick={() => {
-                    navigate(link.path);
-                    setShowMenu(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg"
+          { }
+          <AnimatePresence>
+            {showMenu && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.5 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black z-40 md:hidden"
+                  onClick={() => setShowMenu(false)}
+                />
+                <motion.div
+                  initial={{ x: "100%" }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "100%" }}
+                  transition={{ type: "spring", damping: 25 }}
+                  className="fixed top-0 right-0 bottom-0 w-64 bg-white shadow-xl z-50 md:hidden p-6 flex flex-col"
                 >
-                  {link.label}
-                </button>
-              ))}
-            </motion.div>
-          )}
+                  <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-xl font-bold text-gray-900">Menu</h2>
+                    <motion.button
+                      whileHover={{ scale: 1.1, rotate: 90 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setShowMenu(false)}
+                      className="p-2 hover:bg-gray-100 rounded-lg"
+                    >
+                      <X className="w-6 h-6" />
+                    </motion.button>
+                  </div>
+                  <div className="space-y-4 flex-1">
+                    {[
+                      { label: "Dashboard", path: "/admin/dashboard" },
+                      { label: "Users", path: "/admin/users" },
+                      { label: "Appointments", path: "/admin/appointments" },
+                      { label: "Reviews", path: "/admin/reviews" },
+                      { label: "Analytics", path: "/admin/analytics" },
+                    ].map((item) => (
+                      <button
+                        key={item.path}
+                        onClick={() => {
+                          navigate(item.path);
+                          setShowMenu(false);
+                        }}
+                        className="block w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg"
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                    <div className="border-t border-gray-100 my-2 pt-2">
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
       </motion.nav>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {}
+        { }
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -237,7 +277,7 @@ const AdminDashboard = () => {
           </p>
         </motion.div>
 
-        {}
+        { }
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -261,7 +301,7 @@ const AdminDashboard = () => {
                   transition={{ duration: 0.6 }}
                   className={`w-12 h-12 bg-${stat.color}-100 rounded-full flex items-center justify-center`}
                 >
-                  <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
+                  <stat.icon className={`w-6 h-6 text-${stat.color === 'gray' ? 'black' : stat.color + '-600'}`} />
                 </motion.div>
                 <motion.span
                   initial={{ scale: 0 }}
@@ -280,7 +320,7 @@ const AdminDashboard = () => {
           ))}
         </motion.div>
 
-        {}
+        { }
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -299,13 +339,13 @@ const AdminDashboard = () => {
                 transition={{ delay: 0.5 + index * 0.1 }}
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
+                  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
                 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(link.path)}
-                className="flex items-center gap-3 p-4 bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg hover:from-purple-100 hover:to-blue-100 transition"
+                className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
               >
-                <link.icon className="w-6 h-6 text-purple-600" />
+                <link.icon className="w-6 h-6 text-black" />
                 <span className="font-semibold text-gray-900">
                   {link.label}
                 </span>
@@ -314,9 +354,9 @@ const AdminDashboard = () => {
           </div>
         </motion.div>
 
-        {}
+        { }
         <div className="grid lg:grid-cols-2 gap-8">
-          {}
+          { }
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -330,7 +370,7 @@ const AdminDashboard = () => {
               <motion.button
                 whileHover={{ x: 5 }}
                 onClick={() => navigate("/admin/appointments")}
-                className="text-purple-600 hover:text-purple-700 text-sm font-semibold"
+                className="text-black hover:text-gray-900 text-sm font-semibold"
               >
                 View All →
               </motion.button>
@@ -353,13 +393,12 @@ const AdminDashboard = () => {
                       </p>
                     </div>
                     <span
-                      className={`px-2 py-1 rounded text-xs font-semibold ${
-                        apt.status === "confirmed"
-                          ? "bg-green-100 text-green-800"
-                          : apt.status === "pending"
-                          ? "bg-yellow-100 text-yellow-800"
+                      className={`px-2 py-1 rounded text-xs font-semibold ${apt.status === "confirmed"
+                        ? "bg-black text-white"
+                        : apt.status === "pending"
+                          ? "bg-gray-200 text-gray-800"
                           : "bg-gray-100 text-gray-800"
-                      }`}
+                        }`}
                     >
                       {apt.status}
                     </span>
@@ -373,17 +412,17 @@ const AdminDashboard = () => {
             )}
           </motion.div>
 
-          {}
+          { }
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6 }}
             className="space-y-6"
           >
-            {}
+            { }
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Activity className="w-6 h-6 text-purple-600" />
+                <Activity className="w-6 h-6 text-black" />
                 System Health
               </h2>
               <div className="space-y-3">
@@ -408,7 +447,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            {}
+            { }
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
                 Top Rated Nurses
@@ -424,7 +463,7 @@ const AdminDashboard = () => {
                       whileHover={{ x: 5 }}
                       className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
                     >
-                      <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center font-bold text-purple-600">
+                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center font-bold text-black">
                         #{index + 1}
                       </div>
                       <div className="flex-1">

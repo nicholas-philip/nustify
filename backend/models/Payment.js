@@ -77,15 +77,12 @@ const paymentSchema = new mongoose.Schema(
 );
 
 
-paymentSchema.index({ appointmentId: 1 });
 paymentSchema.index({ patientId: 1, status: 1 });
 paymentSchema.index({ nurseId: 1, status: 1 });
-paymentSchema.index({ transactionId: 1 });
 
 
 paymentSchema.pre("save", function (next) {
   if (this.isNew || this.isModified("amount")) {
-    
     this.platformFee = this.amount * 0.15;
     this.nursePayout = this.amount - this.platformFee;
   }

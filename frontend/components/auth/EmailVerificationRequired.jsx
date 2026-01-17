@@ -11,7 +11,7 @@ const EmailVerificationRequired = () => {
   const { user, logout } = useAuth();
   const [resending, setResending] = useState(false);
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); 
+  const [messageType, setMessageType] = useState("");
 
   const handleResendVerification = async () => {
     setResending(true);
@@ -58,7 +58,7 @@ const EmailVerificationRequired = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {}
+      { }
       <motion.div
         animate={{
           scale: [1, 1.2, 1],
@@ -90,7 +90,7 @@ const EmailVerificationRequired = () => {
         animate="visible"
         className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative z-10"
       >
-        {}
+        { }
         <motion.div
           variants={itemVariants}
           className="flex items-center justify-center gap-2 mb-8"
@@ -106,14 +106,14 @@ const EmailVerificationRequired = () => {
               repeatDelay: 1,
             }}
           >
-            <Heart className="w-10 h-10 text-teal-600" />
+            <Heart className="w-10 h-10 text-black" />
           </motion.div>
-          <span className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+          <span className="text-3xl font-bold text-black">
             Nursify
           </span>
         </motion.div>
 
-        {}
+        { }
         <motion.div
           variants={itemVariants}
           className="flex justify-center mb-6"
@@ -129,7 +129,7 @@ const EmailVerificationRequired = () => {
             }}
             className="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center"
           >
-            <Mail className="w-10 h-10 text-teal-600" />
+            <Mail className="w-10 h-10 text-black" />
           </motion.div>
         </motion.div>
 
@@ -145,7 +145,7 @@ const EmailVerificationRequired = () => {
           className="text-gray-600 text-center mb-6"
         >
           We've sent a verification link to{" "}
-          <span className="font-semibold text-teal-600">{user?.email}</span>
+          <span className="font-semibold text-black">{user?.email}</span>
         </motion.p>
 
         <motion.div
@@ -158,15 +158,15 @@ const EmailVerificationRequired = () => {
           </h3>
           <ul className="space-y-2 text-sm text-blue-800">
             <li className="flex items-start gap-2">
-              <span className="text-teal-600 font-bold">1.</span>
+              <span className="text-black font-bold">1.</span>
               <span>Check your email inbox (and spam folder)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-teal-600 font-bold">2.</span>
+              <span className="text-black font-bold">2.</span>
               <span>Click the verification link in the email</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-teal-600 font-bold">3.</span>
+              <span className="text-black font-bold">3.</span>
               <span>Return here and log in</span>
             </li>
           </ul>
@@ -176,11 +176,10 @@ const EmailVerificationRequired = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${
-              messageType === "success"
-                ? "bg-green-50 border border-green-200"
-                : "bg-red-50 border border-red-200"
-            }`}
+            className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${messageType === "success"
+              ? "bg-green-50 border border-green-200"
+              : "bg-red-50 border border-red-200"
+              }`}
           >
             {messageType === "success" ? (
               <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -188,9 +187,8 @@ const EmailVerificationRequired = () => {
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             )}
             <p
-              className={`text-sm ${
-                messageType === "success" ? "text-green-800" : "text-red-800"
-              }`}
+              className={`text-sm ${messageType === "success" ? "text-green-800" : "text-red-800"
+                }`}
             >
               {message}
             </p>

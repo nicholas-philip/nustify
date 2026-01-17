@@ -77,7 +77,7 @@ const NurseReviews = () => {
             whileHover={{ x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/nurse/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-black hover:text-purple-700 mb-4"
           >
             ← Back to Dashboard
           </motion.button>
@@ -91,7 +91,7 @@ const NurseReviews = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
             My Reviews
           </motion.h1>
@@ -111,7 +111,7 @@ const NurseReviews = () => {
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto"
+              className="w-12 h-12 border-4 border-t-black border-gray-200 rounded-full mx-auto"
             />
           </motion.div>
         ) : (
@@ -133,7 +133,7 @@ const NurseReviews = () => {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", delay: 0.3 }}
-                    className="text-5xl font-bold text-purple-600 mb-2"
+                    className="text-5xl font-bold text-black mb-2"
                   >
                     {stats.averageRating}
                   </motion.div>
@@ -146,11 +146,10 @@ const NurseReviews = () => {
                         transition={{ delay: 0.4 + i * 0.1, type: "spring" }}
                       >
                         <Star
-                          className={`w-6 h-6 ${
-                            i < Math.round(stats.averageRating)
+                          className={`w-6 h-6 ${i < Math.round(stats.averageRating)
                               ? "text-yellow-500 fill-current"
                               : "text-gray-300"
-                          }`}
+                            }`}
                         />
                       </motion.div>
                     ))}
@@ -264,11 +263,10 @@ const NurseReviews = () => {
                                 transition={{ delay: i * 0.05, type: "spring" }}
                               >
                                 <Star
-                                  className={`w-5 h-5 ${
-                                    i < review.rating
+                                  className={`w-5 h-5 ${i < review.rating
                                       ? "text-yellow-500 fill-current"
                                       : "text-gray-300"
-                                  }`}
+                                    }`}
                                 />
                               </motion.div>
                             ))}

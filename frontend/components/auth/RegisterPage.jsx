@@ -86,8 +86,8 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {}
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+      { }
       <motion.div
         animate={{
           scale: [1, 1.2, 1],
@@ -98,7 +98,7 @@ const RegisterPage = () => {
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute top-0 left-0 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+        className="absolute top-0 left-0 w-96 h-96 bg-gray-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
       />
       <motion.div
         animate={{
@@ -114,7 +114,7 @@ const RegisterPage = () => {
       />
 
       <div className="flex max-w-6xl w-full gap-8 relative z-10">
-        {}
+        { }
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -148,17 +148,17 @@ const RegisterPage = () => {
           </div>
         </motion.div>
 
-        {}
+        { }
         <div className="lg:hidden absolute inset-0 z-0">
           <img
             src="https://images.pexels.com/photos/7551581/pexels-photo-7551581.jpeg"
             alt="Healthcare"
             className="w-full h-full object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-50/80 to-blue-50/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-50/80 to-gray-100/80" />
         </div>
 
-        {}
+        { }
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -180,11 +180,9 @@ const RegisterPage = () => {
                 repeatDelay: 1,
               }}
             >
-              <Heart className="w-10 h-10 text-purple-600" />
+              <Heart className="w-10 h-10 text-black font-bold" />
             </motion.div>
-            <span className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Nursify
-            </span>
+            <span className="text-3xl font-bold text-black">Nursify</span>
           </motion.div>
 
           <motion.h2
@@ -200,18 +198,17 @@ const RegisterPage = () => {
             Join our healthcare community
           </motion.p>
 
-          {}
+          { }
           <motion.div variants={itemVariants} className="flex gap-4 mb-6">
             {["patient", "nurse"].map((r) => (
               <motion.button
                 key={r}
                 type="button"
                 onClick={() => setRole(r)}
-                className={`flex-1 py-3 rounded-lg font-semibold ${
-                  role === r
-                    ? "bg-black text-white"
-                    : "bg-gray-100 text-gray-700"
-                }`}
+                className={`flex-1 py-3 rounded-lg font-semibold ${role === r
+                  ? "bg-black text-white"
+                  : "bg-gray-100 text-gray-700"
+                  }`}
               >
                 I'm a {r.charAt(0).toUpperCase() + r.slice(1)}
               </motion.button>
@@ -264,7 +261,7 @@ const RegisterPage = () => {
                     type="text"
                     name="fullName"
                     placeholder="John Doe"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                     value={formData.fullName}
                     onChange={handleChange}
                     required
@@ -282,7 +279,7 @@ const RegisterPage = () => {
                     type="tel"
                     name="phone"
                     placeholder="+1 234 567 8900"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                     value={formData.phone}
                     onChange={handleChange}
                     required
@@ -301,7 +298,7 @@ const RegisterPage = () => {
                   type="email"
                   name="email"
                   placeholder="john@example.com"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -319,7 +316,7 @@ const RegisterPage = () => {
                   type="password"
                   name="password"
                   placeholder="Min 6 characters"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -346,7 +343,7 @@ const RegisterPage = () => {
                       type="text"
                       name="emergencyContactName"
                       placeholder="Emergency contact"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                       value={formData.emergencyContactName}
                       onChange={handleChange}
                       required
@@ -355,7 +352,7 @@ const RegisterPage = () => {
                       type="tel"
                       name="emergencyContactPhone"
                       placeholder="Contact phone"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                       value={formData.emergencyContactPhone}
                       onChange={handleChange}
                       required
@@ -379,7 +376,7 @@ const RegisterPage = () => {
                       type="text"
                       name="specialization"
                       placeholder="e.g., Pediatric Nurse"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                       value={formData.specialization}
                       onChange={handleChange}
                       required
@@ -390,7 +387,7 @@ const RegisterPage = () => {
                       type="text"
                       name="licenseNumber"
                       placeholder="License number"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                       value={formData.licenseNumber}
                       onChange={handleChange}
                       required
@@ -399,7 +396,7 @@ const RegisterPage = () => {
                       type="number"
                       name="hourlyRate"
                       placeholder="Hourly Rate ($)"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                       value={formData.hourlyRate}
                       onChange={handleChange}
                       min="0"
@@ -417,9 +414,7 @@ const RegisterPage = () => {
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {loading ? "Creating Account..." : "Create Account"}
-                {!loading && (
-                  <ArrowRight className="w-5 h-5" />
-                )}
+                {!loading && <ArrowRight className="w-5 h-5" />}
               </span>
             </motion.button>
           </motion.form>
@@ -431,7 +426,7 @@ const RegisterPage = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/login")}
-                className="text-purple-600 font-semibold hover:underline"
+                className="text-black font-semibold hover:underline"
               >
                 Sign in
               </motion.button>

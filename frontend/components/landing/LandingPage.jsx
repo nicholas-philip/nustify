@@ -15,12 +15,18 @@ import {
   Twitter,
   Instagram,
   Linkedin,
+  Menu,
+  X,
 } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../../contexts/AuthContext";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const [showMenu, setShowMenu] = useState(false);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 60 },
@@ -78,7 +84,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-blue-50 overflow-hidden">
+    <div className="min-h-screen bg-gray-50 overflow-hidden">
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -95,29 +101,151 @@ const LandingPage = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
             >
-              <Heart className="w-8 h-8 text-teal-600" />
+              <Heart className="w-8 h-8 text-black font-bold" />
             </motion.div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
-              Nursify
-            </span>
+            <span className="text-2xl font-bold text-black">Nursify</span>
           </motion.div>
 
-          <div className="flex gap-3">
-            <motion.button
-              onClick={() => navigate("/login")}
-              className="px-6 py-2 text-teal-600 rounded-lg font-medium"
-            >
-              Login
-            </motion.button>
+          <div className="hidden md:flex gap-3">
+            {user ? (
+              <>
+                <motion.button
+                  onClick={() => {
+                    const dashboardMap = {
+                      patient: "/patient/dashboard",
+                      nurse: "/nurse/dashboard",
+                      admin: "/admin/dashboard",
+                    };
+                    navigate(dashboardMap[user.role] || "/");
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-2 bg-black text-white rounded-lg font-medium"
+                >
+                  Dashboard
+                </motion.button>
+                <motion.button
+                  onClick={logout}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-2 text-red-600 rounded-lg font-bold hover:bg-red-50"
+                >
+                  Logout
+                </motion.button>
+              </>
+            ) : (
+              <>
+                <motion.button
+                  onClick={() => navigate("/login")}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-2 text-black rounded-lg font-bold"
+                >
+                  Login
+                </motion.button>
 
-            <motion.button
-              onClick={() => navigate("/register")}
-              className="px-6 py-2 bg-black text-white rounded-lg font-medium"
-            >
-              Sign Up
-            </motion.button>
+                <motion.button
+                  onClick={() => navigate("/register")}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-2 bg-black text-white rounded-lg font-medium"
+                >
+                  Sign Up
+                </motion.button>
+              </>
+            )}
           </div>
+
+          <button
+            className="md:hidden p-2"
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            {showMenu ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
+
+        <AnimatePresence>
+          {showMenu && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black z-40 md:hidden"
+                onClick={() => setShowMenu(false)}
+              />
+              <motion.div
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", damping: 25 }}
+                className="fixed top-0 right-0 bottom-0 w-64 bg-white shadow-xl z-50 md:hidden p-6 flex flex-col"
+              >
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-xl font-bold text-gray-900">Menu</h2>
+                  <motion.button
+                    whileHover={{ scale: 1.1, rotate: 90 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setShowMenu(false)}
+                    className="p-2 hover:bg-gray-100 rounded-lg"
+                  >
+                    <X className="w-6 h-6" />
+                  </motion.button>
+                </div>
+                <div className="space-y-4 flex-1">
+                  {user ? (
+                    <>
+                      <button
+                        onClick={() => {
+                          const dashboardMap = {
+                            patient: "/patient/dashboard",
+                            nurse: "/nurse/dashboard",
+                            admin: "/admin/dashboard",
+                          };
+                          navigate(dashboardMap[user.role] || "/");
+                          setShowMenu(false);
+                        }}
+                        className="block w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg font-medium"
+                      >
+                        Dashboard
+                      </button>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setShowMenu(false);
+                        }}
+                        className="block w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg font-medium"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => {
+                          navigate("/login");
+                          setShowMenu(false);
+                        }}
+                        className="block w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg font-medium"
+                      >
+                        Login
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigate("/register");
+                          setShowMenu(false);
+                        }}
+                        className="block w-full text-left px-4 py-3 bg-black text-white rounded-lg font-medium text-center"
+                      >
+                        Sign Up
+                      </button>
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       <motion.div className="relative py-28 overflow-hidden mt-16">
@@ -143,13 +271,13 @@ const LandingPage = () => {
         <motion.div
           animate={{ y: [0, -25, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-24 right-24 w-72 h-72 bg-teal-500 rounded-full blur-3xl opacity-30"
+          className="absolute top-24 right-24 w-72 h-72 bg-gray-400 rounded-full blur-3xl opacity-30"
         />
 
         <motion.div
           animate={{ y: [0, 30, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-24 left-24 w-72 h-72 bg-blue-400 rounded-full blur-3xl opacity-30"
+          className="absolute bottom-24 left-24 w-72 h-72 bg-gray-300 rounded-full blur-3xl opacity-30"
         />
 
         <div className="relative z-10 text-center text-white px-4">
@@ -169,10 +297,7 @@ const LandingPage = () => {
               variants={fadeInUp}
               className="text-6xl md:text-7xl font-bold mb-6 leading-tight"
             >
-              Find Your Perfect{" "}
-              <span className="bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
-                Doctors
-              </span>
+              Find Your Perfect Nurse
             </motion.h1>
 
             <motion.p
@@ -211,9 +336,9 @@ const LandingPage = () => {
               title: "Search & Book",
               description:
                 "Find qualified nurses by specialty, location, and availability. Book appointments that work for your schedule.",
-              gradient: "from-teal-500 to-teal-600",
-              bgColor: "bg-teal-50",
-              iconColor: "text-teal-600",
+              gradient: "from-gray-700 to-black",
+              bgColor: "bg-gray-100",
+              iconColor: "text-black",
               image:
                 "https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg",
             },
@@ -222,9 +347,9 @@ const LandingPage = () => {
               title: "Licensed Professionals",
               description:
                 "All nurses are licensed, verified, and experienced healthcare professionals you can trust.",
-              gradient: "from-blue-500 to-blue-600",
-              bgColor: "bg-blue-50",
-              iconColor: "text-blue-600",
+              gradient: "from-gray-600 to-gray-800",
+              bgColor: "bg-gray-100",
+              iconColor: "text-black",
               image:
                 "https://images.pexels.com/photos/7195310/pexels-photo-7195310.jpeg",
             },
@@ -269,7 +394,7 @@ const LandingPage = () => {
               </div>
 
               <div className="p-8">
-                <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:text-teal-600 transition-colors">
+                <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:text-black transition-colors">
                   {feature.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
@@ -393,7 +518,7 @@ const LandingPage = () => {
               },
               {
                 step: 2,
-                title: "Find a Doctor",
+                title: "Find a Nurse",
                 desc: "Search by specialty and location",
                 icon: Search,
                 gradient: "from-blue-500 to-blue-600",
@@ -535,7 +660,7 @@ const LandingPage = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
               onClick={() => navigate("/register")}
-              className="px-10 py-4 bg-white text-black rounded-xl text-lg font-semibold hover:bg-teal-400 hover:text-white transition-all"
+              className="px-10 py-4 bg-white text-black rounded-xl text-lg font-semibold  transition-all"
             >
               <span className="flex items-center gap-2">
                 Create Account Now
@@ -686,7 +811,7 @@ const LandingPage = () => {
           </div>
         </div>
       </motion.footer>
-    </div>
+    </div >
   );
 };
 

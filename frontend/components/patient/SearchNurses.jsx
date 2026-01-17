@@ -80,7 +80,7 @@ const SearchNurses = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -97,7 +97,7 @@ const SearchNurses = () => {
           <motion.button
             whileHover={{ x: -5 }}
             onClick={() => navigate("/patient/dashboard")}
-            className="text-teal-600 mb-4"
+            className="text-black mb-4"
           >
             ← Back to Dashboard
           </motion.button>
@@ -111,7 +111,7 @@ const SearchNurses = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-teal-600" />
+              <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
             Find a Nurse
           </motion.h1>
@@ -122,7 +122,7 @@ const SearchNurses = () => {
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        
+
         <motion.form
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -159,7 +159,7 @@ const SearchNurses = () => {
                 {field.type === "select" ? (
                   <select
                     name={field.name}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                     value={filters[field.name]}
                     onChange={handleFilterChange}
                   >
@@ -174,7 +174,7 @@ const SearchNurses = () => {
                     type={field.type || "text"}
                     name={field.name}
                     placeholder={field.placeholder}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                     value={filters[field.name]}
                     onChange={handleFilterChange}
                   />
@@ -186,7 +186,7 @@ const SearchNurses = () => {
           <motion.button
             whileHover={{
               scale: 1.02,
-              boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
             }}
             whileTap={{ scale: 0.98 }}
             type="submit"
@@ -197,7 +197,7 @@ const SearchNurses = () => {
           </motion.button>
         </motion.form>
 
-        
+
         <AnimatePresence mode="wait">
           {loading ? (
             <motion.div
@@ -210,7 +210,7 @@ const SearchNurses = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full mx-auto"
+                className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full mx-auto"
               />
             </motion.div>
           ) : nurses.length === 0 ? (
@@ -259,7 +259,7 @@ const SearchNurses = () => {
                     }}
                     className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer"
                   >
-                    
+
                     <div className="relative h-32 bg-gray-200">
                       <div className="absolute inset-0 opacity-20">
                         <img
@@ -285,15 +285,15 @@ const SearchNurses = () => {
                                 }}
                               />
                               <div
-                                className="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center border-4 border-white"
+                                className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-4 border-white"
                                 style={{ display: "none" }}
                               >
-                                <User className="w-12 h-12 text-teal-600" />
+                                <User className="w-12 h-12 text-black" />
                               </div>
                             </div>
                           ) : (
-                            <div className="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center border-4 border-white shadow-xl">
-                              <User className="w-12 h-12 text-teal-600" />
+                            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-4 border-white shadow-xl">
+                              <User className="w-12 h-12 text-black" />
                             </div>
                           )}
                         </motion.div>
@@ -361,7 +361,7 @@ const SearchNurses = () => {
                         <motion.button
                           whileHover={{
                             scale: 1.05,
-                            boxShadow: "0 5px 15px rgba(139, 92, 246, 0.3)",
+                            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)",
                           }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => navigate(`/patient/book/${nurse._id}`)}

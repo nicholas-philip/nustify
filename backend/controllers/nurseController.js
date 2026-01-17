@@ -3,6 +3,8 @@ import NurseProfile from "../models/NurseProfile.js";
 import Appointment from "../models/Appointments.js";
 import Review from "../models/Reviews.js";
 import PatientProfile from "../models/PatientProfile.js";
+import HealthRecord from "../models/HealthRecord.js";
+import VitalSigns from "../models/VitalSigns.js";
 import { deleteImage, extractPublicId } from "../config/cloudinary.js";
 
 
@@ -54,7 +56,7 @@ const getDashboard = async (req, res) => {
 
     let unreadMessages = 0;
     try {
-      const Message = (await import("../models/Message.js")).default;
+      const Message = (await import("../models/Messages.js")).default;
       unreadMessages = await Message.countDocuments({
         receiverId: req.user._id,
         isRead: false,
@@ -324,7 +326,7 @@ const respondToAppointment = async (req, res) => {
       message: `Appointment ${status} successfully`,
       appointment,
     });
-    
+
     try {
       await createNotification(
         appointment.patientId._id || appointment.patientId,
@@ -352,10 +354,10 @@ const respondToAppointment = async (req, res) => {
 
 const completeAppointment = async (req, res) => {
   try {
-    const { completionNotes } = req.body;
+    const { completionNotes, healthData } = req.body;
     const appointmentId = req.params.id;
 
-    
+
     const appointment = await Appointment.findOne({
       _id: appointmentId,
       nurseId: req.user._id,
@@ -369,7 +371,7 @@ const completeAppointment = async (req, res) => {
       });
     }
 
-    
+
     const appointmentDate = new Date(appointment.appointmentDate);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -381,12 +383,59 @@ const completeAppointment = async (req, res) => {
       });
     }
 
-    
+
     appointment.status = "completed";
     appointment.completedAt = new Date();
 
     if (completionNotes) {
       appointment.nurseNotes = completionNotes;
+    }
+
+    // Health Data Integration
+    if (healthData) {
+      const { vitals, assessment } = healthData;
+
+      // 1. Create Vital Signs if provided
+      if (vitals && Object.keys(vitals).length > 0) {
+        const vitalSigns = await VitalSigns.create({
+          patientId: appointment.patientId,
+          appointmentId: appointment._id,
+          recordedBy: req.user._id,
+          recordedByRole: "nurse",
+          measurementDate: new Date(),
+          location: appointment.location || "home",
+          bloodPressure: vitals.bloodPressure,
+          heartRate: { value: vitals.heartRate },
+          temperature: { value: vitals.temperature, unit: vitals.tempUnit || "celsius" },
+          oxygenSaturation: { value: vitals.oxygenSaturation },
+          weight: { value: vitals.weight, unit: vitals.weightUnit || "kg" },
+          respiratoryRate: { value: vitals.respiratoryRate },
+          notes: vitals.notes || "Recorded during appointment",
+        });
+        appointment.vitalSignsRecorded = vitalSigns._id;
+      }
+
+      // 2. Create Health Record if assessment provided
+      if (assessment && assessment.title) {
+        const record = await HealthRecord.create({
+          patientId: appointment.patientId,
+          appointmentId: appointment._id,
+          recordedBy: req.user._id,
+          recordType: assessment.recordType || "diagnosis",
+          title: assessment.title,
+          description: assessment.description,
+          diagnosisCode: assessment.diagnosisCode,
+          severity: assessment.severity,
+          treatmentPlan: assessment.treatmentPlan,
+          prescribedBy: req.user._id,
+          eventDate: new Date(),
+        });
+        appointment.healthRecordsCreated.push(record._id);
+
+        // Update appointment with assessment details for quick reference
+        appointment.diagnosisNotes = assessment.description;
+        appointment.treatmentPlan = assessment.treatmentPlan;
+      }
     }
 
     await appointment.save();
@@ -396,7 +445,7 @@ const completeAppointment = async (req, res) => {
       message: "Appointment marked as completed",
       appointment,
     });
-    
+
     try {
       await createNotification(
         appointment.patientId._id || appointment.patientId,
@@ -489,7 +538,7 @@ const uploadProfileImage = async (req, res) => {
       });
     }
 
-    
+
     if (nurseProfile.profileImage) {
       console.log("🗑️ Deleting old image:", nurseProfile.profileImage);
       const oldPublicId = extractPublicId(nurseProfile.profileImage);
@@ -500,7 +549,7 @@ const uploadProfileImage = async (req, res) => {
       }
     }
 
-    
+
     nurseProfile.profileImage = req.file.path;
     await nurseProfile.save();
 
@@ -542,13 +591,13 @@ const deleteProfileImage = async (req, res) => {
 
     console.log("🗑️ Deleting image:", nurseProfile.profileImage);
 
-    
+
     const publicId = extractPublicId(nurseProfile.profileImage);
     if (publicId) {
       await deleteImage(publicId);
     }
 
-    
+
     nurseProfile.profileImage = "";
     await nurseProfile.save();
 

@@ -13,6 +13,15 @@ import {
 } from "lucide-react";
 import api from "../../services/api";
 
+const specializedServicesMap = {
+  "Maternal Health": ["Prenatal Checkup", "Postpartum Care", "Lactation Consult", "Birth Planning"],
+  "Pediatrics": ["Well-Child Visit", "Vaccination", "Sick Child Visit", "Newborn Care"],
+  "Geriatrics": ["Elderly Care Assessment", "Medication Management", "Mobility Assistance"],
+  "Critical Care": ["Post-ICU Monitoring", "Ventilator Care"],
+  "Mental Health": ["Counseling Session", "Mental Health Assessment"],
+  "Rehabilitation": ["Physical Therapy", "Post-Stroke Rehab"],
+};
+
 const BookAppointment = () => {
   const navigate = useNavigate();
   const { nurseId } = useParams();
@@ -106,7 +115,7 @@ const BookAppointment = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full"
+          className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full"
         />
       </div>
     );
@@ -161,7 +170,7 @@ const BookAppointment = () => {
             whileHover={{ x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/search")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-black hover:text-gray-900 mb-4"
           >
             ← Back to Search
           </motion.button>
@@ -175,7 +184,7 @@ const BookAppointment = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
             Book Appointment
           </motion.h1>
@@ -195,9 +204,9 @@ const BookAppointment = () => {
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.6 }}
-              className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center"
+              className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center"
             >
-              <User className="w-8 h-8 text-purple-600" />
+              <User className="w-8 h-8 text-black" />
             </motion.div>
             <div className="flex-1">
               <h3 className="text-xl font-bold text-gray-900">
@@ -261,8 +270,8 @@ const BookAppointment = () => {
                     field.type === "date"
                       ? new Date().toISOString().split("T")[0]
                       : field.type === "number"
-                      ? "1"
-                      : undefined
+                        ? "1"
+                        : undefined
                   }
                   max={field.type === "number" ? "12" : undefined}
                   required
@@ -299,12 +308,22 @@ const BookAppointment = () => {
               whileFocus={{ scale: 1.02 }}
               type="text"
               name="serviceType"
+              list="service-types"
               placeholder="e.g., Home Care, Post-Surgery Care"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
               value={formData.serviceType}
               onChange={handleChange}
               required
             />
+            <datalist id="service-types">
+              {(nurse?.specializations?.flatMap(spec => specializedServicesMap[spec] || []) || [])
+                .concat(["Home Care", "Wound Care", "General Consultation"])
+                .filter((v, i, a) => a.indexOf(v) === i)
+                .map(service => (
+                  <option key={service} value={service} />
+                ))
+              }
+            </datalist>
           </motion.div>
 
           <motion.div variants={itemVariants}>
@@ -326,8 +345,8 @@ const BookAppointment = () => {
                     (loc === "home"
                       ? " Visit"
                       : loc === "online"
-                      ? " Consultation"
-                      : "")}
+                        ? " Consultation"
+                        : "")}
                 </option>
               ))}
             </motion.select>
@@ -420,12 +439,8 @@ const BookAppointment = () => {
             />
           </motion.div>
 
-          <motion.div
-            variants={itemVariants}
-            whileHover={{ scale: 1.02 }}
-            className="bg-purple-50 p-6 rounded-lg"
-          >
-            <h3 className="font-semibold text-gray-900 mb-3">Cost Summary</h3>
+          <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
+            <h3 className="font-semibold text-gray-900 mb-3">Cost Summary (Cash Payment)</h3>
             <div className="space-y-2">
               <div className="flex justify-between text-gray-700">
                 <span>Hourly Rate:</span>
@@ -435,7 +450,7 @@ const BookAppointment = () => {
                 <span>Duration:</span>
                 <span>{formData.duration} hour(s)</span>
               </div>
-              <div className="flex justify-between text-xl font-bold text-purple-600 pt-3 border-t">
+              <div className="flex justify-between text-xl font-black text-black pt-3 border-t">
                 <span>Total Cost:</span>
                 <motion.span
                   key={totalCost}
@@ -445,8 +460,11 @@ const BookAppointment = () => {
                   ${totalCost.toFixed(2)}
                 </motion.span>
               </div>
+              <p className="text-xs text-gray-500 mt-2 italic">
+                * Please note: Payment must be made in cash directly to the professional at the time of service.
+              </p>
             </div>
-          </motion.div>
+          </div>
 
           <motion.div variants={itemVariants} className="flex gap-4">
             <motion.button
@@ -461,19 +479,19 @@ const BookAppointment = () => {
             <motion.button
               whileHover={{
                 scale: 1.02,
-                boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
+                boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
               }}
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={submitting}
               className="flex-1 px-6 py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50"
             >
-              {submitting ? "Booking..." : "Book Appointment"}
+              {submitting ? "Booking..." : "Confirm & Book (Cash)"}
             </motion.button>
           </motion.div>
         </motion.form>
       </div>
-    </div>
+    </div >
   );
 };
 

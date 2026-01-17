@@ -15,6 +15,7 @@ import {
   Star,
   MapPin,
   DollarSign,
+  Activity,
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../services/api";
@@ -91,7 +92,7 @@ const PatientDashboard = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-teal-200 border-t-teal-600 rounded-full"
+          className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full"
         />
       </div>
     );
@@ -128,9 +129,9 @@ const PatientDashboard = () => {
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Heart className="w-8 h-8 text-teal-600" />
+                <Heart className="w-8 h-8 text-black" />
               </motion.div>
-              <span className="text-2xl font-bold text-teal-600">
+              <span className="text-2xl font-bold text-black">
                 Nursify
               </span>
             </motion.div>
@@ -144,6 +145,7 @@ const PatientDashboard = () => {
                 },
                 { label: "Find Nurses", path: "/patient/search" },
                 { label: "Appointments", path: "/patient/appointments" },
+                { label: "Messages", path: "/patient/messages" },
                 { label: "Profile", path: "/patient/profile" },
               ].map((item) => (
                 <motion.button
@@ -153,8 +155,8 @@ const PatientDashboard = () => {
                   onClick={() => navigate(item.path)}
                   className={
                     item.active
-                      ? "text-teal-600 font-semibold"
-                      : "text-gray-600 hover:text-teal-600"
+                      ? "text-black font-semibold border-b-2 border-black"
+                      : "text-gray-600 hover:text-black"
                   }
                 >
                   {item.label}
@@ -172,8 +174,10 @@ const PatientDashboard = () => {
               </motion.button>
             </div>
 
-            <button
-              className="md:hidden"
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg"
               onClick={() => setShowMenu(!showMenu)}
             >
               {showMenu ? (
@@ -181,7 +185,7 @@ const PatientDashboard = () => {
               ) : (
                 <Menu className="w-6 h-6" />
               )}
-            </button>
+            </motion.button>
           </div>
 
           <AnimatePresence>
@@ -216,6 +220,7 @@ const PatientDashboard = () => {
                     {[
                       { label: "Find Nurses", path: "/patient/search" },
                       { label: "Appointments", path: "/patient/appointments" },
+                      { label: "Messages", path: "/patient/messages" },
                       { label: "Profile", path: "/patient/profile" },
                     ].map((item) => (
                       <button
@@ -259,7 +264,7 @@ const PatientDashboard = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-teal-600" />
+              <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
             Welcome, {dashboard?.profile?.fullName || user?.email}!
           </motion.h1>
@@ -275,7 +280,7 @@ const PatientDashboard = () => {
           {[
             {
               icon: Calendar,
-              color: "text-teal-600",
+              color: "text-gray-900",
               label: "Total Appointments",
               value: dashboard?.stats?.totalAppointments || 0,
             },
@@ -291,6 +296,14 @@ const PatientDashboard = () => {
               label: "Completed",
               value: dashboard?.stats?.completedAppointments || 0,
             },
+            {
+              icon: Activity,
+              color: "text-emerald-600",
+              label: "Health Passport",
+              value: "View",
+              isAction: true,
+              path: "/patient/health"
+            }
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -300,7 +313,8 @@ const PatientDashboard = () => {
                 scale: 1.05,
                 boxShadow: "0 20px 40px rgba(0, 0, 0, 0.1)",
               }}
-              className="bg-white p-6 rounded-xl shadow-lg"
+              onClick={() => stat.isAction && navigate(stat.path)}
+              className={`bg-white p-6 rounded-xl shadow-lg ${stat.isAction ? "cursor-pointer border-2 border-transparent hover:border-black transition-colors" : ""}`}
             >
               <div className="flex items-center justify-between mb-2">
                 <motion.div
@@ -329,7 +343,7 @@ const PatientDashboard = () => {
           transition={{ delay: 0.5 }}
           whileHover={{
             scale: 1.02,
-            boxShadow: "0 25px 50px rgba(139, 92, 246, 0.3)",
+            boxShadow: "0 25px 50px rgba(0, 0, 0, 0.2)",
           }}
           className="bg-black text-white rounded-xl shadow-lg p-8 mb-8"
         >
@@ -372,14 +386,14 @@ const PatientDashboard = () => {
             <motion.button
               whileHover={{ x: 5 }}
               onClick={() => navigate("/patient/appointments")}
-              className="text-teal-600 hover:text-teal-700 font-semibold text-sm"
+              className="text-black hover:text-gray-700 font-semibold text-sm"
             >
               View All →
             </motion.button>
           </div>
 
           {!dashboard?.upcomingAppointments ||
-          dashboard.upcomingAppointments.length === 0 ? (
+            dashboard.upcomingAppointments.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -395,7 +409,7 @@ const PatientDashboard = () => {
               <motion.button
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
+                  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
                 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/patient/search")}

@@ -26,7 +26,7 @@ const tokenBlacklistSchema = new mongoose.Schema(
 tokenBlacklistSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 
-tokenBlacklistSchema.index({ token: 1 });
+// tokenBlacklistSchema.index({ token: 1 });
 
 const TokenBlacklist = mongoose.model("TokenBlacklist", tokenBlacklistSchema);
 

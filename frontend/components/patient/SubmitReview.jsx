@@ -20,6 +20,8 @@ const SubmitReview = () => {
       punctuality: 0,
       communication: 0,
       care: 0,
+      hygiene: 0,
+      protocol: 0
     },
   });
 
@@ -68,7 +70,7 @@ const SubmitReview = () => {
       return;
     }
 
-    
+
     const categoriesRated = Object.values(formData.categories).some(
       (cat) => cat > 0
     );
@@ -81,7 +83,7 @@ const SubmitReview = () => {
     setSubmitting(true);
 
     try {
-      
+
       const filteredCategories = {};
       Object.entries(formData.categories).forEach(([key, value]) => {
         if (value >= 1) {
@@ -128,11 +130,10 @@ const SubmitReview = () => {
               transition={{ duration: 0.5 }}
             >
               <Star
-                className={`w-8 h-8 ${
-                  star <= value
-                    ? "text-yellow-500 fill-current"
-                    : "text-gray-300"
-                } hover:text-yellow-400`}
+                className={`w-8 h-8 ${star <= value
+                  ? "text-yellow-500 fill-current"
+                  : "text-gray-300"
+                  } hover:text-yellow-400`}
               />
             </motion.div>
           </motion.button>
@@ -147,7 +148,7 @@ const SubmitReview = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full"
+          className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full"
         />
       </div>
     );
@@ -202,7 +203,7 @@ const SubmitReview = () => {
             whileHover={{ x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/appointments")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-black hover:text-gray-900 mb-4"
           >
             ← Back to Appointments
           </motion.button>
@@ -216,7 +217,7 @@ const SubmitReview = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
             Leave a Review
           </motion.h1>
@@ -295,6 +296,8 @@ const SubmitReview = () => {
                 { key: "punctuality", label: "Punctuality" },
                 { key: "communication", label: "Communication" },
                 { key: "care", label: "Quality of Care" },
+                { key: "hygiene", label: "Hygiene & Safety" },
+                { key: "protocol", label: "Protocol Adherence" },
               ].map((category, index) => (
                 <motion.div
                   key={category.key}
@@ -320,7 +323,7 @@ const SubmitReview = () => {
             </label>
             <motion.textarea
               whileFocus={{ scale: 1.02 }}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
               rows="6"
               placeholder="Share your experience... What did you like? What could be improved?"
               value={formData.comment}

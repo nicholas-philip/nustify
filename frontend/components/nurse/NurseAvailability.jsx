@@ -165,7 +165,7 @@ const NurseAvailability = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-8 h-8 text-purple-600" />
+              <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
             Manage Availability
           </motion.h1>
@@ -226,7 +226,7 @@ const NurseAvailability = () => {
               />
               <motion.div
                 whileTap={{ scale: 0.95 }}
-                className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-purple-600"
+                className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-black"
               ></motion.div>
               <span className="ml-3 text-sm font-medium text-gray-900">
                 {isAvailable ? "Available" : "Unavailable"}
@@ -263,7 +263,7 @@ const NurseAvailability = () => {
                       whileTap={{ scale: 0.95 }}
                       type="button"
                       onClick={() => addTimeSlot(day)}
-                      className="flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-600 rounded-lg hover:bg-purple-200 text-sm"
+                      className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-black rounded-lg hover:bg-gray-200 text-sm"
                     >
                       <Plus className="w-4 h-4" />
                       Add Slot

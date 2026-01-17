@@ -80,11 +80,44 @@ const appointmentSchema = new mongoose.Schema(
     cancelledAt: {
       type: Date,
     },
-    
+
     reminderSent: {
       type: Boolean,
       default: false,
     },
+    // Health Record Integration
+    vitalSignsRecorded: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "VitalSigns",
+    },
+    prescriptionGiven: {
+      type: Boolean,
+      default: false,
+    },
+    prescriptionDetails: {
+      type: String,
+    },
+    followUpRequired: {
+      type: Boolean,
+      default: false,
+    },
+    followUpDate: {
+      type: Date,
+    },
+    diagnosisNotes: {
+      type: String,
+      maxlength: 2000,
+    },
+    treatmentPlan: {
+      type: String,
+      maxlength: 1000,
+    },
+    healthRecordsCreated: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "HealthRecord",
+      },
+    ],
   },
   {
     timestamps: true,

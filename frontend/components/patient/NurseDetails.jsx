@@ -11,8 +11,12 @@ import {
   Calendar,
   User,
   Sparkles,
+  MessageSquare,
+  ShieldCheck,
 } from "lucide-react";
 import api from "../../services/api";
+import TrustScore from "../common/TrustScore";
+import VerificationBadge from "../common/VerificationBadge";
 
 const NurseDetails = () => {
   const navigate = useNavigate();
@@ -45,7 +49,7 @@ const NurseDetails = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full"
+          className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full"
         />
       </div>
     );
@@ -98,7 +102,7 @@ const NurseDetails = () => {
             whileHover={{ x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/search")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-black hover:text-gray-900 mb-4"
           >
             ← Back to Search
           </motion.button>
@@ -117,14 +121,14 @@ const NurseDetails = () => {
               className="bg-white rounded-xl shadow-lg p-6"
             >
               <div className="text-center mb-6">
-                
+
                 <motion.div
                   whileHover={{ scale: 1.05, rotate: 5 }}
                   transition={{ duration: 0.3 }}
                   className="mx-auto mb-4"
                 >
                   {nurse.profileImage ? (
-                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-200 shadow-lg mx-auto">
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-100 shadow-lg mx-auto">
                       <img
                         src={nurse.profileImage}
                         alt={nurse.fullName}
@@ -135,21 +139,22 @@ const NurseDetails = () => {
                         }}
                       />
                       <div
-                        className="w-32 h-32 bg-purple-100 rounded-full flex items-center justify-center"
+                        className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center"
                         style={{ display: "none" }}
                       >
-                        <User className="w-16 h-16 text-purple-600" />
+                        <User className="w-16 h-16 text-black" />
                       </div>
                     </div>
                   ) : (
-                    <div className="w-32 h-32 bg-purple-100 rounded-full flex items-center justify-center mx-auto border-4 border-purple-200 shadow-lg">
-                      <User className="w-16 h-16 text-purple-600" />
+                    <div className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto border-4 border-gray-100 shadow-lg">
+                      <User className="w-16 h-16 text-black" />
                     </div>
                   )}
                 </motion.div>
 
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-2">
                   {nurse.fullName}
+                  {nurse.verificationStatus === 'verified' && <VerificationBadge size="md" showText={false} />}
                 </h2>
                 <p className="text-gray-600 mb-4">{nurse.specialization}</p>
 
@@ -162,11 +167,10 @@ const NurseDetails = () => {
                       transition={{ delay: 0.3 + i * 0.1, type: "spring" }}
                     >
                       <Star
-                        className={`w-6 h-6 ${
-                          i < Math.round(nurse.rating || 0)
-                            ? "text-yellow-500 fill-current"
-                            : "text-gray-300"
-                        }`}
+                        className={`w-6 h-6 ${i < Math.round(nurse.rating || 0)
+                          ? "text-yellow-500 fill-current"
+                          : "text-gray-300"
+                          }`}
                       />
                     </motion.div>
                   ))}
@@ -188,18 +192,39 @@ const NurseDetails = () => {
                   <span>${nurse.hourlyRate}/hour</span>
                 </motion.div>
 
-                <motion.button
-                  whileHover={{
-                    scale: 1.05,
-                    boxShadow: "0 10px 30px rgba(139, 92, 246, 0.3)",
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate(`/patient/book/${id}`)}
-                  className="w-full px-6 py-3 bg-black text-white rounded-lg font-semibold"
-                >
-                  Book Appointment
-                </motion.button>
+                <div className="space-y-3">
+                  <motion.button
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => navigate(`/patient/book/${id}`)}
+                    className="w-full px-6 py-3 bg-black text-white rounded-lg font-semibold"
+                  >
+                    Book Appointment
+                  </motion.button>
+
+                  <motion.button
+                    whileHover={{
+                      scale: 1.05,
+                      boxShadow: "0 10px 30px rgba(0, 0, 0, 0.05)",
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => navigate(`/patient/messages?nurseId=${nurse.userId?._id || nurse.userId}`)}
+                    className="w-full px-6 py-3 bg-white text-black border border-gray-200 rounded-lg font-semibold flex items-center justify-center gap-2"
+                  >
+                    <MessageSquare className="w-5 h-5" />
+                    Message Nurse
+                  </motion.button>
+                </div>
               </div>
+
+              {nurse.trustScore > 0 && (
+                <div className="border-t pt-6 bg-gradient-to-b from-transparent to-gray-50 -mx-6 px-6 pb-6 rounded-b-xl">
+                  <TrustScore score={nurse.trustScore} size="sm" showLabel={true} />
+                </div>
+              )}
 
               <div className="border-t pt-6 space-y-3">
                 <motion.div
@@ -244,7 +269,7 @@ const NurseDetails = () => {
                       whileHover={{ x: 5 }}
                       className="flex items-center gap-2"
                     >
-                      <div className="w-2 h-2 bg-purple-600 rounded-full"></div>
+                      <div className="w-2 h-2 bg-black rounded-full"></div>
                       <span className="text-gray-700">{service}</span>
                     </motion.div>
                   ))}
@@ -271,7 +296,7 @@ const NurseDetails = () => {
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.7 + index * 0.1 }}
                       whileHover={{ scale: 1.1 }}
-                      className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm"
+                      className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm"
                     >
                       {language}
                     </motion.span>
@@ -296,10 +321,32 @@ const NurseDetails = () => {
                   animate={{ rotate: [0, 10, -10, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <Sparkles className="w-6 h-6 text-purple-600" />
+                  <Sparkles className="w-6 h-6 text-black" />
                 </motion.div>
                 About
               </h3>
+
+              {nurse.specializations && nurse.specializations.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {nurse.specializations.map((spec, i) => (
+                    <span key={i} className="px-3 py-1 bg-black text-white rounded-full text-sm font-medium">
+                      {spec}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {nurse.complianceBadges && nurse.complianceBadges.length > 0 && (
+                <div className="flex flex-wrap gap-3 mb-6 p-4 bg-gray-50 rounded-xl">
+                  {nurse.complianceBadges.map((badge, i) => (
+                    <div key={i} className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border border-gray-100 shadow-sm" title={`Earned: ${new Date(badge.earnedDate).toLocaleDateString()}`}>
+                      <ShieldCheck className="w-4 h-4 text-blue-500" />
+                      <span className="text-sm font-medium text-gray-700 capitalize">{badge.badgeType.replace('_', ' ')}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {nurse.bio ? (
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">
                   {nurse.bio}
@@ -318,7 +365,7 @@ const NurseDetails = () => {
                 className="bg-white rounded-xl shadow-lg p-6"
               >
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <Award className="w-6 h-6 text-purple-600" />
+                  <Award className="w-6 h-6 text-black" />
                   Certifications
                 </h3>
                 <div className="space-y-4">
@@ -329,7 +376,7 @@ const NurseDetails = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.6 + index * 0.1 }}
                       whileHover={{ x: 5 }}
-                      className="border-l-4 border-purple-600 pl-4"
+                      className="border-l-4 border-black pl-4"
                     >
                       <h4 className="font-semibold text-gray-900">
                         {cert.title}
@@ -392,11 +439,10 @@ const NurseDetails = () => {
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
-                                className={`w-5 h-5 ${
-                                  i < review.rating
-                                    ? "text-yellow-500 fill-current"
-                                    : "text-gray-300"
-                                }`}
+                                className={`w-5 h-5 ${i < review.rating
+                                  ? "text-yellow-500 fill-current"
+                                  : "text-gray-300"
+                                  }`}
                               />
                             ))}
                           </div>
@@ -446,7 +492,7 @@ const NurseDetails = () => {
           </motion.div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
