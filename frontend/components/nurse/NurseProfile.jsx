@@ -626,7 +626,7 @@ const NurseProfile = () => {
                     onClick={() => setIsEditing(true)}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full px-6 py-3.5 bg-black text-white rounded-xl font-semibold flex items-center justify-center gap-2"
+                    className="w-full px-6 py-2.5 bg-black text-white rounded-2xl font-semibold flex items-center justify-center gap-2"
                   >
                     <User className="w-5 h-5" />
                     Edit Profile
@@ -663,7 +663,7 @@ const NurseProfile = () => {
                       }}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="flex-1 px-6 py-3.5 bg-gray-200 text-gray-800 rounded-xl font-semibold"
+                      className="flex-1 px-6 py-2.5 bg-gray-200 text-gray-800 rounded-2xl font-semibold"
                     >
                       Cancel
                     </motion.button>
@@ -672,7 +672,7 @@ const NurseProfile = () => {
                       disabled={saving}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="flex-1 px-6 py-3.5 bg-black text-white rounded-xl font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="flex-1 px-6 py-2.5 bg-black text-white rounded-2xl font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       <Save className="w-5 h-5" />
                       {saving ? "Saving..." : "Save Changes"}
