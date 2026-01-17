@@ -15,8 +15,9 @@ import {
   Twitter,
   Instagram,
   Linkedin,
-  Menu,
-  X,
+  Activity,
+  Baby,
+  ClipboardList,
 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +27,6 @@ import { useAuth } from "../../contexts/AuthContext";
 const LandingPage = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const [showMenu, setShowMenu] = useState(false);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 60 },
@@ -155,97 +155,7 @@ const LandingPage = () => {
               </>
             )}
           </div>
-
-          <button
-            className="md:hidden p-2"
-            onClick={() => setShowMenu(!showMenu)}
-          >
-            {showMenu ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
-
-        <AnimatePresence>
-          {showMenu && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.5 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black z-40 md:hidden"
-                onClick={() => setShowMenu(false)}
-              />
-              <motion.div
-                initial={{ x: "100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "100%" }}
-                transition={{ type: "spring", damping: 25 }}
-                className="fixed top-0 right-0 bottom-0 w-64 bg-white shadow-xl z-50 md:hidden p-6 flex flex-col"
-              >
-                <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-xl font-bold text-gray-900">Menu</h2>
-                  <motion.button
-                    whileHover={{ scale: 1.1, rotate: 90 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setShowMenu(false)}
-                    className="p-2 hover:bg-gray-100 rounded-lg"
-                  >
-                    <X className="w-6 h-6" />
-                  </motion.button>
-                </div>
-                <div className="space-y-4 flex-1">
-                  {user ? (
-                    <>
-                      <button
-                        onClick={() => {
-                          const dashboardMap = {
-                            patient: "/patient/dashboard",
-                            nurse: "/nurse/dashboard",
-                            admin: "/admin/dashboard",
-                          };
-                          navigate(dashboardMap[user.role] || "/");
-                          setShowMenu(false);
-                        }}
-                        className="block w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg font-medium"
-                      >
-                        Dashboard
-                      </button>
-                      <button
-                        onClick={() => {
-                          logout();
-                          setShowMenu(false);
-                        }}
-                        className="block w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg font-medium"
-                      >
-                        Logout
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => {
-                          navigate("/login");
-                          setShowMenu(false);
-                        }}
-                        className="block w-full text-left px-4 py-3 hover:bg-gray-100 rounded-lg font-medium"
-                      >
-                        Login
-                      </button>
-                      <button
-                        onClick={() => {
-                          navigate("/register");
-                          setShowMenu(false);
-                        }}
-                        className="block w-full text-left px-4 py-3 bg-black text-white rounded-lg font-medium text-center"
-                      >
-                        Sign Up
-                      </button>
-                    </>
-                  )}
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
       </motion.nav>
 
       <motion.div className="relative py-28 overflow-hidden mt-16">
@@ -297,7 +207,8 @@ const LandingPage = () => {
               variants={fadeInUp}
               className="text-6xl md:text-7xl font-bold mb-6 leading-tight"
             >
-              Find Your Perfect Nurse
+              Professional Nursing & <br />
+              <span className="text-gray-300 italic">Family Health Care</span>
             </motion.h1>
 
             <motion.p
@@ -333,9 +244,9 @@ const LandingPage = () => {
           {[
             {
               icon: Search,
-              title: "Search & Book",
+              title: "Expert Nursing",
               description:
-                "Find qualified nurses by specialty, location, and availability. Book appointments that work for your schedule.",
+                "Find qualified nurses by specialty, location, and availability. Professional care tailored to your specific needs.",
               gradient: "from-gray-700 to-black",
               bgColor: "bg-gray-100",
               iconColor: "text-black",
@@ -343,10 +254,10 @@ const LandingPage = () => {
                 "https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg",
             },
             {
-              icon: Shield,
-              title: "Licensed Professionals",
+              icon: ClipboardList,
+              title: "Health Passport",
               description:
-                "All nurses are licensed, verified, and experienced healthcare professionals you can trust.",
+                "Track vitals, medical history, and clinical documents in one secure, unified digital health wallet.",
               gradient: "from-gray-600 to-gray-800",
               bgColor: "bg-gray-100",
               iconColor: "text-black",
@@ -354,13 +265,13 @@ const LandingPage = () => {
                 "https://images.pexels.com/photos/7195310/pexels-photo-7195310.jpeg",
             },
             {
-              icon: Heart,
-              title: "Quality Care",
+              icon: Baby,
+              title: "Maternal & Child Hub",
               description:
-                "Receive personalized, compassionate care in the comfort of your own home.",
-              gradient: "from-green-500 to-green-600",
-              bgColor: "bg-green-50",
-              iconColor: "text-green-600",
+                "Specialized pregnancy tracking, vaccination reminders, and developmental milestones for the whole family.",
+              gradient: "from-blue-500 to-blue-600",
+              bgColor: "bg-blue-50",
+              iconColor: "text-blue-600",
               image:
                 "https://images.pexels.com/photos/7551662/pexels-photo-7551662.jpeg",
             },
@@ -425,26 +336,26 @@ const LandingPage = () => {
             <div className="grid md:grid-cols-4 gap-8 text-center">
               {[
                 {
-                  number: "500+",
-                  label: "Qualified Nurses",
-                  icon: Users,
+                  number: "50k+",
+                  label: "Health Records",
+                  icon: Activity,
                   gradient: "from-teal-400 to-teal-300",
                 },
                 {
                   number: "10k+",
-                  label: "Happy Patients",
+                  label: "Happy Families",
                   icon: Heart,
                   gradient: "from-blue-400 to-blue-300",
                 },
                 {
-                  number: "4.8",
-                  label: "Average Rating",
-                  icon: Star,
+                  number: "500+",
+                  label: "Verified Pros",
+                  icon: Shield,
                   gradient: "from-green-400 to-green-300",
                 },
                 {
                   number: "24/7",
-                  label: "Support Available",
+                  label: "Instant Access",
                   icon: Clock,
                   gradient: "from-orange-400 to-orange-300",
                 },
