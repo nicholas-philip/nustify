@@ -24,6 +24,17 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../contexts/AuthContext";
 
+// Local Assets
+import heroImg from "../../src/doctors/pexels-tima-miroshnichenko-8376277.jpg";
+import nursingImg from "../../src/doctors/pexels-shkrabaanthony-6749773.jpg";
+import passportImg from "../../src/doctors/pexels-rdne-6129506.jpg";
+import maternalImg from "../../src/doctors/pexels-laura-james-6098047.jpg";
+import statsBg from "../../src/doctors/pexels-cottonbro-3957986.jpg";
+import step1Img from "../../src/doctors/pexels-shkrabaanthony-5215024.jpg";
+import step2Img from "../../src/doctors/pexels-rdne-6129501.jpg";
+import step3Img from "../../src/doctors/pexels-karola-g-5207087.jpg";
+import step4Img from "../../src/doctors/pexels-klaus-nielsen-6303555.jpg";
+
 const LandingPage = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -158,7 +169,7 @@ const LandingPage = () => {
         </div>
       </motion.nav>
 
-      <motion.div className="relative py-28 overflow-hidden mt-16">
+      <motion.div className="relative py-40 overflow-hidden mt-16">
         <motion.div
           className="absolute inset-0 bg-cover bg-center"
           initial={{ scale: 1.05 }}
@@ -168,8 +179,7 @@ const LandingPage = () => {
             ease: "easeOut",
           }}
           style={{
-            backgroundImage:
-              "url('https://images.pexels.com/photos/7659565/pexels-photo-7659565.jpeg')",
+            backgroundImage: `url(${heroImg})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -250,8 +260,7 @@ const LandingPage = () => {
               gradient: "from-gray-700 to-black",
               bgColor: "bg-gray-100",
               iconColor: "text-black",
-              image:
-                "https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg",
+              image: nursingImg,
             },
             {
               icon: ClipboardList,
@@ -261,8 +270,7 @@ const LandingPage = () => {
               gradient: "from-gray-600 to-gray-800",
               bgColor: "bg-gray-100",
               iconColor: "text-black",
-              image:
-                "https://images.pexels.com/photos/7195310/pexels-photo-7195310.jpeg",
+              image: passportImg,
             },
             {
               icon: Baby,
@@ -272,8 +280,7 @@ const LandingPage = () => {
               gradient: "from-blue-500 to-blue-600",
               bgColor: "bg-blue-50",
               iconColor: "text-blue-600",
-              image:
-                "https://images.pexels.com/photos/7551662/pexels-photo-7551662.jpeg",
+              image: maternalImg,
             },
           ].map((feature, index) => (
             <motion.div
@@ -286,11 +293,11 @@ const LandingPage = () => {
               }}
               className="bg-white rounded-2xl shadow-lg transition-all duration-300 cursor-pointer group relative overflow-hidden"
             >
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-64 overflow-hidden">
                 <motion.img
                   src={feature.image}
                   alt={feature.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.6 }}
                 />
@@ -325,7 +332,7 @@ const LandingPage = () => {
         >
           <div className="absolute inset-0">
             <img
-              src="https://images.pexels.com/photos/7089400/pexels-photo-7089400.jpeg"
+              src={statsBg}
               alt="Healthcare team"
               className="w-full h-full object-cover"
             />
@@ -424,8 +431,7 @@ const LandingPage = () => {
                 desc: "Create your account in minutes",
                 icon: Users,
                 gradient: "from-teal-500 to-teal-600",
-                image:
-                  "https://images.pexels.com/photos/5867731/pexels-photo-5867731.jpeg",
+                image: step1Img,
               },
               {
                 step: 2,
@@ -433,8 +439,7 @@ const LandingPage = () => {
                 desc: "Search by specialty and location",
                 icon: Search,
                 gradient: "from-blue-500 to-blue-600",
-                image:
-                  "https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg",
+                image: step2Img,
               },
               {
                 step: 3,
@@ -442,8 +447,7 @@ const LandingPage = () => {
                 desc: "Choose your preferred date and time",
                 icon: Calendar,
                 gradient: "from-green-500 to-green-600",
-                image:
-                  "https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg",
+                image: step3Img,
               },
               {
                 step: 4,
@@ -451,8 +455,7 @@ const LandingPage = () => {
                 desc: "Receive quality healthcare at home",
                 icon: Heart,
                 gradient: "from-pink-500 to-pink-600",
-                image:
-                  "https://images.pexels.com/photos/7345465/pexels-photo-7345465.jpeg",
+                image: step4Img,
               },
             ].map((item, index) => (
               <motion.div
@@ -461,11 +464,11 @@ const LandingPage = () => {
                 whileHover={{ y: -15, scale: 1.05 }}
                 className="relative text-center group"
               >
-                <div className="relative mb-4 rounded-2xl overflow-hidden h-40">
+                <div className="relative mb-4 rounded-2xl overflow-hidden h-64">
                   <motion.img
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                     whileHover={{ scale: 1.15 }}
                     transition={{ duration: 0.6 }}
                   />

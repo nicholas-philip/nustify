@@ -10,9 +10,12 @@ import {
   AlertCircle,
   CheckCircle,
   ArrowRight,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import api from "../../services/api";
 import { motion, AnimatePresence } from "framer-motion";
+import teamImg from "../../src/doctors/pexels-cottonbro-5722166.jpg";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -31,6 +34,7 @@ const RegisterPage = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -122,9 +126,9 @@ const RegisterPage = () => {
           className="hidden lg:flex lg:w-1/2 relative rounded-3xl overflow-hidden shadow-2xl"
         >
           <img
-            src="https://images.pexels.com/photos/7551581/pexels-photo-7551581.jpeg"
+            src={teamImg}
             alt="Healthcare Team"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-black/50 flex items-end p-12">
             <div className="text-white">
@@ -151,7 +155,7 @@ const RegisterPage = () => {
         { }
         <div className="lg:hidden absolute inset-0 z-0">
           <img
-            src="https://images.pexels.com/photos/7551581/pexels-photo-7551581.jpeg"
+            src={teamImg}
             alt="Healthcare"
             className="w-full h-full object-cover opacity-20"
           />
@@ -313,15 +317,26 @@ const RegisterPage = () => {
               <motion.div whileFocus={{ scale: 1.02 }} className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Min 6 characters"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
                   value={formData.password}
                   onChange={handleChange}
                   required
                   minLength={6}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
               </motion.div>
             </motion.div>
 

@@ -20,6 +20,7 @@ import {
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../services/api";
 import NotificationCenter from "../common/NotificationCenter";
+import heroBg from "../../src/doctors/pexels-shkrabaanthony-5214995.jpg";
 
 const PatientDashboard = () => {
   const navigate = useNavigate();
@@ -342,33 +343,47 @@ const PatientDashboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
           whileHover={{
-            scale: 1.02,
+            scale: 1.01,
             boxShadow: "0 25px 50px rgba(0, 0, 0, 0.2)",
           }}
-          className="bg-black text-white rounded-xl shadow-lg p-8 mb-8"
+          className="relative text-white rounded-2xl shadow-lg p-10 mb-10 overflow-hidden group min-h-[300px] flex items-center"
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-2xl font-bold mb-2">Need Healthcare?</h3>
-              <p className="opacity-90 mb-4">
-                Find qualified nurses near you in minutes
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src={heroBg}
+              alt="Healthy life"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+          </div>
+
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between w-full">
+            <div className="max-w-lg">
+              <h3 className="text-4xl font-bold mb-4">Your Health, <br />Our Priority</h3>
+              <p className="text-xl text-gray-200 mb-6 font-medium">
+                Access qualified nursing care and manage your family health journey in one secure place.
               </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate("/patient/search")}
-                className="px-6 py-3 bg-black text-white rounded-lg font-semibold flex items-center gap-2"
-              >
-                <Search className="w-5 h-5" />
-                Find a Nurse
-              </motion.button>
+              <div className="flex flex-wrap gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate("/patient/search")}
+                  className="px-8 py-3 bg-white text-black rounded-xl font-bold flex items-center gap-2 shadow-lg"
+                >
+                  <Search className="w-5 h-5" />
+                  Find a Nurse
+                </motion.button>
+              </div>
             </div>
             <motion.div
-              animate={{ y: [0, -20, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="hidden md:block"
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="hidden lg:block"
             >
-              <Heart className="w-32 h-32 opacity-20" />
+              <div className="w-48 h-48 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 flex items-center justify-center p-6">
+                <Heart className="w-24 h-24 text-white opacity-80" />
+              </div>
             </motion.div>
           </div>
         </motion.div>

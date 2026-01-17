@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import api from "../../services/api";
 import { motion, AnimatePresence } from "framer-motion";
+import headerBg from "../../src/doctors/pexels-kooldark-14438789.jpg";
+import cardBg from "../../src/doctors/pexels-cristian-rojas-8460373.jpg";
 
 const SearchNurses = () => {
   const navigate = useNavigate();
@@ -88,7 +90,7 @@ const SearchNurses = () => {
       >
         <div className="absolute inset-0 opacity-10">
           <img
-            src="https://images.pexels.com/photos/3938022/pexels-photo-3938022.jpeg"
+            src={headerBg}
             alt="Healthcare"
             className="w-full h-full object-cover"
           />
@@ -263,7 +265,7 @@ const SearchNurses = () => {
                     <div className="relative h-32 bg-gray-200">
                       <div className="absolute inset-0 opacity-20">
                         <img
-                          src="https://images.pexels.com/photos/7089020/pexels-photo-7089020.jpeg"
+                          src={cardBg}
                           alt="Healthcare"
                           className="w-full h-full object-cover"
                         />

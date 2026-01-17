@@ -213,16 +213,14 @@ const NotificationCenter = () => {
       <button
         className="relative p-2 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
         onClick={() => setOpen(!open)}
-        aria-label={`Notifications${
-          unreadCount > 0 ? `, ${unreadCount} unread` : ""
-        }`}
+        aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ""
+          }`}
         aria-expanded={open}
         aria-haspopup="true"
       >
         <Bell
-          className={`w-6 h-6 ${
-            unreadCount > 0 ? "text-blue-600" : "text-gray-700"
-          } transition-colors`}
+          className={`w-6 h-6 ${unreadCount > 0 ? "text-blue-600" : "text-gray-700"
+            } transition-colors`}
         />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 bg-red-600 text-white text-xs font-bold rounded-full px-1 shadow-lg animate-pulse">
@@ -251,7 +249,7 @@ const NotificationCenter = () => {
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-2xl bg-white shadow-2xl rounded-2xl border border-gray-200 z-[9999] overflow-hidden max-h-[85vh] flex flex-col"
             >
-              {}
+              { }
               <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <h3 className="font-semibold text-gray-900 text-base">
@@ -294,7 +292,7 @@ const NotificationCenter = () => {
                 </div>
               </div>
 
-              {}
+              { }
               <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                 {loading ? (
                   <div className="flex flex-col items-center justify-center py-16">
@@ -336,13 +334,11 @@ const NotificationCenter = () => {
                     {notifications.map((n, idx) => (
                       <div
                         key={n._id}
-                        className={`relative px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 group ${
-                          !n.isRead ? "bg-blue-50/40" : ""
-                        } ${
-                          idx === 0
+                        className={`relative px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 group ${!n.isRead ? "bg-blue-50/40" : ""
+                          } ${idx === 0
                             ? "animate-in slide-in-from-top-2 fade-in duration-300"
                             : ""
-                        }`}
+                          }`}
                       >
                         <div className="flex gap-3">
                           {/* Unread indicator */}
@@ -355,14 +351,14 @@ const NotificationCenter = () => {
                           </div>
 
                           {/* Content */}
-                          <div className="flex-1 min-w-0">
+                          <div className="flex-1 min-w-0 pr-2">
                             <div className="flex items-start gap-2 mb-1">
                               <h4 className="text-sm font-semibold text-gray-900 line-clamp-1 flex-1">
                                 {n.title}
                               </h4>
                               {n.type && (
                                 <span
-                                  className={`px-1.5 py-0.5 text-xs font-medium rounded ${getNotificationTypeColor(
+                                  className={`px-1.5 py-0.5 text-xs font-medium rounded self-start ${getNotificationTypeColor(
                                     n.type
                                   )}`}
                                 >
@@ -379,7 +375,7 @@ const NotificationCenter = () => {
                           </div>
 
                           {/* Action buttons */}
-                          <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                          <div className="flex-shrink-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
                             {!n.isRead && (
                               <button
                                 onClick={() => markRead(n._id)}

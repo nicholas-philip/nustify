@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart, Mail, Lock, AlertCircle, ArrowRight } from "lucide-react";
+import { Heart, Mail, Lock, AlertCircle, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../services/api";
 import { motion } from "framer-motion";
+import docImg from "../../src/doctors/pexels-rdne-6129192.jpg";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const LoginPage = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -106,9 +108,9 @@ const LoginPage = () => {
           className="hidden lg:flex lg:w-1/2 relative rounded-3xl overflow-hidden shadow-2xl"
         >
           <img
-            src="https://images.pexels.com/photos/4021775/pexels-photo-4021775.jpeg"
+            src={docImg}
             alt="Healthcare Professional"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-black/40 flex items-end p-12">
             <div className="text-white">
@@ -135,7 +137,7 @@ const LoginPage = () => {
         { }
         <div className="lg:hidden absolute inset-0 z-0">
           <img
-            src="https://images.pexels.com/photos/4021775/pexels-photo-4021775.jpeg"
+            src={docImg}
             alt="Healthcare"
             className="w-full h-full object-cover opacity-20"
           />
@@ -248,14 +250,25 @@ const LoginPage = () => {
                     boxShadow: "0 0 0 3px rgba(0, 0, 0, 0.1)",
                     borderColor: "rgb(0, 0, 0)",
                   }}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Enter your password"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg outline-none transition"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg outline-none transition"
                   value={formData.password}
                   onChange={handleChange}
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
               </motion.div>
             </motion.div>
 
