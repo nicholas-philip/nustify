@@ -106,7 +106,7 @@ const LandingPage = () => {
             <span className="text-2xl font-bold text-black">Nursify</span>
           </motion.div>
 
-          <div className="hidden md:flex gap-3">
+          <div className="flex gap-2 md:gap-3">
             {user ? (
               <>
                 <motion.button
@@ -120,7 +120,7 @@ const LandingPage = () => {
                   }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-2 bg-black text-white rounded-lg font-medium"
+                  className="px-4 md:px-6 py-2 bg-black text-white rounded-lg font-medium"
                 >
                   Dashboard
                 </motion.button>
@@ -128,7 +128,7 @@ const LandingPage = () => {
                   onClick={logout}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-2 text-red-600 rounded-lg font-bold hover:bg-red-50"
+                  className="px-4 md:px-6 py-2 text-red-600 rounded-lg font-bold hover:bg-red-50"
                 >
                   Logout
                 </motion.button>
@@ -139,7 +139,7 @@ const LandingPage = () => {
                   onClick={() => navigate("/login")}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-2 text-black rounded-lg font-bold"
+                  className="px-4 md:px-6 py-2 text-black rounded-lg font-bold"
                 >
                   Login
                 </motion.button>
@@ -148,7 +148,7 @@ const LandingPage = () => {
                   onClick={() => navigate("/register")}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-2 bg-black text-white rounded-lg font-medium"
+                  className="px-4 md:px-6 py-2 bg-black text-white rounded-lg font-medium"
                 >
                   Sign Up
                 </motion.button>
