@@ -213,8 +213,8 @@ const AdminReviews = () => {
                             >
                               <Star
                                 className={`w-5 h-5 ${i < review.rating
-                                    ? "text-yellow-500 fill-current"
-                                    : "text-gray-300"
+                                  ? "text-yellow-500 fill-current"
+                                  : "text-gray-300"
                                   }`}
                               />
                             </motion.div>
@@ -239,7 +239,7 @@ const AdminReviews = () => {
                             className="flex items-center gap-2"
                           >
                             <User className="w-4 h-4" />
-                            <span>Nurse: {review.nurseId?.email || "N/A"}</span>
+                            <span>Specialist: {review.nurseId?.email || "N/A"}</span>
                           </motion.div>
                         </div>
 

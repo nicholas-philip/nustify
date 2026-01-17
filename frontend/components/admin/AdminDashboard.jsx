@@ -450,7 +450,7 @@ const AdminDashboard = () => {
             { }
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">
-                Top Rated Nurses
+                Top Rated Specialists
               </h2>
               {dashboard?.topNurses?.length > 0 ? (
                 <div className="space-y-3">
@@ -484,7 +484,7 @@ const AdminDashboard = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-center py-8">No nurses yet</p>
+                <p className="text-gray-500 text-center py-8">No specialists yet</p>
               )}
             </div>
           </motion.div>

@@ -110,7 +110,7 @@ const NurseDashboard = () => {
                 Nursify
               </span>
               <span className="px-2 py-1 bg-gray-100 text-black text-xs font-semibold rounded">
-                NURSE
+                SPECIALIST
               </span>
             </motion.div>
 

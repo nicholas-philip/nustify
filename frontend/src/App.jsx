@@ -21,6 +21,7 @@ import PatientProfile from "../components/patient/PatientProfile";
 import SubmitReview from "../components/patient/SubmitReview";
 import NurseDashboard from "../components/nurse/NurseDashboard";
 import NurseProfile from "../components/nurse/NurseProfile";
+import PatientHealthRecordView from "../components/nurse/PatientHealthRecordView";
 import AdminDashboard from "../components/admin/AdminDashboard";
 import AdminUsers from "../components/admin/AdminUsers";
 import AdminAppointments from "../components/admin/AdminAppointments";
@@ -225,6 +226,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={["nurse"]}>
                   <MessagesView />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/nurse/patient-record/:patientId"
+              element={
+                <ProtectedRoute allowedRoles={["nurse"]}>
+                  <PatientHealthRecordView />
                 </ProtectedRoute>
               }
             />

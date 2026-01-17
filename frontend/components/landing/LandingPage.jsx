@@ -217,8 +217,8 @@ const LandingPage = () => {
               variants={fadeInUp}
               className="text-6xl md:text-7xl font-bold mb-6 leading-tight"
             >
-              Professional Nursing & <br />
-              <span className="text-gray-300 italic">Family Health Care</span>
+              Specialized Medical & <br />
+              <span className="text-gray-300 italic">Nursing Care</span>
             </motion.h1>
 
             <motion.p
@@ -254,9 +254,9 @@ const LandingPage = () => {
           {[
             {
               icon: Search,
-              title: "Expert Nursing",
+              title: "Expert Specialists",
               description:
-                "Find qualified nurses by specialty, location, and availability. Professional care tailored to your specific needs.",
+                "Find qualified doctors and nurses by specialty, location, and availability. Professional care tailored to your needs.",
               gradient: "from-gray-700 to-black",
               bgColor: "bg-gray-100",
               iconColor: "text-black",
@@ -435,7 +435,7 @@ const LandingPage = () => {
               },
               {
                 step: 2,
-                title: "Find a Nurse",
+                title: "Find a Specialist",
                 desc: "Search by specialty and location",
                 icon: Search,
                 gradient: "from-blue-500 to-blue-600",
@@ -616,7 +616,7 @@ const LandingPage = () => {
             <div>
               <h3 className="font-bold text-lg mb-4">Quick Links</h3>
               <ul className="space-y-3">
-                {["About Us", "How It Works", "Find a Nurse", "Pricing"].map(
+                {["About Us", "How It Works", "Find a Specialist", "Pricing"].map(
                   (link, i) => (
                     <motion.li
                       key={i}
@@ -636,11 +636,11 @@ const LandingPage = () => {
             </div>
 
             <div>
-              <h3 className="font-bold text-lg mb-4">For Nurses</h3>
+              <h3 className="font-bold text-lg mb-4">For Specialists</h3>
               <ul className="space-y-3">
                 {[
-                  "Register as Nurse",
-                  "Nurse Dashboard",
+                  "Register as Specialist",
+                  "Specialist Dashboard",
                   "Resources",
                   "Support",
                 ].map((link, i) => (

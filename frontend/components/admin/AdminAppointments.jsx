@@ -250,7 +250,7 @@ const AdminAppointments = () => {
                           >
                             <User className="w-4 h-4" />
                             <span>
-                              Nurse: {appointment.nurseId?.email || "N/A"}
+                              Specialist: {appointment.nurseId?.email || "N/A"}
                             </span>
                           </motion.div>
                         </div>
@@ -353,7 +353,7 @@ const AdminAppointments = () => {
                         className="mb-3 p-3 bg-blue-50 rounded-lg"
                       >
                         <p className="text-sm text-blue-900">
-                          <strong>Nurse Notes:</strong> {appointment.nurseNotes}
+                          <strong>Specialist Notes:</strong> {appointment.nurseNotes}
                         </p>
                       </motion.div>
                     )}

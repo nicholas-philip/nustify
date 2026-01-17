@@ -6,7 +6,9 @@ import {
     Trash2,
     Upload,
     Eye,
-    File
+    File,
+    Share2,
+    X
 } from "lucide-react";
 
 import api from "../../../services/api"; // Ensure top-level import
@@ -15,6 +17,7 @@ const MedicalDocuments = () => {
     console.log("📄 MedicalDocuments Rendered");
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [shareModal, setShareModal] = useState({ show: false, document: null });
 
     useEffect(() => {
         fetchDocuments();
@@ -147,6 +150,15 @@ const MedicalDocuments = () => {
                                     <motion.button
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
+                                        onClick={() => setShareModal({ show: true, document: doc })}
+                                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                                        title="Share with Specialist"
+                                    >
+                                        <Share2 className="w-5 h-5" />
+                                    </motion.button>
+                                    <motion.button
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
                                         onClick={() => handleDelete(doc.id)}
                                         className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
                                         title="Delete"
@@ -159,6 +171,84 @@ const MedicalDocuments = () => {
                     </AnimatePresence>
                 </div>
             </div>
+
+            {/* Share Modal */}
+            <AnimatePresence>
+                {shareModal.show && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+                        onClick={() => setShareModal({ show: false, document: null })}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.9, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl"
+                        >
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-xl font-bold text-gray-900">Share Document</h3>
+                                <button
+                                    onClick={() => setShareModal({ show: false, document: null })}
+                                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="p-4 bg-gray-50 rounded-lg">
+                                    <p className="text-sm font-semibold text-gray-900 mb-1">
+                                        {shareModal.document?.name}
+                                    </p>
+                                    <p className="text-xs text-gray-500">
+                                        {shareModal.document?.date} • {shareModal.document?.size}
+                                    </p>
+                                </div>
+
+                                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <div className="flex items-start gap-3">
+                                        <Share2 className="w-5 h-5 text-blue-600 mt-0.5" />
+                                        <div>
+                                            <h4 className="font-semibold text-blue-900 mb-1">
+                                                Automatic Sharing
+                                            </h4>
+                                            <p className="text-sm text-blue-700">
+                                                This document is automatically shared with specialists who have confirmed or completed appointments with you, unless marked as private.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                                    <div>
+                                        <p className="font-semibold text-gray-900">Mark as Private</p>
+                                        <p className="text-sm text-gray-500">Hide from all specialists</p>
+                                    </div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only peer"
+                                            defaultChecked={false}
+                                        />
+                                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+
+                                <button
+                                    onClick={() => setShareModal({ show: false, document: null })}
+                                    className="w-full px-4 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+                                >
+                                    Done
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

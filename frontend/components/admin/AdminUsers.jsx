@@ -166,7 +166,7 @@ const AdminUsers = () => {
               {
                 name: "role",
                 label: "Role",
-                options: ["All Roles", "Patient", "Nurse", "Admin"],
+                options: ["All Roles", "Patient", "Healthcare Professional", "Admin"],
               },
               {
                 name: "isVerified",
@@ -312,13 +312,13 @@ const AdminUsers = () => {
                             <motion.span
                               whileHover={{ scale: 1.1 }}
                               className={`px-2 py-1 text-xs font-semibold rounded-full ${user.role === "admin"
-                                  ? "bg-purple-100 text-purple-800"
-                                  : user.role === "nurse"
-                                    ? "bg-blue-100 text-blue-800"
-                                    : "bg-green-100 text-green-800"
+                                ? "bg-purple-100 text-purple-800"
+                                : user.role === "nurse"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : "bg-green-100 text-green-800"
                                 }`}
                             >
-                              {user.role}
+                              {user.role === "nurse" ? "Professional" : user.role}
                             </motion.span>
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-900">
@@ -336,8 +336,8 @@ const AdminUsers = () => {
                                 )
                               }
                               className={`px-3 py-1 text-xs font-semibold rounded-full ${user.isActive
-                                  ? "bg-green-100 text-green-800 hover:bg-green-200"
-                                  : "bg-red-100 text-red-800 hover:bg-red-200"
+                                ? "bg-green-100 text-green-800 hover:bg-green-200"
+                                : "bg-red-100 text-red-800 hover:bg-red-200"
                                 }`}
                             >
                               {user.isActive ? "Active" : "Inactive"}
@@ -355,8 +355,8 @@ const AdminUsers = () => {
                                 )
                               }
                               className={`px-3 py-1 text-xs font-semibold rounded-full ${user.isVerified
-                                  ? "bg-green-100 text-green-800 hover:bg-green-200"
-                                  : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+                                ? "bg-green-100 text-green-800 hover:bg-green-200"
+                                : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
                                 }`}
                             >
                               {user.isVerified ? "Verified" : "Not Verified"}

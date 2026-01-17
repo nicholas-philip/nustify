@@ -170,7 +170,9 @@ const CredentialManager = () => {
                                     value={formData.licenseType}
                                     onChange={(e) => setFormData({ ...formData, licenseType: e.target.value })}
                                 >
-                                    <option value="RN">Register Nurse (RN)</option>
+                                    <option value="MD">Medical Doctor (MD)</option>
+                                    <option value="DO">Doctor of Osteopathic Medicine (DO)</option>
+                                    <option value="RN">Registered Nurse (RN)</option>
                                     <option value="LPN">Licensed Practical Nurse (LPN)</option>
                                     <option value="CNP">Certified Nurse Practitioner</option>
                                     <option value="CNA">Certified Nursing Assistant</option>
@@ -195,7 +197,7 @@ const CredentialManager = () => {
                                     className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-black outline-none"
                                     value={formData.issuingAuthority}
                                     onChange={(e) => setFormData({ ...formData, issuingAuthority: e.target.value })}
-                                    placeholder="State Board of Nursing"
+                                    placeholder="Relevant Licensing Board"
                                 />
                             </div>
                             <div>
@@ -284,7 +286,7 @@ const CredentialManager = () => {
                             <div className="text-center py-8 text-gray-500">
                                 <ShieldCheck className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                                 <p>No credentials submitted yet.</p>
-                                <p className="text-sm mt-1">Submit your nursing license to get verified and boost your visibility.</p>
+                                <p className="text-sm mt-1">Submit your professional license to get verified and boost your visibility.</p>
                             </div>
                         )}
                     </div>

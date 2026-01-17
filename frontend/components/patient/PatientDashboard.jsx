@@ -144,7 +144,7 @@ const PatientDashboard = () => {
                   path: "/patient/dashboard",
                   active: true,
                 },
-                { label: "Find Nurses", path: "/patient/search" },
+                { label: "Find Specialists", path: "/patient/search" },
                 { label: "Appointments", path: "/patient/appointments" },
                 { label: "Messages", path: "/patient/messages" },
                 { label: "Profile", path: "/patient/profile" },
@@ -219,7 +219,7 @@ const PatientDashboard = () => {
                   </div>
                   <div className="space-y-4 flex-1">
                     {[
-                      { label: "Find Nurses", path: "/patient/search" },
+                      { label: "Find Specialists", path: "/patient/search" },
                       { label: "Appointments", path: "/patient/appointments" },
                       { label: "Messages", path: "/patient/messages" },
                       { label: "Profile", path: "/patient/profile" },
@@ -362,7 +362,7 @@ const PatientDashboard = () => {
             <div className="max-w-lg">
               <h3 className="text-4xl font-bold mb-4">Your Health, <br />Our Priority</h3>
               <p className="text-xl text-gray-200 mb-6 font-medium">
-                Access qualified nursing care and manage your family health journey in one secure place.
+                Access qualified medical care and manage your family health journey in one secure place.
               </p>
               <div className="flex flex-wrap gap-4">
                 <motion.button
@@ -372,7 +372,7 @@ const PatientDashboard = () => {
                   className="px-8 py-3 bg-white text-black rounded-xl font-bold flex items-center gap-2 shadow-lg"
                 >
                   <Search className="w-5 h-5" />
-                  Find a Nurse
+                  Find a Specialist
                 </motion.button>
               </div>
             </div>
@@ -456,7 +456,7 @@ const PatientDashboard = () => {
                         {appointment.serviceType}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Nurse:{" "}
+                        Specialist:{" "}
                         {appointment.nurseId?.fullName ||
                           appointment.nurseId?.email ||
                           "N/A"}

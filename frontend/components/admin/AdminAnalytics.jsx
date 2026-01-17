@@ -153,7 +153,7 @@ const AdminAnalytics = () => {
                             ))}
                             <div className="flex justify-center gap-3 md:gap-4 pt-3 md:pt-4 border-t">
                                 <div className="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-xs text-gray-500">
-                                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-black rounded-sm"></div> Nurses
+                                    <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-black rounded-sm"></div> Specialists
                                 </div>
                                 <div className="flex items-center gap-1.5 md:gap-2 text-[10px] md:text-xs text-gray-500">
                                     <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-blue-500 rounded-sm"></div> Patients

@@ -115,7 +115,7 @@ const SearchNurses = () => {
             >
               <Sparkles className="w-8 h-8 text-black" />
             </motion.div>
-            Find a Nurse
+            Find a Specialist
           </motion.h1>
           <p className="text-gray-600 mt-1">
             Search qualified healthcare professionals
@@ -195,7 +195,7 @@ const SearchNurses = () => {
             className="w-full md:w-auto px-8 py-3 bg-black text-white rounded-lg font-semibold flex items-center justify-center gap-2"
           >
             <Search className="w-5 h-5" />
-            Search Nurses
+            Search Specialists
           </motion.button>
         </motion.form>
 
@@ -229,7 +229,7 @@ const SearchNurses = () => {
               >
                 <User className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               </motion.div>
-              <p className="text-gray-500 text-lg">No nurses found</p>
+              <p className="text-gray-500 text-lg">No specialists found</p>
               <p className="text-gray-400 text-sm mt-2">
                 Try adjusting your search filters
               </p>
@@ -241,7 +241,7 @@ const SearchNurses = () => {
                 animate={{ opacity: 1 }}
                 className="mb-4 text-gray-600"
               >
-                Found {nurses.length} nurse{nurses.length !== 1 ? "s" : ""}
+                Found {nurses.length} specialist{nurses.length !== 1 ? "s" : ""}
               </motion.div>
               <motion.div
                 key="results"

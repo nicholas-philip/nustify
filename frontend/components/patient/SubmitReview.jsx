@@ -222,7 +222,7 @@ const SubmitReview = () => {
             Leave a Review
           </motion.h1>
           <p className="text-gray-600 mt-1">
-            Share your experience with this nurse
+            Share your experience with this specialist
           </p>
         </div>
       </motion.div>

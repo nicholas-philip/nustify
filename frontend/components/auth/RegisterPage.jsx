@@ -210,11 +210,11 @@ const RegisterPage = () => {
                 type="button"
                 onClick={() => setRole(r)}
                 className={`flex-1 py-3 rounded-lg font-semibold ${role === r
-                  ? "bg-black text-white"
-                  : "bg-gray-100 text-gray-700"
+                    ? "bg-black text-white"
+                    : "bg-gray-100 text-gray-700"
                   }`}
               >
-                I'm a {r.charAt(0).toUpperCase() + r.slice(1)}
+                I'm a {r === "nurse" ? "Healthcare Professional" : "Patient"}
               </motion.button>
             ))}
           </motion.div>

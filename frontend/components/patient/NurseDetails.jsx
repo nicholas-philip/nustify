@@ -63,7 +63,7 @@ const NurseDetails = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <p className="text-gray-500 mb-4">Nurse not found</p>
+          <p className="text-gray-500 mb-4">Specialist not found</p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -215,7 +215,7 @@ const NurseDetails = () => {
                     className="w-full px-6 py-3 bg-white text-black border border-gray-200 rounded-lg font-semibold flex items-center justify-center gap-2"
                   >
                     <MessageSquare className="w-5 h-5" />
-                    Message Nurse
+                    Message Specialist
                   </motion.button>
                 </div>
               </div>

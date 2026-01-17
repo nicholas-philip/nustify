@@ -129,7 +129,7 @@ const BookAppointment = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <p className="text-gray-500 mb-4">Nurse not found</p>
+          <p className="text-gray-500 mb-4">Specialist not found</p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -431,7 +431,7 @@ const BookAppointment = () => {
             <motion.textarea
               whileFocus={{ scale: 1.02 }}
               name="notes"
-              placeholder="Any additional information for the nurse"
+              placeholder="Any additional information for the professional"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
               rows="3"
               value={formData.notes}

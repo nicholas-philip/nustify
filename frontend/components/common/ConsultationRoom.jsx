@@ -37,7 +37,7 @@ const ConsultationRoom = () => {
                             // Recipient is Nurse
                             setRecipient({
                                 id: currentAppointment.nurseId._id || currentAppointment.nurseId,
-                                name: currentAppointment.nurseId.fullName || "Nurse"
+                                name: currentAppointment.nurseId.fullName || "Specialist"
                             });
                         } else {
                             // Recipient is Patient

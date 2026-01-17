@@ -18,7 +18,8 @@ import {
   Scale,
   Stethoscope,
   FileEdit,
-  ClipboardList
+  ClipboardList,
+  FileText
 } from "lucide-react";
 import api from "../../services/api";
 
@@ -518,6 +519,20 @@ const NurseAppointments = () => {
                         className="w-full px-4 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
                       >
                         Open Consultation Room
+                      </motion.button>
+                    </motion.div>
+                  )}
+
+                  {(appointment.status === 'confirmed' || appointment.status === 'completed') && appointment.patientId?._id && (
+                    <motion.div className="mt-4 pt-4 border-t">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => navigate(`/nurse/patient-record/${appointment.patientId._id}`)}
+                        className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                      >
+                        <FileText className="w-5 h-5" />
+                        View Health Record
                       </motion.button>
                     </motion.div>
                   )}

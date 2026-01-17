@@ -230,7 +230,7 @@ const PatientAppointments = () => {
                       <div className="flex items-center gap-2 text-gray-600 mb-1">
                         <User className="w-4 h-4" />
                         <span>
-                          Nurse: {appointment.nurseId?.email || "N/A"}
+                          Specialist: {appointment.nurseId?.email || "N/A"}
                         </span>
                       </div>
                     </div>

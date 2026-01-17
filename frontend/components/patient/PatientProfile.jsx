@@ -449,7 +449,7 @@ const PatientProfile = () => {
                       <div>
                         <h4 className="text-red-900 font-bold">Important Information</h4>
                         <p className="text-red-700 text-sm mt-1">
-                          Please ensure your emergency contact details are accurate. This information is critical for our nurses in case of unforeseen circumstances during appointments.
+                          Please ensure your emergency contact details are accurate. This information is critical for our specialists in case of unforeseen circumstances during appointments.
                         </p>
                       </div>
                     </div>
