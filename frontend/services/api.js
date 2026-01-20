@@ -191,6 +191,37 @@ class ApiService {
     }
   };
 
+  logoutAll = async () => {
+    console.log("🔐 Logging out from all devices...");
+    try {
+      const result = await this.request("/api/auth/logout-all", {
+        method: "POST",
+      });
+      console.log("✅ Logout all devices successful");
+      this.clearToken();
+      return result;
+    } catch (error) {
+      console.error("❌ Logout all failed:", error.message);
+      this.clearToken();
+      throw error;
+    }
+  };
+
+  verify2FA = (data) => {
+    console.log("🔐 Verifying 2FA code...");
+    return this.request("/api/auth/verify-2fa", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  };
+
+  toggle2FA = () => {
+    console.log("🔐 Toggling 2FA...");
+    return this.request("/api/auth/toggle-2fa", {
+      method: "PUT",
+    });
+  };
+
   changePassword = (data) => {
     return this.request("/api/auth/change-password", {
       method: "PUT",
@@ -296,6 +327,13 @@ class ApiService {
     });
   }
 
+  addCertification(data) {
+    return this.request("/api/nurse/certifications", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
   getNurseReviews() {
     return this.request("/api/nurse/reviews");
   }
@@ -376,6 +414,26 @@ class ApiService {
   getAnalytics(params) {
     const queryString = new URLSearchParams(params).toString();
     return this.request(`/api/admin/analytics?${queryString}`);
+  }
+
+  // Admin Credential Verification
+  getPendingCredentials() {
+    return this.request("/api/credentials/pending");
+  }
+
+  verifyCredentials(nurseId, data) {
+    return this.request(`/api/credentials/verify/${nurseId}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Admin Document Verification
+  verifyMedicalDocument(id, data) {
+    return this.request(`/api/medical-documents/${id}/verify`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
   }
 
   getNotifications(params) {
@@ -468,6 +526,19 @@ class ApiService {
     return this.request("/api/vital-signs/abnormal");
   }
 
+  updateVitalSigns(id, data) {
+    return this.request(`/api/vital-signs/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+
+  deleteVitalSigns(id) {
+    return this.request(`/api/vital-signs/${id}`, {
+      method: "DELETE",
+    });
+  }
+
   // Medical Documents
   uploadMedicalDocument(file, data) {
     console.log("📤 Uploading medical document...");
@@ -488,6 +559,10 @@ class ApiService {
   getMedicalDocuments(params) {
     const queryString = new URLSearchParams(params).toString();
     return this.request(`/api/medical-documents?${queryString}`);
+  }
+
+  getMedicalDocument(id) {
+    return this.request(`/api/medical-documents/${id}`);
   }
 
   deleteMedicalDocument(id) {

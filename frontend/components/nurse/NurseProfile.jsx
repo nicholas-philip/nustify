@@ -23,6 +23,7 @@ import api from "../../services/api";
 import CredentialManager from "./CredentialManager";
 import VerificationBadge from "../common/VerificationBadge";
 import TrustScore from "../common/TrustScore";
+import TwoFactorSettings from "../common/TwoFactorSettings";
 
 const NurseProfile = () => {
   const navigate = useNavigate();
@@ -684,6 +685,43 @@ const NurseProfile = () => {
           </div>
 
           <div className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-white rounded-xl shadow-lg p-6"
+            >
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Security</h3>
+              <div className="space-y-4">
+                <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900">Active Sessions</h4>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Logout from all devices to secure your account
+                    </p>
+                  </div>
+                  <motion.button
+                    onClick={async () => {
+                      if (window.confirm('Are you sure you want to logout from all devices? You will need to login again on all your devices.')) {
+                        try {
+                          await api.logoutAll();
+                          navigate('/login');
+                        } catch (error) {
+                          setError('Failed to logout from all devices');
+                        }
+                      }
+                    }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-sm hover:bg-red-700 transition-colors"
+                  >
+                    Logout All
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
+
+            <TwoFactorSettings />
+
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}

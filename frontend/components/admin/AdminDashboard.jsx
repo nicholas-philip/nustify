@@ -152,6 +152,7 @@ const AdminDashboard = () => {
                 { label: "Appointments", path: "/admin/appointments" },
                 { label: "Reviews", path: "/admin/reviews" },
                 { label: "Analytics", path: "/admin/analytics" },
+                { label: "Credentials", path: "/admin/credentials" },
               ].map((item) => (
                 <motion.button
                   key={item.path}

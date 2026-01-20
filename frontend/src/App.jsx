@@ -27,6 +27,7 @@ import AdminUsers from "../components/admin/AdminUsers";
 import AdminAppointments from "../components/admin/AdminAppointments";
 import AdminReviews from "../components/admin/AdminReviews";
 import AdminAnalytics from "../components/admin/AdminAnalytics";
+import AdminCredentials from "../components/admin/AdminCredentials";
 import NurseAppointments from "../components/nurse/NurseAppointments";
 import VerifyEmailPage from "../components/auth/VerifyEmailPage";
 import EmailVerificationRequired from "../components/auth/EmailVerificationRequired";
@@ -275,6 +276,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={["admin"]}>
                   <AdminAnalytics />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/credentials"
+              element={
+                <ProtectedRoute allowedRoles={["admin"]}>
+                  <AdminCredentials />
                 </ProtectedRoute>
               }
             />
