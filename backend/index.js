@@ -178,6 +178,9 @@ setIO(io);
 import { startReminderWorker } from "./libs/reminder.js";
 startReminderWorker();
 
+import { startSelfPing } from "./libs/cron.js";
+startSelfPing();
+
 io.on("connection", (socket) => {
   console.log("🔌 Socket connected:", socket.id);
 
