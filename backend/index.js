@@ -50,6 +50,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`📨 ${req.method} ${req.url} from ${req.ip}`);
+  next();
+});
+
 
 const allowedOrigins = [
   process.env.CORS_ORIGIN,
@@ -233,7 +239,7 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(
     `🚀 Server running in ${process.env.NODE_ENV || "development"
     } mode on port ${PORT}`
