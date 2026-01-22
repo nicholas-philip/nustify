@@ -58,7 +58,10 @@ app.use((req, res, next) => {
 
 
 const corsOptions = {
-  origin: true, // Allow any origin
+  origin: function (origin, callback) {
+    // Allow all origins (including mobile browsers)
+    callback(null, true);
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -157,7 +160,7 @@ const server = http.createServer(app);
 
 const io = new IOServer(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   },
 });

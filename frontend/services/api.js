@@ -1,4 +1,31 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4500";
+const getApiUrl = () => {
+  // 1. If we are running in a browser
+  if (typeof window !== "undefined") {
+    const hostname = window.location.hostname;
+
+    // A. Local Machine (Laptop)
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+      return "http://localhost:4500";
+    }
+
+    // B. Local Area Network (Phone testing on same Wi-Fi)
+    // This matches the IP address from your 'ipconfig' (172.20.10.3)
+    if (hostname === "172.20.10.3") {
+      return "http://172.20.10.3:4500";
+    }
+
+    // C. Production (Render Deployment)
+    // If you are on the render website, use the render backend
+    if (hostname.includes("onrender.com") || hostname.includes("vercel.app")) {
+      return "https://nustify-backend.onrender.com";
+    }
+  }
+
+  // Fallback to environment variable or localhost
+  return import.meta.env.VITE_API_URL || "http://localhost:4500";
+};
+
+const API_URL = getApiUrl();
 
 class ApiService {
   constructor() {
