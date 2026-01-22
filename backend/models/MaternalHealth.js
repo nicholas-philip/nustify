@@ -241,7 +241,7 @@ maternalHealthSchema.index({ patientId: 1, pregnancyStatus: 1 });
 maternalHealthSchema.index({ estimatedDueDate: 1 });
 
 // Pre-save hook to calculate current week and trimester
-maternalHealthSchema.pre("save", function (next) {
+maternalHealthSchema.pre("save", async function () {
     if (this.lastMenstrualPeriod && this.pregnancyStatus === "pregnant") {
         const now = new Date();
         const lmp = new Date(this.lastMenstrualPeriod);
@@ -257,7 +257,6 @@ maternalHealthSchema.pre("save", function (next) {
             this.currentTrimester = 3;
         }
     }
-    next();
 });
 
 const MaternalHealth = mongoose.model("MaternalHealth", maternalHealthSchema);
