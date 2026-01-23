@@ -188,7 +188,7 @@ const MessagesView = () => {
                             placeholder="Search conversations..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all text-sm"
+                            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black transition-all text-sm shadow-sm"
                         />
                     </div>
                 </div>
@@ -333,7 +333,7 @@ const MessagesView = () => {
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}
                                         placeholder="Type your message..."
-                                        className="w-full pl-6 pr-12 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:outline-none focus:ring-4 focus:ring-black/5 focus:border-black transition-all text-sm shadow-inner"
+                                        className="w-full pl-6 pr-12 py-3.5 bg-gray-50 border border-gray-100 rounded-full focus:outline-none focus:ring-4 focus:ring-black/5 focus:border-black transition-all text-sm shadow-inner"
                                     />
                                 </div>
                                 <motion.button
@@ -341,7 +341,7 @@ const MessagesView = () => {
                                     whileHover={{ scale: 1.05, backgroundColor: "#1a1a1a" }}
                                     whileTap={{ scale: 0.95 }}
                                     disabled={!newMessage.trim()}
-                                    className="p-3.5 bg-black text-white rounded-2xl hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    className="p-3.5 bg-black text-white rounded-full hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
                                 >
                                     <Send size={20} />
                                 </motion.button>

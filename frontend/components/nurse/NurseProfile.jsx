@@ -256,8 +256,10 @@ const NurseProfile = () => {
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <motion.button
+            whileHover={{ scale: 1.05, x: -5 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/nurse/dashboard")}
-            className="text-black mb-4 text-sm font-medium flex items-center gap-2"
+            className="text-black mb-4 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2 font-bold"
           >
             <span>←</span> Back to Dashboard
           </motion.button>
@@ -372,7 +374,7 @@ const NurseProfile = () => {
 
                     <div className="flex flex-wrap gap-3">
                       <label
-                        className={`px-4 py-2 bg-black text-white rounded-lg cursor-pointer flex items-center gap-2 ${uploadingImage ? "opacity-50 cursor-not-allowed" : ""
+                        className={`px-6 py-2 bg-black text-white rounded-full cursor-pointer flex items-center gap-2 shadow-lg transition-all ${uploadingImage ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-900"
                           }`}
                       >
                         <Upload className="w-4 h-4" />
@@ -391,7 +393,7 @@ const NurseProfile = () => {
                           onClick={handleDeleteImage}
                           disabled={uploadingImage}
                           type="button"
-                          className={`px-4 py-2 bg-black text-white rounded-lg flex items-center gap-2 ${uploadingImage ? "opacity-50 cursor-not-allowed" : ""
+                          className={`px-6 py-2 bg-white border border-gray-200 text-gray-900 rounded-full flex items-center gap-2 transition-all ${uploadingImage ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50 shadow-sm"
                             }`}
                         >
                           <X className="w-4 h-4" />
@@ -625,9 +627,9 @@ const NurseProfile = () => {
                   <motion.button
                     type="button"
                     onClick={() => setIsEditing(true)}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full px-6 py-2.5 bg-black text-white rounded-2xl font-semibold flex items-center justify-center gap-2"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-full px-8 py-3 bg-black text-white rounded-full font-bold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all"
                   >
                     <User className="w-5 h-5" />
                     Edit Profile
@@ -662,18 +664,18 @@ const NurseProfile = () => {
                           });
                         }
                       }}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex-1 px-6 py-2.5 bg-gray-200 text-gray-800 rounded-2xl font-semibold"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex-1 px-8 py-3 bg-gray-200 text-gray-800 rounded-full font-bold hover:bg-gray-300 transition-all shadow-sm"
                     >
                       Cancel
                     </motion.button>
                     <motion.button
                       type="submit"
                       disabled={saving}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex-1 px-6 py-2.5 bg-black text-white rounded-2xl font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex-1 px-8 py-3 bg-black text-white rounded-full font-bold disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all"
                     >
                       <Save className="w-5 h-5" />
                       {saving ? "Saving..." : "Save Changes"}
@@ -710,9 +712,9 @@ const NurseProfile = () => {
                         }
                       }
                     }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-sm hover:bg-red-700 transition-colors"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-2 bg-red-600 text-white rounded-full font-bold text-sm hover:bg-red-700 transition-all shadow-md hover:shadow-lg"
                   >
                     Logout All
                   </motion.button>

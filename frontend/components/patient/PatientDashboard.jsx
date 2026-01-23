@@ -146,6 +146,7 @@ const PatientDashboard = () => {
                 },
                 { label: "Find Specialists", path: "/patient/search" },
                 { label: "Appointments", path: "/patient/appointments" },
+                { label: "Health Record", path: "/patient/health" },
                 { label: "Messages", path: "/patient/messages" },
                 { label: "Profile", path: "/patient/profile" },
               ].map((item) => (
@@ -168,7 +169,7 @@ const PatientDashboard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+                className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-full"
               >
                 <LogOut className="w-4 h-4" />
                 Logout
@@ -221,6 +222,7 @@ const PatientDashboard = () => {
                     {[
                       { label: "Find Specialists", path: "/patient/search" },
                       { label: "Appointments", path: "/patient/appointments" },
+                      { label: "Health Record", path: "/patient/health" },
                       { label: "Messages", path: "/patient/messages" },
                       { label: "Profile", path: "/patient/profile" },
                     ].map((item) => (
@@ -297,14 +299,6 @@ const PatientDashboard = () => {
               label: "Completed",
               value: dashboard?.stats?.completedAppointments || 0,
             },
-            {
-              icon: Activity,
-              color: "text-emerald-600",
-              label: "Health Passport",
-              value: "View",
-              isAction: true,
-              path: "/patient/health"
-            }
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -369,7 +363,7 @@ const PatientDashboard = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate("/patient/search")}
-                  className="px-8 py-3 bg-white text-black rounded-xl font-bold flex items-center gap-2 shadow-lg"
+                  className="px-8 py-3 bg-white text-black rounded-full font-bold flex items-center gap-2 shadow-lg"
                 >
                   <Search className="w-5 h-5" />
                   Find a Specialist
@@ -401,7 +395,7 @@ const PatientDashboard = () => {
             <motion.button
               whileHover={{ x: 5 }}
               onClick={() => navigate("/patient/appointments")}
-              className="text-black hover:text-gray-700 font-semibold text-sm"
+              className="px-4 py-2 bg-black text-white rounded-full font-semibold text-xs shadow-md"
             >
               View All →
             </motion.button>
@@ -428,7 +422,7 @@ const PatientDashboard = () => {
                 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/patient/search")}
-                className="mt-4 px-6 py-2 bg-black text-white rounded-lg"
+                className="mt-4 px-6 py-2 bg-black text-white rounded-full shadow-lg"
               >
                 Book Now
               </motion.button>

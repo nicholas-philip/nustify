@@ -134,7 +134,7 @@ const BookAppointment = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/search")}
-            className="px-6 py-2 bg-black text-white rounded-lg"
+            className="px-6 py-2 bg-black text-white rounded-full shadow-lg"
           >
             Back to Search
           </motion.button>
@@ -170,7 +170,7 @@ const BookAppointment = () => {
             whileHover={{ x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/search")}
-            className="text-black hover:text-gray-900 mb-4"
+            className="text-black hover:text-gray-900 mb-4 flex items-center gap-2 px-4 py-2 rounded-full hover:bg-white hover:shadow-sm transition-all"
           >
             ← Back to Search
           </motion.button>
@@ -263,7 +263,7 @@ const BookAppointment = () => {
                   whileFocus={{ scale: 1.02 }}
                   type={field.type}
                   name={field.name}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
                   value={formData[field.name]}
                   onChange={handleChange}
                   min={
@@ -291,7 +291,7 @@ const BookAppointment = () => {
                   whileFocus={{ scale: 1.02 }}
                   type={field.type}
                   name={field.name}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
                   value={formData[field.name]}
                   onChange={handleChange}
                   required
@@ -310,7 +310,7 @@ const BookAppointment = () => {
               name="serviceType"
               list="service-types"
               placeholder="e.g., Home Care, Post-Surgery Care"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
               value={formData.serviceType}
               onChange={handleChange}
               required
@@ -333,7 +333,7 @@ const BookAppointment = () => {
             <motion.select
               whileFocus={{ scale: 1.02 }}
               name="location"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
               value={formData.location}
               onChange={handleChange}
               required
@@ -365,7 +365,7 @@ const BookAppointment = () => {
                     type="text"
                     name="address.street"
                     placeholder="123 Main St"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
                     value={formData.address.street}
                     onChange={handleChange}
                     required
@@ -384,7 +384,7 @@ const BookAppointment = () => {
                       type="text"
                       name={`address.${field.name}`}
                       placeholder={field.placeholder}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
                       value={formData.address[field.name]}
                       onChange={handleChange}
                       required={field.label.includes("*")}
@@ -399,7 +399,7 @@ const BookAppointment = () => {
                     whileFocus={{ scale: 1.02 }}
                     name="address.instructions"
                     placeholder="Gate code, parking instructions, etc."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
                     rows="2"
                     value={formData.address.instructions}
                     onChange={handleChange}
@@ -417,7 +417,7 @@ const BookAppointment = () => {
               whileFocus={{ scale: 1.02 }}
               name="symptoms"
               placeholder="Describe your symptoms or reason for the appointment"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
               rows="3"
               value={formData.symptoms}
               onChange={handleChange}
@@ -432,7 +432,7 @@ const BookAppointment = () => {
               whileFocus={{ scale: 1.02 }}
               name="notes"
               placeholder="Any additional information for the professional"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
               rows="3"
               value={formData.notes}
               onChange={handleChange}
@@ -466,25 +466,25 @@ const BookAppointment = () => {
             </div>
           </div>
 
-          <motion.div variants={itemVariants} className="flex gap-4">
+          <motion.div variants={itemVariants} className="flex flex-col md:flex-row gap-4">
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               type="button"
               onClick={() => navigate("/patient/search")}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              className="px-8 py-3 border border-gray-300 text-gray-700 rounded-full hover:bg-gray-50 shadow-sm transition-all font-bold"
             >
               Cancel
             </motion.button>
             <motion.button
               whileHover={{
-                scale: 1.02,
-                boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
+                scale: 1.05,
+                boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
               }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.95 }}
               type="submit"
               disabled={submitting}
-              className="flex-1 px-6 py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50"
+              className="px-12 py-3 bg-black text-white rounded-full font-bold disabled:opacity-50 shadow-lg hover:shadow-xl transition-all"
             >
               {submitting ? "Booking..." : "Confirm & Book (Cash)"}
             </motion.button>

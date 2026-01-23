@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema(
       enum: ["nurse", "patient", "admin"],
       required: [true, "Role is required"],
     },
+    gender: {
+      type: String,
+      enum: ["male", "female", "other", "prefer-not-to-say"],
+      default: "prefer-not-to-say",
+    },
     isVerified: {
       type: Boolean,
       default: false,

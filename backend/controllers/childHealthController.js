@@ -1,4 +1,5 @@
 import ChildHealth from "../models/ChildHealth.js";
+import Appointment from "../models/Appointments.js";
 
 // Create child health record
 export const createChildHealthRecord = async (req, res) => {
@@ -28,7 +29,30 @@ export const createChildHealthRecord = async (req, res) => {
 // Get child health records
 export const getChildHealthRecords = async (req, res) => {
     try {
-        const parentId = req.user._id;
+        const parentId = req.user.role === "patient" ? req.user._id : req.query.patientId;
+
+        if (!parentId) {
+            return res.status(400).json({
+                success: false,
+                message: "Patient ID is required",
+            });
+        }
+
+        // If nurse is requesting, check permissions
+        if (req.user.role === "nurse") {
+            const hasAppointment = await Appointment.findOne({
+                nurseId: req.user._id,
+                patientId: parentId,
+                status: { $in: ["confirmed", "completed", "in-progress"] },
+            });
+
+            if (!hasAppointment) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Access denied or no appointment found",
+                });
+            }
+        }
 
         const records = await ChildHealth.find({ parentId })
             .populate("appointments.appointmentId")

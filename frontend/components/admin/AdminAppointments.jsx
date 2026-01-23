@@ -87,10 +87,10 @@ const AdminAppointments = () => {
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <motion.button
-            whileHover={{ x: -5 }}
+            whileHover={{ scale: 1.05, x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/admin/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-black mb-4 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2 font-bold"
           >
             ← Back to Dashboard
           </motion.button>
@@ -152,7 +152,7 @@ const AdminAppointments = () => {
                     whileFocus={{ scale: 1.02 }}
                     type="date"
                     name={filter.name}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white transition-all"
                     value={filters[filter.name]}
                     onChange={handleFilterChange}
                   />
@@ -160,7 +160,7 @@ const AdminAppointments = () => {
                   <motion.select
                     whileFocus={{ scale: 1.02 }}
                     name={filter.name}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white transition-all"
                     value={filters[filter.name]}
                     onChange={handleFilterChange}
                   >
@@ -378,7 +378,7 @@ const AdminAppointments = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="px-6 py-2 border border-gray-300 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white shadow-sm transition-all font-semibold"
                   >
                     Previous
                   </motion.button>
@@ -390,7 +390,7 @@ const AdminAppointments = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                     disabled={page === totalPages}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="px-6 py-2 border border-gray-300 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white shadow-sm transition-all font-semibold"
                   >
                     Next
                   </motion.button>

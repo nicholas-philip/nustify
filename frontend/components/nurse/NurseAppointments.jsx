@@ -219,10 +219,10 @@ const NurseAppointments = () => {
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <motion.button
-            whileHover={{ x: -5 }}
+            whileHover={{ scale: 1.05, x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/nurse/dashboard")}
-            className="text-teal-600 mb-4"
+            className="text-black mb-4 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2 font-bold"
           >
             ← Back to Dashboard
           </motion.button>
@@ -269,8 +269,8 @@ const NurseAppointments = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setFilter(status)}
-              className={`px-6 py-2 rounded-lg font-medium transition ${filter === status
-                ? "bg-black text-white"
+              className={`px-6 py-2 rounded-full font-medium transition-all ${filter === status
+                ? "bg-black text-white shadow-md"
                 : "text-gray-600 hover:bg-gray-100"
                 }`}
             >
@@ -482,13 +482,13 @@ const NurseAppointments = () => {
                       <motion.button
                         whileHover={{
                           scale: 1.05,
-                          boxShadow: "0 5px 15px rgba(34, 197, 94, 0.3)",
+                          boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)",
                         }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() =>
                           setRespondModal({ show: true, appointment })
                         }
-                        className="flex-1 px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
+                        className="px-8 py-2.5 bg-black text-white rounded-full flex items-center justify-center gap-2 shadow-lg font-bold transition-all"
                       >
                         <Check className="w-5 h-5" />
                         Accept
@@ -496,13 +496,13 @@ const NurseAppointments = () => {
                       <motion.button
                         whileHover={{
                           scale: 1.05,
-                          boxShadow: "0 5px 15px rgba(239, 68, 68, 0.3)",
+                          boxShadow: "0 5px 15px rgba(0, 0, 0, 0.1)",
                         }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() =>
                           handleRespond(appointment._id, "rejected")
                         }
-                        className="flex-1 px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
+                        className="px-8 py-2.5 bg-white border border-gray-200 text-gray-900 rounded-full flex items-center justify-center gap-2 font-bold transition-all"
                       >
                         <X className="w-5 h-5" />
                         Decline
@@ -513,10 +513,10 @@ const NurseAppointments = () => {
                   {(appointment.status === 'confirmed' || appointment.status === 'pending') && (
                     <motion.div className="mt-4 pt-4 border-t">
                       <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => navigate(`/consultation/${appointment._id}`)}
-                        className="w-full px-4 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                        className="w-full md:w-max px-8 py-2.5 bg-black text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
                       >
                         Open Consultation Room
                       </motion.button>
@@ -526,10 +526,10 @@ const NurseAppointments = () => {
                   {(appointment.status === 'confirmed' || appointment.status === 'completed') && appointment.patientId?._id && (
                     <motion.div className="mt-4 pt-4 border-t">
                       <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => navigate(`/nurse/patient-record/${appointment.patientId._id}`)}
-                        className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                        className="w-full md:w-max px-8 py-2.5 bg-white border border-gray-200 text-black rounded-full font-bold shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2"
                       >
                         <FileText className="w-5 h-5" />
                         View Health Record
@@ -547,14 +547,14 @@ const NurseAppointments = () => {
                       >
                         <motion.button
                           whileHover={{
-                            scale: 1.02,
-                            boxShadow: "0 5px 15px rgba(59, 130, 246, 0.3)",
+                            scale: 1.05,
+                            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
                           }}
-                          whileTap={{ scale: 0.98 }}
+                          whileTap={{ scale: 0.95 }}
                           onClick={() =>
                             setCompleteModal({ show: true, appointment })
                           }
-                          className="w-full px-4 py-3 bg-black text-white rounded-lg flex items-center justify-center gap-2"
+                          className="w-full md:w-max px-8 py-2.5 bg-black text-white rounded-full font-bold flex items-center justify-center gap-2 shadow-lg transition-all"
                         >
                           <CheckCircle2 className="w-5 h-5" />
                           Mark as Completed
@@ -593,7 +593,7 @@ const NurseAppointments = () => {
                   onClick={() =>
                     setRespondModal({ show: false, appointment: null })
                   }
-                  className="p-1 hover:bg-gray-100 rounded"
+                  className="p-1 hover:bg-gray-100 rounded-full transition-all"
                 >
                   <X className="w-5 h-5" />
                 </motion.button>
@@ -625,7 +625,7 @@ const NurseAppointments = () => {
                   onClick={() =>
                     setRespondModal({ show: false, appointment: null })
                   }
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-full hover:bg-gray-50 transition-all font-semibold"
                 >
                   Cancel
                 </motion.button>
@@ -639,7 +639,7 @@ const NurseAppointments = () => {
                     handleRespond(respondModal.appointment._id, "confirmed")
                   }
                   disabled={responding}
-                  className="flex-1 px-4 py-2 bg-black text-white rounded-lg disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-black text-white rounded-full transition-all shadow-md disabled:opacity-50 font-semibold"
                 >
                   {responding ? "Accepting..." : "Accept Appointment"}
                 </motion.button>
@@ -689,9 +689,9 @@ const NurseAppointments = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === tab.id
-                      ? "border-black text-black"
-                      : "border-transparent text-gray-500 hover:text-gray-700"
+                    className={`flex items-center gap-2 px-6 py-2 text-sm font-medium border-b-2 rounded-t-xl transition-all whitespace-nowrap ${activeTab === tab.id
+                      ? "border-black text-black bg-gray-50"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                       }`}
                   >
                     <tab.icon className="w-4 h-4" />
@@ -883,7 +883,7 @@ const NurseAppointments = () => {
                   onClick={() =>
                     setCompleteModal({ show: false, appointment: null })
                   }
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-6 py-2 border border-gray-300 text-gray-700 rounded-full hover:bg-gray-50 transition-all font-semibold"
                 >
                   Cancel
                 </motion.button>
@@ -895,7 +895,7 @@ const NurseAppointments = () => {
                   whileTap={{ scale: 0.95 }}
                   onClick={handleComplete}
                   disabled={completing}
-                  className="flex-1 px-4 py-2 bg-black text-white rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 px-6 py-2 bg-black text-white rounded-full shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2 font-semibold"
                 >
                   <CheckCircle2 className="w-5 h-5" />
                   {completing ? "Completing..." : "Mark as Complete"}

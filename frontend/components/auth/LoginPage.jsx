@@ -231,7 +231,7 @@ const LoginPage = () => {
                   type="email"
                   name="email"
                   placeholder="Enter your email"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg outline-none transition"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full outline-none transition"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -253,7 +253,7 @@ const LoginPage = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Enter your password"
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg outline-none transition"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-full outline-none transition"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -276,7 +276,7 @@ const LoginPage = () => {
               variants={itemVariants}
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full   py-5 bg-black text-white rounded-full font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <motion.span className="relative z-10 flex items-center justify-center gap-2">
                 {loading ? "Signing in..." : "Sign In"}

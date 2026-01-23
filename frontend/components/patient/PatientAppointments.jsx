@@ -125,9 +125,10 @@ const PatientAppointments = () => {
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <motion.button
-            whileHover={{ x: -5 }}
+            whileHover={{ scale: 1.05, x: -5 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/dashboard")}
-            className="text-black hover:text-gray-900 mb-4"
+            className="text-black mb-4 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2 font-bold"
           >
             ← Back to Dashboard
           </motion.button>
@@ -153,8 +154,8 @@ const PatientAppointments = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setFilter(status)}
-                className={`px-6 py-2 rounded-lg font-medium transition ${filter === status
-                  ? "bg-black text-white"
+                className={`px-6 py-2 rounded-full font-medium transition shadow-sm ${filter === status
+                  ? "bg-black text-white shadow-md"
                   : "text-gray-600 hover:bg-gray-100"
                   }`}
               >
@@ -199,7 +200,7 @@ const PatientAppointments = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/patient/search")}
-                className="mt-4 px-6 py-3 bg-black text-white rounded-lg"
+                className="mt-4 px-6 py-3 bg-black text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all"
               >
                 Book an Appointment
               </motion.button>
@@ -292,7 +293,7 @@ const PatientAppointments = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       disabled={true}
-                      className="w-full mb-3 px-4 py-2 bg-gray-200 text-gray-500 rounded-lg font-medium cursor-not-allowed flex items-center justify-center gap-2"
+                      className="w-full md:w-max mb-3 px-8 py-2.5 bg-gray-100 text-gray-400 rounded-full font-medium cursor-not-allowed flex items-center justify-center gap-2 border border-gray-200"
                     >
                       <DollarSign className="w-4 h-4" />
                       Pay with Cash (${appointment.totalCost}) - Online Payment Not Active
@@ -301,10 +302,10 @@ const PatientAppointments = () => {
 
                   {(appointment.status === 'confirmed' || appointment.status === 'pending') && (
                     <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => navigate(`/consultation/${appointment._id}`)}
-                      className="w-full mb-3 px-4 py-2 bg-black text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all"
+                      className="w-full md:w-max mb-3 px-8 py-2.5 bg-black text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
                     >
                       Join Consultation Room
                     </motion.button>
@@ -312,15 +313,15 @@ const PatientAppointments = () => {
 
                   {canCancelAppointment(appointment) && (
                     <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       onClick={() =>
                         setCancelModal({
                           show: true,
                           appointmentId: appointment._id,
                         })
                       }
-                      className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
+                      className="w-full md:w-max px-8 py-2.5 bg-red-50 text-red-600 rounded-full font-bold hover:bg-red-100 transition-all shadow-sm border border-red-100"
                     >
                       Cancel Appointment
                     </motion.button>
@@ -328,12 +329,12 @@ const PatientAppointments = () => {
 
                   {appointment.status === "completed" && (
                     <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                       onClick={() =>
                         navigate(`/patient/review/${appointment._id}`)
                       }
-                      className="mt-4 px-4 py-2 bg-black text-white rounded-lg"
+                      className="w-full md:w-max mt-4 px-8 py-2.5 bg-black text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all"
                     >
                       Leave a Review
                     </motion.button>
@@ -404,7 +405,7 @@ const PatientAppointments = () => {
                   onClick={() =>
                     setCancelModal({ show: false, appointmentId: null })
                   }
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-full hover:bg-gray-50 transition shadow-sm"
                 >
                   Keep Appointment
                 </motion.button>
@@ -413,7 +414,7 @@ const PatientAppointments = () => {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleCancelAppointment}
                   disabled={cancelling}
-                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 disabled:opacity-50 shadow-lg hover:shadow-xl transition-all"
                 >
                   {cancelling ? "Cancelling..." : "Cancel Appointment"}
                 </motion.button>
@@ -457,10 +458,10 @@ const PatientAppointments = () => {
                 </p>
               </div>
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setPaymentModal({ show: false, appointment: null })}
-                className="w-full px-6 py-3 bg-black text-white rounded-xl font-semibold"
+                className="w-full md:w-max mx-auto px-12 py-3 bg-black text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all"
               >
                 Understood
               </motion.button>

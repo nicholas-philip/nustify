@@ -12,13 +12,12 @@ const router = express.Router();
 
 // All routes require authentication
 router.use(protect);
-router.use(authorize("patient")); // Only patients (parents) can manage child health
 
 // Child health routes
-router.post("/", createChildHealthRecord);
-router.get("/", getChildHealthRecords);
-router.put("/:id", updateChildHealthRecord);
-router.get("/:id/vaccinations", getVaccinationSchedule);
-router.post("/:id/milestone", recordMilestone);
+router.post("/", authorize("patient"), createChildHealthRecord);
+router.get("/", authorize("patient", "nurse"), getChildHealthRecords);
+router.put("/:id", authorize("patient"), updateChildHealthRecord);
+router.get("/:id/vaccinations", authorize("patient", "nurse"), getVaccinationSchedule);
+router.post("/:id/milestone", authorize("patient"), recordMilestone);
 
 export default router;

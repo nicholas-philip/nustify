@@ -187,6 +187,7 @@ const registerPatient = async (req, res) => {
       password,
       fullName,
       phone,
+      gender,
       emergencyContactName,
       emergencyContactPhone,
     } = req.body;
@@ -202,12 +203,14 @@ const registerPatient = async (req, res) => {
       email,
       password,
       role: "patient",
+      gender: gender || "prefer-not-to-say",
     });
 
     const patientProfile = await PatientProfile.create({
       userId: user._id,
       fullName,
       phone,
+      gender: gender || "prefer-not-to-say",
       emergencyContact: {
         name: emergencyContactName,
         phone: emergencyContactPhone,

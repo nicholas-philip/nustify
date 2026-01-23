@@ -74,10 +74,10 @@ const AdminAnalytics = () => {
                 <div className="flex flex-col gap-4 mb-6">
                     <div>
                         <motion.button
-                            whileHover={{ x: -5 }}
+                            whileHover={{ scale: 1.05, x: -5 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => navigate("/admin/dashboard")}
-                            className="flex items-center gap-2 text-black font-medium mb-3"
+                            className="flex items-center gap-2 text-black font-bold mb-3 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm transition-all"
                         >
                             <ArrowLeft className="w-4 h-4" />
                             Back
@@ -107,10 +107,10 @@ const AdminAnalytics = () => {
                                 />
                             </div>
                             <motion.button
-                                whileHover={{ scale: 1.02 }}
+                                whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={fetchAnalytics}
-                                className="px-4 py-2 bg-black text-white rounded-lg text-sm font-semibold hover:bg-gray-900 transition-colors w-full sm:w-auto"
+                                className="px-6 py-2 bg-black text-white rounded-full text-sm font-bold hover:bg-gray-900 transition-all shadow-md hover:shadow-lg w-full sm:w-auto"
                             >
                                 Apply
                             </motion.button>

@@ -97,9 +97,10 @@ const SearchNurses = () => {
         </div>
         <div className="max-w-7xl mx-auto px-4 py-4 relative z-10">
           <motion.button
-            whileHover={{ x: -5 }}
+            whileHover={{ scale: 1.05, x: -5 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/dashboard")}
-            className="text-black mb-4"
+            className="text-black mb-4 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2 font-bold"
           >
             ← Back to Dashboard
           </motion.button>
@@ -161,7 +162,7 @@ const SearchNurses = () => {
                 {field.type === "select" ? (
                   <select
                     name={field.name}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white transition-all shadow-sm"
                     value={filters[field.name]}
                     onChange={handleFilterChange}
                   >
@@ -176,7 +177,7 @@ const SearchNurses = () => {
                     type={field.type || "text"}
                     name={field.name}
                     placeholder={field.placeholder}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                    className="w-full px-6 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none shadow-sm transition-all"
                     value={filters[field.name]}
                     onChange={handleFilterChange}
                   />
@@ -192,7 +193,7 @@ const SearchNurses = () => {
             }}
             whileTap={{ scale: 0.98 }}
             type="submit"
-            className="w-full md:w-auto px-8 py-3 bg-black text-white rounded-lg font-semibold flex items-center justify-center gap-2"
+            className="w-full md:w-auto px-8 py-3 bg-black text-white rounded-full font-semibold flex items-center justify-center gap-2 shadow-lg"
           >
             <Search className="w-5 h-5" />
             Search Specialists
@@ -356,7 +357,7 @@ const SearchNurses = () => {
                           onClick={() =>
                             navigate(`/patient/nurse/${nurse._id}`)
                           }
-                          className="flex-1 px-4 py-2 bg-black text-white rounded-lg"
+                          className="flex-1 px-4 py-2 bg-white border border-gray-200 text-black rounded-full shadow-sm hover:shadow-md transition-all font-semibold"
                         >
                           View Profile
                         </motion.button>
@@ -367,7 +368,7 @@ const SearchNurses = () => {
                           }}
                           whileTap={{ scale: 0.95 }}
                           onClick={() => navigate(`/patient/book/${nurse._id}`)}
-                          className="flex-1 px-4 py-2 bg-black text-white rounded-lg"
+                          className="flex-1 px-4 py-2 bg-black text-white rounded-full shadow-md font-semibold transition-all hover:bg-gray-900"
                         >
                           Book Now
                         </motion.button>

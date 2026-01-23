@@ -152,7 +152,7 @@ const ChildHealth = () => {
                             <p className="text-red-800 font-medium">{error}</p>
                             <button
                                 onClick={() => { setError(""); fetchChildren(); }}
-                                className="text-red-600 text-sm underline mt-1 hover:text-red-700"
+                                className="text-red-600 text-sm underline mt-1 hover:text-red-700 font-medium px-4 py-1 rounded-full hover:bg-red-100 transition-all border border-transparent hover:border-red-200"
                             >
                                 Try again
                             </button>
@@ -169,7 +169,7 @@ const ChildHealth = () => {
                 {!showForm && (
                     <button
                         onClick={() => setShowForm(true)}
-                        className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
+                        className="flex items-center gap-2 bg-black text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl"
                     >
                         <Plus className="w-4 h-4" />
                         Add Child
@@ -226,14 +226,14 @@ const ChildHealth = () => {
                                     <button
                                         type="button"
                                         onClick={() => setShowForm(false)}
-                                        className="px-6 py-2 border border-gray-200 rounded-xl font-semibold hover:bg-gray-50"
+                                        className="flex-1 px-6 py-2 border border-gray-200 rounded-full font-semibold hover:bg-gray-50 transition-all"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="px-6 py-2 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-600 shadow-lg shadow-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="flex-1 px-6 py-2 bg-blue-500 text-white rounded-full font-semibold hover:bg-blue-600 shadow-lg shadow-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                                     >
                                         {submitting ? "Adding..." : "Add Profile"}
                                     </button>

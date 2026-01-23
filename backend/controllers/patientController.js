@@ -39,6 +39,35 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.params.id || req.user._id;
+    const profile = await PatientProfile.findOne({ userId }).populate(
+      "userId",
+      "email role"
+    );
+
+    if (!profile) {
+      return res.status(404).json({
+        success: false,
+        message: "Patient profile not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      profile,
+    });
+  } catch (error) {
+    console.error("Get profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
 
 
 
@@ -568,4 +597,5 @@ export {
   cancelAppointment,
   sendMessage,
   submitReview,
+  getProfile,
 };

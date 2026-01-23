@@ -140,7 +140,7 @@ const NurseDashboard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+                className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-full"
               >
                 <LogOut className="w-4 h-4" />
                 Logout
@@ -368,7 +368,7 @@ const NurseDashboard = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/nurse/profile")}
-              className="px-4 md:px-6 py-2 bg-white text-black rounded-lg font-semibold text-sm md:text-base whitespace-nowrap self-start sm:self-auto"
+              className="px-4 md:px-6 py-2 bg-white text-black rounded-full font-semibold text-sm md:text-base whitespace-nowrap self-start sm:self-auto border border-gray-200 shadow-sm"
             >
               Edit Profile
             </motion.button>
@@ -388,7 +388,7 @@ const NurseDashboard = () => {
             <motion.button
               whileHover={{ x: 5 }}
               onClick={() => navigate("/nurse/appointments")}
-              className="text-black hover:text-gray-900 font-semibold text-sm"
+              className="px-4 py-2 bg-black text-white rounded-full font-semibold text-xs shadow-md"
             >
               View All →
             </motion.button>
@@ -494,7 +494,7 @@ const NurseDashboard = () => {
                         }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => navigate("/nurse/appointments")}
-                        className="px-4 py-2 bg-black text-white rounded-lg text-sm"
+                        className="px-4 py-2 bg-black text-white rounded-full text-sm shadow-md"
                       >
                         Respond
                       </motion.button>

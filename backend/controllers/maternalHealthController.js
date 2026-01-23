@@ -1,8 +1,19 @@
 import MaternalHealth from "../models/MaternalHealth.js";
+import PatientProfile from "../models/PatientProfile.js";
+import Appointment from "../models/Appointments.js";
 
 // Create pregnancy record
 export const createPregnancyRecord = async (req, res) => {
     try {
+        // Check if patient is female
+        const profile = await PatientProfile.findOne({ userId: req.user._id });
+        if (profile && profile.gender === "male") {
+            return res.status(400).json({
+                success: false,
+                message: "Pregnancy records can only be created for female patients",
+            });
+        }
+
         const recordData = {
             ...req.body,
             patientId: req.user._id,
@@ -29,6 +40,29 @@ export const createPregnancyRecord = async (req, res) => {
 export const getPregnancyRecords = async (req, res) => {
     try {
         const patientId = req.user.role === "patient" ? req.user._id : req.query.patientId;
+
+        if (!patientId) {
+            return res.status(400).json({
+                success: false,
+                message: "Patient ID is required",
+            });
+        }
+
+        // If nurse is requesting, check permissions
+        if (req.user.role === "nurse") {
+            const hasAppointment = await Appointment.findOne({
+                nurseId: req.user._id,
+                patientId,
+                status: { $in: ["confirmed", "completed", "in-progress"] },
+            });
+
+            if (!hasAppointment) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Access denied or no appointment found",
+                });
+            }
+        }
 
         const records = await MaternalHealth.find({ patientId })
             .populate("prenatalAppointments.appointmentId")

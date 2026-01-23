@@ -80,9 +80,9 @@ const TwoFactorSettings = () => {
                         disabled={loading}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${enabled
-                                ? "bg-red-600 text-white hover:bg-red-700"
-                                : "bg-green-600 text-white hover:bg-green-700"
+                        className={`px-6 py-2 rounded-full font-bold text-sm transition-all shadow-md ${enabled
+                            ? "bg-red-600 text-white hover:bg-red-700"
+                            : "bg-black text-white hover:bg-gray-900"
                             } disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
                         {loading ? "Processing..." : enabled ? "Disable" : "Enable"}

@@ -131,7 +131,7 @@ const LandingPage = () => {
                   }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 md:px-6 py-2 bg-black text-white rounded-lg font-medium"
+                  className="px-4 md:px-6 py-2 bg-black text-white rounded-full font-medium"
                 >
                   Dashboard
                 </motion.button>
@@ -139,7 +139,7 @@ const LandingPage = () => {
                   onClick={logout}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 md:px-6 py-2 text-red-600 rounded-lg font-bold hover:bg-red-50"
+                  className="px-4 md:px-6 py-2 text-red-600 rounded-full font-bold hover:bg-red-50"
                 >
                   Logout
                 </motion.button>
@@ -150,16 +150,16 @@ const LandingPage = () => {
                   onClick={() => navigate("/login")}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 md:px-6 py-2 text-black rounded-lg font-bold"
+                  className="px-4 md:px-6 py-2 text-black rounded-full font-bold"
                 >
                   Login
                 </motion.button>
 
                 <motion.button
                   onClick={() => navigate("/register")}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)" }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 md:px-6 py-2 bg-black text-white rounded-lg font-medium"
+                  className="px-4 md:px-8 py-2.5 bg-black text-white rounded-full font-bold shadow-md hover:shadow-xl transition-all"
                 >
                   Sign Up
                 </motion.button>
@@ -231,8 +231,10 @@ const LandingPage = () => {
 
             <motion.button
               variants={fadeInUp}
+              whileHover={{ scale: 1.05, boxShadow: "0 20px 50px rgba(0, 0, 0, 0.3)" }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/register")}
-              className="px-10 py-4 bg-black text-white rounded-xl text-lg font-semibold"
+              className="px-12 py-5 bg-black text-white rounded-full text-lg font-black shadow-2xl transition-all"
             >
               <span className="flex items-center gap-2">
                 Get Started Today
@@ -264,7 +266,7 @@ const LandingPage = () => {
             },
             {
               icon: ClipboardList,
-              title: "Health Passport",
+              title: "Health Record",
               description:
                 "Track vitals, medical history, and clinical documents in one secure, unified digital health wallet.",
               gradient: "from-gray-600 to-gray-800",
@@ -574,7 +576,7 @@ const LandingPage = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
               onClick={() => navigate("/register")}
-              className="px-10 py-4 bg-white text-black rounded-xl text-lg font-semibold  transition-all"
+              className="px-10 py-4 bg-white text-black rounded-full text-lg font-semibold transition-all shadow-xl"
             >
               <span className="flex items-center gap-2">
                 Create Account Now
@@ -651,7 +653,7 @@ const LandingPage = () => {
                   >
                     <a
                       href="#"
-                      className="text-gray-400 hover:text-teal-400 transition-colors text-sm"
+                      className="text-gray-400 hover:text-white transition-colors text-sm"
                     >
                       {link}
                     </a>
@@ -664,15 +666,15 @@ const LandingPage = () => {
               <h3 className="font-bold text-lg mb-4">Contact Us</h3>
               <ul className="space-y-3 text-sm text-gray-400">
                 <li className="flex items-start gap-2">
-                  <Mail className="w-5 h-5 text-teal-400 flex-shrink-0" />
+                  <Mail className="w-5 h-5 text-gray-300 flex-shrink-0" />
                   <span>support@nursify.com</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Phone className="w-5 h-5 text-teal-400 flex-shrink-0" />
+                  <Phone className="w-5 h-5 text-gray-300 flex-shrink-0" />
                   <span>+1 (555) 123-4567</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <MapPin className="w-5 h-5 text-teal-400 flex-shrink-0" />
+                  <MapPin className="w-5 h-5 text-gray-300 flex-shrink-0" />
                   <span>
                     123 Healthcare Ave,
                     <br />
@@ -701,7 +703,7 @@ const LandingPage = () => {
                     href="#"
                     whileHover={{ scale: 1.2, y: -3 }}
                     whileTap={{ scale: 0.9 }}
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-teal-600 transition-colors"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all shadow-lg"
                     title={social.name}
                   >
                     <social.icon className="w-5 h-5" />
@@ -714,8 +716,8 @@ const LandingPage = () => {
                   <motion.a
                     key={i}
                     href="#"
-                    whileHover={{ color: "#a78bfa" }}
-                    className="text-gray-400 hover:text-teal-400 transition-colors"
+                    whileHover={{ scale: 1.05, color: "#ffffff" }}
+                    className="text-gray-400 hover:text-white transition-all underline decoration-gray-700 underline-offset-4"
                   >
                     {link}
                   </motion.a>

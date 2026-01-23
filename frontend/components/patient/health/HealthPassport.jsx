@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../../contexts/AuthContext";
 import {
     Activity,
     FileText,
@@ -18,9 +19,10 @@ import ChildHealth from "./ChildHealth";
 
 const HealthPassport = () => {
     console.log("🛡️ HealthPassport Rendered");
+    const { profile } = useAuth();
     const [activeTab, setActiveTab] = useState("summary");
 
-    const tabs = [
+    const allTabs = [
         {
             id: "summary",
             label: "Health Summary",
@@ -36,6 +38,7 @@ const HealthPassport = () => {
             component: MaternalHealth,
             color: "text-pink-600",
             bgColor: "bg-pink-50",
+            gender: "female",
         },
         {
             id: "child",
@@ -71,6 +74,15 @@ const HealthPassport = () => {
         },
     ];
 
+    const tabs = useMemo(() => {
+        if (!profile?.gender) return allTabs;
+        const gender = profile.gender.toLowerCase();
+        return allTabs.filter(tab => {
+            if (tab.gender && tab.gender !== gender) return false;
+            return true;
+        });
+    }, [profile?.gender]);
+
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             {/* Header Section */}
@@ -87,7 +99,7 @@ const HealthPassport = () => {
                             </div>
                             <div>
                                 <h1 className="text-2xl font-bold text-gray-900">
-                                    Health Passport
+                                    Health Record
                                 </h1>
                                 <p className="text-gray-500 text-sm">
                                     Your complete medical record
@@ -102,9 +114,9 @@ const HealthPassport = () => {
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     className={`
-                    relative flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-200 whitespace-nowrap
+                    relative flex items-center gap-2 px-4 py-3 rounded-full transition-all duration-200 whitespace-nowrap
                     ${activeTab === tab.id
-                                            ? "text-black bg-gray-100 font-semibold"
+                                            ? "text-black bg-gray-100 font-semibold shadow-sm"
                                             : "text-gray-500 hover:text-black hover:bg-gray-50"
                                         }
                   `}

@@ -227,7 +227,7 @@ const VerifyEmailPage = () => {
 
                 <motion.button
                   onClick={handleVerifyByCode}
-                  className="w-full py-3 bg-black text-white rounded-lg font-semibold"
+                  className="w-full py-3 bg-black text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all"
                 >
                   Verify Code
                 </motion.button>
@@ -237,7 +237,7 @@ const VerifyEmailPage = () => {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleResendVerification}
                   disabled={resending}
-                  className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold"
+                  className="w-full py-3 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-all"
                 >
                   {resending ? "Sending..." : "Resend Code"}
                 </motion.button>
@@ -310,7 +310,7 @@ const VerifyEmailPage = () => {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleResendVerification}
                   disabled={resending}
-                  className="w-full py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-black text-white rounded-full font-semibold disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all"
                 >
                   <Mail className="w-5 h-5" />
                   {resending ? "Sending..." : "Resend Verification Email"}
@@ -318,7 +318,7 @@ const VerifyEmailPage = () => {
 
                 <motion.button
                   onClick={() => navigate("/login")}
-                  className="w-full py-3 bg-black text-white rounded-lg font-semibold flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-black text-white rounded-full font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all"
                 >
                   Back to Login
                   <ArrowRight className="w-5 h-5" />

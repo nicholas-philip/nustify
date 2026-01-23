@@ -30,6 +30,7 @@ const RegisterPage = () => {
     specialization: "",
     licenseNumber: "",
     hourlyRate: "",
+    gender: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -209,9 +210,9 @@ const RegisterPage = () => {
                 key={r}
                 type="button"
                 onClick={() => setRole(r)}
-                className={`flex-1 py-3 rounded-lg font-semibold ${role === r
-                    ? "bg-black text-white"
-                    : "bg-gray-100 text-gray-700"
+                className={`flex-1 py-3 rounded-full font-semibold ${role === r
+                  ? "bg-black text-white"
+                  : "bg-gray-100 text-gray-700"
                   }`}
               >
                 I'm a {r === "nurse" ? "Healthcare Professional" : "Patient"}
@@ -265,7 +266,7 @@ const RegisterPage = () => {
                     type="text"
                     name="fullName"
                     placeholder="John Doe"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none"
                     value={formData.fullName}
                     onChange={handleChange}
                     required
@@ -283,7 +284,7 @@ const RegisterPage = () => {
                     type="tel"
                     name="phone"
                     placeholder="+1 234 567 8900"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none"
                     value={formData.phone}
                     onChange={handleChange}
                     required
@@ -302,7 +303,7 @@ const RegisterPage = () => {
                   type="email"
                   name="email"
                   placeholder="john@example.com"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -320,7 +321,7 @@ const RegisterPage = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Min 6 characters"
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -351,6 +352,24 @@ const RegisterPage = () => {
                   className="space-y-4 pt-4 border-t"
                 >
                   <h3 className="font-semibold text-gray-900">
+                    Gender Selection
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <select
+                      name="gender"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none bg-white h-[46px]"
+                      value={formData.gender}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                      <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mt-4">
                     Emergency Contact
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4">
@@ -358,7 +377,7 @@ const RegisterPage = () => {
                       type="text"
                       name="emergencyContactName"
                       placeholder="Emergency contact"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none"
                       value={formData.emergencyContactName}
                       onChange={handleChange}
                       required
@@ -367,7 +386,7 @@ const RegisterPage = () => {
                       type="tel"
                       name="emergencyContactPhone"
                       placeholder="Contact phone"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none"
                       value={formData.emergencyContactPhone}
                       onChange={handleChange}
                       required
@@ -391,7 +410,7 @@ const RegisterPage = () => {
                       type="text"
                       name="specialization"
                       placeholder="e.g., Pediatric Nurse"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none"
                       value={formData.specialization}
                       onChange={handleChange}
                       required
@@ -402,7 +421,7 @@ const RegisterPage = () => {
                       type="text"
                       name="licenseNumber"
                       placeholder="License number"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none"
                       value={formData.licenseNumber}
                       onChange={handleChange}
                       required
@@ -411,7 +430,7 @@ const RegisterPage = () => {
                       type="number"
                       name="hourlyRate"
                       placeholder="Hourly Rate ($)"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-black outline-none"
                       value={formData.hourlyRate}
                       onChange={handleChange}
                       min="0"
@@ -425,7 +444,7 @@ const RegisterPage = () => {
               variants={itemVariants}
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-black text-white rounded-lg font-semibold disabled:opacity-50 mt-6"
+              className="w-full py-3 bg-black text-white rounded-full font-semibold disabled:opacity-50 mt-6"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {loading ? "Creating Account..." : "Create Account"}
@@ -460,7 +479,7 @@ const RegisterPage = () => {
           </motion.div>
         </motion.div>
       </div>
-    </div>
+    </div >
   );
 };
 

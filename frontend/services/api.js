@@ -309,6 +309,11 @@ class ApiService {
     });
   }
 
+  getPatientProfile(id) {
+    const endpoint = id ? `/api/patient/profile/${id}` : "/api/patient/profile";
+    return this.request(endpoint);
+  }
+
   submitReview(data) {
     return this.request("/api/patient/reviews", {
       method: "POST",
@@ -536,9 +541,10 @@ class ApiService {
     });
   }
 
-  getVitalSigns(params) {
+  getVitalSigns(params = {}) {
     const queryString = new URLSearchParams(params).toString();
-    return this.request(`/api/vital-signs?${queryString}`);
+    const endpoint = queryString ? `/api/vital-signs?${queryString}` : "/api/vital-signs";
+    return this.request(endpoint);
   }
 
   getVitalSignsTrends(metric, days = 30) {
@@ -633,8 +639,10 @@ class ApiService {
     });
   }
 
-  getPregnancyRecords() {
-    return this.request("/api/maternal-health");
+  getPregnancyRecords(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const endpoint = queryString ? `/api/maternal-health?${queryString}` : "/api/maternal-health";
+    return this.request(endpoint);
   }
 
   updatePregnancyRecord(id, data) {
@@ -655,8 +663,10 @@ class ApiService {
     });
   }
 
-  getChildHealthRecords() {
-    return this.request("/api/child-health");
+  getChildHealthRecords(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const endpoint = queryString ? `/api/child-health?${queryString}` : "/api/child-health";
+    return this.request(endpoint);
   }
 
   updateChildHealthRecord(id, data) {

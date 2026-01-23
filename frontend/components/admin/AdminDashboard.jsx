@@ -159,11 +159,10 @@ const AdminDashboard = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate(item.path)}
-                  className={
-                    item.active
-                      ? "text-black font-semibold"
-                      : "text-gray-600 hover:text-black"
-                  }
+                  className={`px-4 py-2 rounded-full transition-all ${item.active
+                      ? "bg-black text-white font-semibold shadow-md"
+                      : "text-gray-600 hover:text-black hover:bg-gray-100"
+                    }`}
                 >
                   {item.label}
                 </motion.button>
@@ -179,7 +178,7 @@ const AdminDashboard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+                className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-full transition-all font-bold border border-red-50"
               >
                 <LogOut className="w-4 h-4" />
                 Logout
@@ -344,7 +343,7 @@ const AdminDashboard = () => {
                 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(link.path)}
-                className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+                className="flex items-center gap-3 p-4 bg-gray-50 rounded-full hover:bg-gray-100 transition shadow-sm border border-gray-100"
               >
                 <link.icon className="w-6 h-6 text-black" />
                 <span className="font-semibold text-gray-900">
@@ -369,9 +368,10 @@ const AdminDashboard = () => {
                 Recent Appointments
               </h2>
               <motion.button
-                whileHover={{ x: 5 }}
+                whileHover={{ scale: 1.05, x: 5 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/admin/appointments")}
-                className="text-black hover:text-gray-900 text-sm font-semibold"
+                className="px-4 py-2 bg-black text-white rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all"
               >
                 View All →
               </motion.button>

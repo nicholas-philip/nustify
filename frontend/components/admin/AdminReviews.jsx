@@ -84,10 +84,10 @@ const AdminReviews = () => {
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <motion.button
-            whileHover={{ x: -5 }}
+            whileHover={{ scale: 1.05, x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/admin/dashboard")}
-            className="text-purple-600 hover:text-purple-700 mb-4"
+            className="text-black mb-4 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2 font-bold"
           >
             ← Back to Dashboard
           </motion.button>
@@ -276,7 +276,7 @@ const AdminReviews = () => {
                           {review.isVerified && (
                             <motion.span
                               whileHover={{ scale: 1.1 }}
-                              className="ml-3 px-2 py-1 bg-green-100 text-green-800 rounded text-xs"
+                              className="ml-3 px-3 py-1 bg-green-100 text-green-800 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm"
                             >
                               Verified
                             </motion.span>
@@ -288,7 +288,7 @@ const AdminReviews = () => {
                         whileHover={{ scale: 1.2, rotate: 10 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => handleDeleteReview(review._id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded"
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-all"
                         title="Delete Review"
                       >
                         <Trash2 className="w-5 h-5" />
@@ -310,7 +310,7 @@ const AdminReviews = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="px-6 py-2 border border-gray-300 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white hover:shadow-sm transition-all font-semibold"
                   >
                     Previous
                   </motion.button>
@@ -322,7 +322,7 @@ const AdminReviews = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                     disabled={page === totalPages}
-                    className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="px-6 py-2 border border-gray-300 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white hover:shadow-sm transition-all font-semibold"
                   >
                     Next
                   </motion.button>

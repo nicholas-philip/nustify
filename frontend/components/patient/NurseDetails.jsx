@@ -68,7 +68,7 @@ const NurseDetails = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/search")}
-            className="px-6 py-2 bg-black text-white rounded-lg"
+            className="px-6 py-2 bg-black text-white rounded-full font-bold shadow-md transition-all hover:bg-gray-900"
           >
             Back to Search
           </motion.button>
@@ -99,10 +99,10 @@ const NurseDetails = () => {
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <motion.button
-            whileHover={{ x: -5 }}
+            whileHover={{ scale: 1.05, x: -5 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/patient/search")}
-            className="text-black hover:text-gray-900 mb-4"
+            className="text-black mb-4 px-4 py-2 rounded-full border border-gray-100 hover:bg-white hover:shadow-sm transition-all flex items-center gap-2 font-bold"
           >
             ← Back to Search
           </motion.button>
@@ -200,7 +200,7 @@ const NurseDetails = () => {
                     }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate(`/patient/book/${id}`)}
-                    className="w-full px-6 py-3 bg-black text-white rounded-lg font-semibold"
+                    className="w-full px-6 py-3 bg-black text-white rounded-full font-semibold shadow-lg"
                   >
                     Book Appointment
                   </motion.button>
@@ -212,7 +212,7 @@ const NurseDetails = () => {
                     }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate(`/patient/messages?nurseId=${nurse.userId?._id || nurse.userId}`)}
-                    className="w-full px-6 py-3 bg-white text-black border border-gray-200 rounded-lg font-semibold flex items-center justify-center gap-2"
+                    className="w-full px-6 py-3 bg-white text-black border border-gray-200 rounded-full font-semibold flex items-center justify-center gap-2 shadow-sm"
                   >
                     <MessageSquare className="w-5 h-5" />
                     Message Specialist

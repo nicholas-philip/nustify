@@ -96,7 +96,7 @@ const MedicalDocuments = () => {
                         {loading ? "Uploading..." : "Upload Medical Records"}
                     </h3>
                     <p className="text-gray-500 text-sm mb-4">Drag & drop files here or click to browse</p>
-                    <div className="px-6 py-2 bg-black text-white rounded-lg text-sm font-semibold inline-block">
+                    <div className="px-6 py-2 bg-black text-white rounded-full text-sm font-semibold inline-block shadow-lg">
                         Select Files
                     </div>
                 </motion.div>
@@ -131,7 +131,7 @@ const MedicalDocuments = () => {
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
                                         onClick={() => window.open(doc.url, '_blank')}
-                                        className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-lg"
+                                        className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-full transition-all"
                                         title="View"
                                         disabled={!doc.url}
                                     >
@@ -141,7 +141,7 @@ const MedicalDocuments = () => {
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
                                         onClick={() => window.open(doc.url, '_blank')}
-                                        className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-lg"
+                                        className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-full transition-all"
                                         title="Download"
                                         disabled={!doc.url}
                                     >
@@ -240,7 +240,7 @@ const MedicalDocuments = () => {
 
                                 <button
                                     onClick={() => setShareModal({ show: false, document: null })}
-                                    className="w-full px-4 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+                                    className="w-full px-4 py-3 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-colors shadow-lg"
                                 >
                                     Done
                                 </button>
@@ -249,7 +249,7 @@ const MedicalDocuments = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 };
 

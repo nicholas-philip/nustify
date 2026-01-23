@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -23,7 +23,8 @@ const PatientHealthRecordView = () => {
         documents: [],
         vitals: [],
         maternal: [],
-        child: []
+        child: [],
+        profile: null
     });
     const [error, setError] = useState(null);
 
@@ -60,11 +61,15 @@ const PatientHealthRecordView = () => {
                 console.log("No child records");
             }
 
+            // Fetch patient profile for gender check
+            const profileResponse = await api.getPatientProfile(patientId);
+
             setPatientData({
                 documents: docsResponse.documents || [],
                 vitals: vitalsResponse.vitalSigns || [],
                 maternal: maternalRecords,
-                child: childRecords
+                child: childRecords,
+                profile: profileResponse.profile
             });
         } catch (error) {
             console.error("Error fetching patient health data:", error);
@@ -74,12 +79,22 @@ const PatientHealthRecordView = () => {
         }
     };
 
-    const tabs = [
-        { id: "documents", label: "Medical Documents", icon: FileText, count: patientData.documents.length },
-        { id: "vitals", label: "Vital Signs", icon: Activity, count: patientData.vitals.length },
-        { id: "maternal", label: "Pregnancy Records", icon: Baby, count: patientData.maternal.length },
-        { id: "child", label: "Child Health", icon: Heart, count: patientData.child.length },
-    ];
+    const tabs = useMemo(() => {
+        const allTabs = [
+            { id: "documents", label: "Medical Documents", icon: FileText, count: patientData.documents.length },
+            { id: "vitals", label: "Vital Signs", icon: Activity, count: patientData.vitals.length },
+            { id: "maternal", label: "Pregnancy Records", icon: Baby, count: patientData.maternal.length, gender: "female" },
+            { id: "child", label: "Child Health", icon: Heart, count: patientData.child.length },
+        ];
+
+        if (!patientData.profile?.gender) return allTabs;
+        const gender = patientData.profile.gender.toLowerCase();
+
+        return allTabs.filter(tab => {
+            if (tab.gender && tab.gender !== gender) return false;
+            return true;
+        });
+    }, [patientData]);
 
     if (loading) {
         return (
@@ -135,9 +150,9 @@ const PatientHealthRecordView = () => {
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all whitespace-nowrap ${activeTab === tab.id
-                                        ? "bg-black text-white"
-                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                className={`flex items-center gap-2 px-6 py-2.5 rounded-full transition-all whitespace-nowrap border shadow-sm ${activeTab === tab.id
+                                    ? "bg-black text-white border-black font-bold"
+                                    : "bg-white text-gray-600 border-gray-100 hover:border-gray-300"
                                     }`}
                             >
                                 <tab.icon className="w-4 h-4" />

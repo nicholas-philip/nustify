@@ -11,12 +11,11 @@ const router = express.Router();
 
 // All routes require authentication
 router.use(protect);
-router.use(authorize("patient")); // Only patients can manage maternal health
 
 // Maternal health routes
-router.post("/", createPregnancyRecord);
-router.get("/", getPregnancyRecords);
-router.put("/:id", updatePregnancyRecord);
-router.get("/:id/timeline", getPregnancyTimeline);
+router.post("/", authorize("patient"), createPregnancyRecord);
+router.get("/", authorize("patient", "nurse"), getPregnancyRecords);
+router.put("/:id", authorize("patient"), updatePregnancyRecord);
+router.get("/:id/timeline", authorize("patient", "nurse"), getPregnancyTimeline);
 
 export default router;
