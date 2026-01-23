@@ -30,8 +30,8 @@ const MedicalDocuments = () => {
                 const formattedDocs = data.documents.map(doc => ({
                     id: doc._id,
                     name: doc.title || doc.fileName || "Untitled",
-                    date: new Date(doc.uploadDate).toLocaleDateString(),
-                    size: doc.size ? `${(doc.size / 1024 / 1024).toFixed(2)} MB` : "Unknown size",
+                    date: new Date(doc.documentDate || doc.createdAt).toLocaleDateString(),
+                    size: doc.fileSize ? `${(doc.fileSize / 1024 / 1024).toFixed(2)} MB` : "Unknown size",
                     type: doc.fileType || "application/pdf",
                     url: doc.fileUrl
                 }));

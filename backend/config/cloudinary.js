@@ -71,9 +71,13 @@ const docStorage = new CloudinaryStorage({
   params: {
     folder: "nursify/medical-documents",
     resource_type: "auto",
+    type: "upload",
+    access_mode: "public",
     public_id: (req, file) => {
+      const timestamp = Date.now();
+      const extension = file.originalname.split('.').pop();
       const cleanName = file.originalname.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_');
-      return `doc_${Date.now()}_${cleanName}`;
+      return `doc_${timestamp}_${cleanName}.${extension}`;
     },
   },
 });

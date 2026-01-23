@@ -229,7 +229,7 @@ const PatientHealthRecordView = () => {
                                                     <div>
                                                         <h3 className="font-semibold text-gray-900">{doc.title}</h3>
                                                         <p className="text-sm text-gray-500">
-                                                            {new Date(doc.documentDate).toLocaleDateString()} • {doc.documentType}
+                                                            {new Date(doc.documentDate || doc.createdAt).toLocaleDateString()} • {doc.documentType}
                                                         </p>
                                                         {doc.isPrivate && (
                                                             <div className="flex items-center gap-1 mt-1">

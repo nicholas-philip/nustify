@@ -106,6 +106,7 @@ export const getDocuments = async (req, res) => {
 
         // If nurse is requesting, check permissions
         if (req.user.role === "nurse") {
+            console.log(`🔍 Nurse ${req.user._id} checking docs for patient ${patientId}`);
             const hasAppointment = await Appointment.findOne({
                 nurseId: req.user._id,
                 patientId,
@@ -113,12 +114,14 @@ export const getDocuments = async (req, res) => {
             });
 
             if (!hasAppointment) {
+                console.log("❌ No valid appointment found for nurse");
                 return res.status(403).json({
                     success: false,
-                    message: "Access denied",
+                    message: "Access denied. You must have a confirmed appointment with this patient to view their records.",
                 });
             }
 
+            console.log("✅ Appointment found, granting access to non-private docs");
             query.isPrivate = false;
         }
 
