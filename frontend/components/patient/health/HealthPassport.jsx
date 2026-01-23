@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import {
     Activity,
     FileText,
@@ -86,50 +86,51 @@ const HealthPassport = () => {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             {/* Header Section */}
-            <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+            <div className="bg-white sticky top-0 z-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between py-6">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between py-10 gap-8">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="flex items-center gap-3 mb-4 md:mb-0"
+                            className="flex items-center gap-4"
                         >
-                            <div className="p-3 bg-black rounded-xl">
-                                <File className="w-8 h-8 text-white" />
+                            <div className="p-3.5 bg-black rounded-2xl shadow-lg shadow-black/10">
+                                <File className="w-7 h-7 text-white" />
                             </div>
                             <div>
-                                <h1 className="text-2xl font-bold text-gray-900">
+                                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
                                     Health Record
                                 </h1>
-                                <p className="text-gray-500 text-sm">
-                                    Your complete medical record
+                                <p className="text-gray-500 text-sm font-medium">
+                                    Your complete medical journey & history
                                 </p>
                             </div>
                         </motion.div>
 
                         {/* Tab Navigation */}
-                        <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+                        <div className="flex p-1.5 bg-gray-100/80 backdrop-blur-md rounded-2xl overflow-x-auto hide-scrollbar">
                             {tabs.map((tab) => (
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     className={`
-                    relative flex items-center gap-2 px-4 py-3 rounded-full transition-all duration-200 whitespace-nowrap
-                    ${activeTab === tab.id
-                                            ? "text-black bg-gray-100 font-semibold shadow-sm"
-                                            : "text-gray-500 hover:text-black hover:bg-gray-50"
+                                        relative flex items-center gap-2.5 px-6 py-2.5 rounded-xl transition-all duration-300 whitespace-nowrap text-sm font-bold
+                                        ${activeTab === tab.id
+                                            ? "text-black"
+                                            : "text-gray-500 hover:text-gray-800"
                                         }
-                  `}
+                                    `}
                                 >
                                     <tab.icon
-                                        className={`w-5 h-5 ${activeTab === tab.id ? tab.color : "text-gray-400"
+                                        className={`w-4.5 h-4.5 transition-colors duration-300 ${activeTab === tab.id ? tab.color : "text-gray-400 group-hover:text-gray-600"
                                             }`}
                                     />
                                     <span>{tab.label}</span>
                                     {activeTab === tab.id && (
                                         <motion.div
-                                            layoutId="activeTab"
-                                            className="absolute inset-x-0 -bottom-[25px] h-0.5 bg-black md:hidden"
+                                            layoutId="activePill"
+                                            className="absolute inset-0 bg-white rounded-xl -z-10"
+                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                         />
                                     )}
                                 </button>
