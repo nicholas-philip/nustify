@@ -58,10 +58,7 @@ app.use((req, res, next) => {
 
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow all origins (including mobile browsers)
-    callback(null, true);
-  },
+  origin: true,
   credentials: true,
   optionsSuccessStatus: 200,
 };

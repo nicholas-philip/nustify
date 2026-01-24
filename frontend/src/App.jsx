@@ -31,6 +31,8 @@ import AdminCredentials from "../components/admin/AdminCredentials";
 import NurseAppointments from "../components/nurse/NurseAppointments";
 import VerifyEmailPage from "../components/auth/VerifyEmailPage";
 import EmailVerificationRequired from "../components/auth/EmailVerificationRequired";
+import ForgotPasswordPage from "../components/auth/ForgotPasswordPage";
+import ResetPasswordPage from "../components/auth/ResetPasswordPage";
 import ConsultationRoom from "../components/common/ConsultationRoom";
 import MessagesView from "../components/chat/MessagesView";
 
@@ -119,6 +121,22 @@ function App() {
               element={
                 <PublicRoute>
                   <RegisterPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/forgot-password"
+              element={
+                <PublicRoute>
+                  <ForgotPasswordPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/reset-password/:token"
+              element={
+                <PublicRoute>
+                  <ResetPasswordPage />
                 </PublicRoute>
               }
             />

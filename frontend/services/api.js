@@ -5,7 +5,7 @@ const getApiUrl = () => {
 
     // A. Local Machine (Laptop)
     if (hostname === "localhost" || hostname === "127.0.0.1") {
-      return "http://localhost:4500";
+      return "http://127.0.0.1:4500";
     }
 
     // B. Local Area Network (Phone testing on same Wi-Fi)
@@ -22,7 +22,7 @@ const getApiUrl = () => {
   }
 
   // Fallback to environment variable or localhost
-  return import.meta.env.VITE_API_URL || "http://localhost:4500";
+  return import.meta.env.VITE_API_URL || "http://127.0.0.1:4500";
 };
 
 const API_URL = getApiUrl();
@@ -110,8 +110,9 @@ class ApiService {
 
     console.log("📋 Request headers:", headers);
 
+    console.log(`🌐 Fetching: ${fullUrl}`);
     try {
-      const response = await fetch(`${API_URL}${endpoint}`, config);
+      const response = await fetch(fullUrl, config);
 
       console.log("📊 Response status:", response.status);
       console.log("📊 Response ok:", response.ok);

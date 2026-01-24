@@ -286,23 +286,36 @@ const LoginPage = () => {
           </motion.form>
 
           <motion.div variants={itemVariants} className="mt-6 text-center">
-            <label className="flex items-center gap-2 justify-center mb-4">
-              <input
-                type="checkbox"
-                checked={useSession}
-                onChange={(e) => setUseSession(e.target.checked)}
-                className="w-4 h-4"
-              />
-              <span className="text-sm text-gray-600">
-                Remember me (sign in to all tabs)
-              </span>
-            </label>
+            <div className="flex flex-col items-center gap-4 mb-4">
+              {/* <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={useSession}
+                  onChange={(e) => setUseSession(e.target.checked)}
+                  className="w-4 h-4 cursor-pointer"
+                />
+                <span className="text-sm text-gray-600">
+                  Stay signed in on all tabs
+                </span>
+              </label> */}
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/forgot-password")}
+                type="button"
+                className="text-sm font-bold text-gray-900 hover:underline"
+              >
+                Forgot your password?
+              </motion.button>
+            </div>
             <p className="text-gray-600">
               Don't have an account?{" "}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/register")}
+                type="button"
                 className="text-black font-semibold hover:underline"
               >
                 Sign up
@@ -322,7 +335,7 @@ const LoginPage = () => {
           </motion.div>
         </motion.div>
       </div>
-    </div>
+    </div >
   );
 };
 
