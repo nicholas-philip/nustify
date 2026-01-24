@@ -6,8 +6,8 @@ let transporter = null;
 const getTransporter = () => {
   if (!transporter) {
     const smtpHost = process.env.SMTP_HOST || "smtp-relay.brevo.com";
-    // Default to port 465 (Secure) if not specified, as 587 seems to be timing out
-    const smtpPort = parseInt(process.env.SMTP_PORT || "465");
+    // Attempt port 2525, as 587 and 465 are blocked on Render
+    const smtpPort = parseInt(process.env.SMTP_PORT || "2525");
     const smtpUser = process.env.SMTP_USER;
     const smtpPass = process.env.SMTP_PASS;
 
@@ -24,17 +24,18 @@ const getTransporter = () => {
     const config = {
       host: smtpHost,
       port: smtpPort,
-      secure: smtpPort === 465, // true for 465, false for other ports
+      // Port 465 is implicit SSL/TLS. Ports 587 and 2525 are usually explicit STARTTLS (secure: false)
+      secure: smtpPort === 465,
       auth: {
         user: smtpUser,
         pass: smtpPass,
       },
-      // Increase timeouts further
-      connectionTimeout: 20000, // 20 seconds
+      // Keep timeouts high
+      connectionTimeout: 20000,
       greetingTimeout: 20000,
       socketTimeout: 20000,
-      debug: true, // Enable debug output
-      logger: true // Enable logger
+      debug: true,
+      logger: true
     };
 
     transporter = nodemailer.createTransport(config);
