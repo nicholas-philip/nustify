@@ -6,7 +6,8 @@ let transporter = null;
 const getTransporter = () => {
   if (!transporter) {
     const smtpHost = process.env.SMTP_HOST || "smtp-relay.brevo.com";
-    const smtpPort = parseInt(process.env.SMTP_PORT || "587");
+    // Default to port 465 (Secure) if not specified, as 587 seems to be timing out
+    const smtpPort = parseInt(process.env.SMTP_PORT || "465");
     const smtpUser = process.env.SMTP_USER;
     const smtpPass = process.env.SMTP_PASS;
 
@@ -28,10 +29,10 @@ const getTransporter = () => {
         user: smtpUser,
         pass: smtpPass,
       },
-      // Increase timeouts
-      connectionTimeout: 10000, // 10 seconds
-      greetingTimeout: 10000,
-      socketTimeout: 10000,
+      // Increase timeouts further
+      connectionTimeout: 20000, // 20 seconds
+      greetingTimeout: 20000,
+      socketTimeout: 20000,
       debug: true, // Enable debug output
       logger: true // Enable logger
     };
