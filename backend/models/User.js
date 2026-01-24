@@ -63,6 +63,14 @@ const userSchema = new mongoose.Schema(
       type: Date,
       select: false,
     },
+    passwordResetCode: {
+      type: String,
+      select: false,
+    },
+    passwordResetCodeExpires: {
+      type: Date,
+      select: false,
+    },
     passwordChangedAt: {
       type: Date,
       select: false,
@@ -171,6 +179,19 @@ userSchema.methods.createPasswordResetToken = function () {
   this.passwordResetExpires = Date.now() + 60 * 60 * 1000;
 
   return resetToken;
+};
+
+userSchema.methods.createPasswordResetCode = function () {
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+  this.passwordResetCode = crypto
+    .createHash("sha256")
+    .update(code)
+    .digest("hex");
+
+  this.passwordResetCodeExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+  return code;
 };
 
 userSchema.methods.create2FACode = function () {

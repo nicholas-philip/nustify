@@ -6,27 +6,66 @@ import api from "../../services/api";
 
 const ForgotPasswordPage = () => {
     const navigate = useNavigate();
+    const [step, setStep] = useState(1); // 1: Email, 2: Code + Reset
     const [email, setEmail] = useState("");
+    const [code, setCode] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState({ type: "", message: "" });
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = async (e) => {
+    const handleEmailSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setStatus({ type: "", message: "" });
 
         try {
+            // Step 1: Request Reset Code
             const data = await api.forgotPassword({ email });
             if (data.success) {
                 setStatus({
                     type: "success",
-                    message: "If an account exists with this email, you will receive a password reset link shortly.",
+                    message: "Reset code sent! Please check your email.",
                 });
+                setTimeout(() => {
+                    setStatus({ type: "", message: "" });
+                    setStep(2);
+                }, 1500);
             }
         } catch (error) {
             setStatus({
                 type: "error",
                 message: error.message || "Something went wrong. Please try again.",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleResetSubmit = async (e) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            setStatus({ type: "error", message: "Passwords do not match" });
+            return;
+        }
+
+        setLoading(true);
+        setStatus({ type: "", message: "" });
+
+        try {
+            // Step 2: Verify Code and Reset Password
+            const data = await api.resetPassword({ email, code, password });
+            if (data.success) {
+                setStatus({
+                    type: "success",
+                    message: "Password reset successfully! You can now login.",
+                });
+            }
+        } catch (error) {
+            setStatus({
+                type: "error",
+                message: error.message || "Failed to reset password. Check the code and try again.",
             });
         } finally {
             setLoading(false);
@@ -77,8 +116,14 @@ const ForgotPasswordPage = () => {
                         </motion.div>
                         <span className="text-3xl font-black text-black tracking-tight">Nursify</span>
                     </motion.div>
-                    <h2 className="text-4xl font-black text-gray-900 mb-2">Forgot Password?</h2>
-                    <p className="text-gray-600">No worries, we'll send you reset instructions.</p>
+                    <h2 className="text-4xl font-black text-gray-900 mb-2">
+                        {step === 1 ? "Forgot Password?" : "Reset Password"}
+                    </h2>
+                    <p className="text-gray-600">
+                        {step === 1
+                            ? "No worries, we'll send you a reset code."
+                            : "Enter the code sent to your email and your new password."}
+                    </p>
                 </div>
 
                 <motion.div
@@ -87,7 +132,7 @@ const ForgotPasswordPage = () => {
                     transition={{ duration: 0.3 }}
                 >
                     <AnimatePresence mode="wait">
-                        {status.type === "success" ? (
+                        {status.type === "success" && step === 2 ? (
                             <motion.div
                                 key="success"
                                 initial={{ opacity: 0, scale: 0.9 }}
@@ -98,7 +143,7 @@ const ForgotPasswordPage = () => {
                                     <CheckCircle2 className="w-10 h-10 text-green-500" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-bold text-gray-900">Email Sent!</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">Success!</h3>
                                     <p className="text-gray-600 leading-relaxed text-sm">
                                         {status.message}
                                     </p>
@@ -113,53 +158,105 @@ const ForgotPasswordPage = () => {
                                         Back to Login
                                     </motion.button>
                                 </div>
-                                <p className="text-sm text-gray-500">
-                                    Didn't receive the email?{" "}
-                                    <button
-                                        onClick={() => setStatus({ type: "", message: "" })}
-                                        className="text-black font-bold hover:underline"
-                                    >
-                                        Try again
-                                    </button>
-                                </p>
                             </motion.div>
                         ) : (
                             <motion.form
-                                key="form"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                onSubmit={handleSubmit}
+                                key={step === 1 ? "email-form" : "reset-form"}
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                onSubmit={step === 1 ? handleEmailSubmit : handleResetSubmit}
                                 className="space-y-6"
                             >
-                                {status.type === "error" && (
+                                {status.type && (
                                     <motion.div
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        className="p-4 bg-red-50 rounded-2xl border border-red-100 flex items-center gap-3 text-red-700 text-sm font-medium"
+                                        className={`p-4 rounded-2xl border flex items-center gap-3 text-sm font-medium ${status.type === 'error'
+                                                ? 'bg-red-50 border-red-100 text-red-700'
+                                                : 'bg-green-50 border-green-100 text-green-700'
+                                            }`}
                                     >
-                                        <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                                        {status.type === 'error' ? <AlertCircle className="w-5 h-5 flex-shrink-0" /> : <CheckCircle2 className="w-5 h-5 flex-shrink-0" />}
                                         {status.message}
                                     </motion.div>
                                 )}
 
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2 px-1">
-                                        Email Address
-                                    </label>
-                                    <div className="relative group">
-                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-black transition-colors" />
+                                {step === 1 ? (
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 mb-2 px-1">
+                                            Email Address
+                                        </label>
+                                        <div className="relative group">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-black transition-colors" />
+                                            </div>
+                                            <input
+                                                type="email"
+                                                required
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-black focus:ring-0 text-gray-900 font-medium transition-all outline-none sm:text-sm"
+                                                placeholder="you@example.com"
+                                            />
                                         </div>
-                                        <input
-                                            type="email"
-                                            required
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-black focus:ring-0 text-gray-900 font-medium transition-all outline-none sm:text-sm"
-                                            placeholder="you@example.com"
-                                        />
                                     </div>
-                                </div>
+                                ) : (
+                                    <>
+                                        <div>
+                                            <label className="block text-sm font-bold text-gray-700 mb-2 px-1">
+                                                Verification Code
+                                            </label>
+                                            <input
+                                                type="text"
+                                                required
+                                                maxLength={6}
+                                                value={code}
+                                                onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+                                                className="block w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-black focus:ring-0 text-gray-900 font-medium transition-all outline-none sm:text-sm text-center tracking-[1em] text-xl"
+                                                placeholder="000000"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-bold text-gray-700 mb-2 px-1">
+                                                New Password
+                                            </label>
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                required
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className="block w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-black focus:ring-0 text-gray-900 font-medium transition-all outline-none sm:text-sm"
+                                                placeholder="••••••••"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-bold text-gray-700 mb-2 px-1">
+                                                Confirm New Password
+                                            </label>
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                required
+                                                value={confirmPassword}
+                                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                                className="block w-full px-4 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-black focus:ring-0 text-gray-900 font-medium transition-all outline-none sm:text-sm"
+                                                placeholder="••••••••"
+                                            />
+                                        </div>
+                                        <div className="flex items-center">
+                                            <input
+                                                id="show-password"
+                                                type="checkbox"
+                                                className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
+                                                checked={showPassword}
+                                                onChange={() => setShowPassword(!showPassword)}
+                                            />
+                                            <label htmlFor="show-password" class="ml-2 block text-sm text-gray-900">
+                                                Show password
+                                            </label>
+                                        </div>
+                                    </>
+                                )}
 
                                 <div className="pt-2">
                                     <motion.button
@@ -174,7 +271,7 @@ const ForgotPasswordPage = () => {
                                                 <div className="w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                                             ) : (
                                                 <>
-                                                    Send Reset Link
+                                                    {step === 1 ? "Send Reset Code" : "Reset Password"}
                                                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                                 </>
                                             )}
@@ -192,13 +289,13 @@ const ForgotPasswordPage = () => {
                     transition={{ delay: 0.5 }}
                     className="mt-8 text-center"
                 >
-                    <Link
-                        to="/login"
+                    <button
+                        onClick={() => step === 2 ? setStep(1) : navigate("/login")}
                         className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-black transition-colors group"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                        Back to Login
-                    </Link>
+                        {step === 2 ? "Back to Email" : "Back to Login"}
+                    </button>
                 </motion.div>
             </motion.div>
         </div>

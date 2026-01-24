@@ -93,7 +93,7 @@ router.post("/verify-email-code", verifyEmailByCode);
 router.post("/resend-verification", resendVerification);
 router.post("/verify-2fa", verify2FAValidation, verify2FA);
 router.post("/forgot-password", forgotPasswordValidation, forgotPassword);
-router.post("/reset-password/:token", resetPasswordValidation, resetPassword);
+router.post("/reset-password", resetPasswordValidation, resetPassword);
 
 router.use(protect);
 router.get("/me", getMe);

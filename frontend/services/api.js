@@ -264,8 +264,8 @@ class ApiService {
     });
   };
 
-  resetPassword = (token, data) => {
-    return this.request(`/api/auth/reset-password/${token}`, {
+  resetPassword = (data) => {
+    return this.request("/api/auth/reset-password", {
       method: "POST",
       body: JSON.stringify(data),
     });

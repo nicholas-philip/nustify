@@ -734,30 +734,21 @@ const forgotPassword = async (req, res) => {
     if (!user) {
       return res.status(200).json({
         success: true,
-        message: "If an account exists, a password reset email has been sent",
+        message: "If an account exists, a password reset code has been sent",
       });
     }
 
-    const resetToken = user.createPasswordResetToken();
+    // Generate 6-digit code
+    const resetCode = user.createPasswordResetCode();
     await user.save({ validateBeforeSave: false });
 
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-
-    // Respond immediately to the user
-    res.status(200).json({
-      success: true,
-      message: "Password reset email sent successfully",
-      // In development, include the reset token so you can test
-      ...(process.env.NODE_ENV === 'development' && { resetToken, resetUrl }),
-    });
-
-    // Send email asynchronously in the background (non-blocking)
+    // Send email asynchronously
     setImmediate(async () => {
       try {
         await getTransporter().sendMail({
           from: `"Nursify Platform" <${process.env.SENDER_EMAIL}>`,
           to: email,
-          subject: "Password Reset Request - Nursify",
+          subject: "Password Reset Code - Nursify",
           html: `
           <!DOCTYPE html>
           <html>
@@ -767,7 +758,7 @@ const forgotPassword = async (req, res) => {
               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
               .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
               .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-              .button { display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+              .code-box { background: white; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; color: #667eea; letter-spacing: 5px; margin: 20px 0; border-radius: 5px; border: 2px dashed #667eea; }
               .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
               .footer { text-align: center; margin-top: 30px; color: #666; font-size: 12px; }
             </style>
@@ -778,19 +769,14 @@ const forgotPassword = async (req, res) => {
                 <h1>Password Reset Request 🔐</h1>
               </div>
               <div class="content">
-                <h2>Reset Your Password</h2>
-                <p>We received a request to reset your password. Click the button below to create a new password:</p>
-                <div style="text-align: center;">
-                  <a href="${resetUrl}" class="button">Reset Password</a>
-                </div>
-                <p>Or copy and paste this link into your browser:</p>
-                <p style="word-break: break-all; color: #667eea;">${resetUrl}</p>
+                <h2>Your Reset Code</h2>
+                <p>We received a request to reset your password. Use the code below to reset it:</p>
+                <div class="code-box">${resetCode}</div>
                 <div class="warning">
                   <strong>⚠️ Important:</strong>
                   <ul>
-                    <li>This link will expire in 1 hour</li>
+                    <li>This code will expire in 10 minutes</li>
                     <li>If you didn't request this reset, please ignore this email</li>
-                    <li>Your password will remain unchanged until you create a new one</li>
                   </ul>
                 </div>
               </div>
@@ -802,12 +788,16 @@ const forgotPassword = async (req, res) => {
           </html>
         `,
         });
-        console.log("✅ Password reset email sent successfully to:", email);
+        console.log("✅ Password reset code sent successfully to:", email);
       } catch (error) {
         console.error("❌ Email sending error:", error.message);
-        console.log("⚠️ Password reset token generated but email failed to send");
-        console.log("🔗 Reset URL:", resetUrl);
+        console.log("⚠️ Password reset code generated but email failed to send");
       }
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset code sent successfully",
     });
   } catch (error) {
     console.error("Forgot password error:", error);
@@ -819,26 +809,32 @@ const forgotPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   try {
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(req.params.token)
-      .digest("hex");
+    // Expect email, code, and new password
+    const { email, code, password } = req.body;
+
+    if (!email || !code || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email, code, and password are required",
+      });
+    }
+
+    const hashedCode = crypto.createHash("sha256").update(code).digest("hex");
 
     const user = await User.findOne({
-      passwordResetToken: hashedToken,
-      passwordResetExpires: { $gt: Date.now() },
+      email,
+      passwordResetCode: hashedCode,
+      passwordResetCodeExpires: { $gt: Date.now() },
     });
 
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "Invalid or expired reset token",
+        message: "Invalid or expired reset code",
       });
     }
 
-    const { password } = req.body;
-
-    if (!password || password.length < 6) {
+    if (password.length < 6) {
       return res.status(400).json({
         success: false,
         message: "Password must be at least 6 characters",
@@ -853,8 +849,8 @@ const resetPassword = async (req, res) => {
     }
 
     user.password = password;
-    user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
+    user.passwordResetCode = undefined;
+    user.passwordResetCodeExpires = undefined;
     user.passwordChangedAt = Date.now();
     await user.save();
 
@@ -887,10 +883,10 @@ const resetPassword = async (req, res) => {
                 <div class="success">
                   <strong>✓ Success:</strong> Your password has been changed successfully.
                 </div>
-                <p>This is a confirmation that your password was recently changed.</p>
+                <p>This is a confirmation that your password was recently changed via security code.</p>
                 <div class="warning">
                   <strong>⚠️ Didn't make this change?</strong><br>
-                  If you did not change your password, please contact our support team immediately at support@nursify.com
+                  If you did not change your password, please contact our support team immediately.
                 </div>
                 <p>For security reasons, you may need to log in again on all your devices.</p>
               </div>
