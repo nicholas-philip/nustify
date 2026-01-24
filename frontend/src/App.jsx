@@ -100,7 +100,11 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<LandingPage />}
+              element={
+                <PublicRoute>
+                  <LandingPage />
+                </PublicRoute>
+              }
             />
             <Route
               path="/login"
