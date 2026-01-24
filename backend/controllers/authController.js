@@ -741,14 +741,24 @@ const forgotPassword = async (req, res) => {
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    try {
-      const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-      await getTransporter().sendMail({
-        from: `"Nursify Platform" <${process.env.SENDER_EMAIL}>`,
-        to: email,
-        subject: "Password Reset Request - Nursify",
-        html: `
+    // Respond immediately to the user
+    res.status(200).json({
+      success: true,
+      message: "Password reset email sent successfully",
+      // In development, include the reset token so you can test
+      ...(process.env.NODE_ENV === 'development' && { resetToken, resetUrl }),
+    });
+
+    // Send email asynchronously in the background (non-blocking)
+    setImmediate(async () => {
+      try {
+        await getTransporter().sendMail({
+          from: `"Nursify Platform" <${process.env.SENDER_EMAIL}>`,
+          to: email,
+          subject: "Password Reset Request - Nursify",
+          html: `
           <!DOCTYPE html>
           <html>
           <head>
@@ -791,27 +801,14 @@ const forgotPassword = async (req, res) => {
           </body>
           </html>
         `,
-      });
-
-      res.status(200).json({
-        success: true,
-        message: "Password reset email sent successfully",
-      });
-    } catch (error) {
-      console.error("❌ Email sending error:", error.message);
-
-      // For development: Still return success even if email fails
-      // In production, you should fix the SMTP credentials
-      console.log("⚠️ Password reset token generated but email failed to send");
-      console.log("🔗 Reset URL would have been:", `${process.env.FRONTEND_URL}/reset-password/${resetToken}`);
-
-      return res.status(200).json({
-        success: true,
-        message: "Password reset email sent successfully",
-        // In development, include the reset token so you can test
-        ...(process.env.NODE_ENV === 'development' && { resetToken }),
-      });
-    }
+        });
+        console.log("✅ Password reset email sent successfully to:", email);
+      } catch (error) {
+        console.error("❌ Email sending error:", error.message);
+        console.log("⚠️ Password reset token generated but email failed to send");
+        console.log("🔗 Reset URL:", resetUrl);
+      }
+    });
   } catch (error) {
     console.error("Forgot password error:", error);
     res
